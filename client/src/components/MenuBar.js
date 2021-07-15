@@ -1,40 +1,56 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Button from "@material-ui/core/Button";
+import React, { useContext, useState } from "react";
+import { Menu } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  title: {
-    flexGrow: 1,
-  },
-}));
+import { AuthContext } from "../context/auth";
 
-const MenuBar = () => {
-  const classes = useStyles();
-  return (
-    <div className={classes.root}>
-      <AppBar position="static">
-        <Toolbar>
-          <div className={classes.title}>
-            <Button color="inherit" component={Link} to="/">
-              Home
-            </Button>
-          </div>
-          <Button color="inherit" component={Link} to="/login">
-            Login
-          </Button>
-          <Button color="inherit" component={Link} to="/register">
-            Register
-          </Button>
-        </Toolbar>
-      </AppBar>
-    </div>
+function MenuBar() {
+  const { user, logout } = useContext(AuthContext);
+  const pathname = window.location.pathname;
+
+  const path = pathname === "/" ? "home" : pathname.substr(1);
+  const [activeItem, setActiveItem] = useState(path);
+
+  const handleItemClick = (e, { name }) => setActiveItem(name);
+
+  const menuBar = user ? (
+    <Menu pointing secondary size="massive" color="teal">
+      <Menu.Item name={user.username} active as={Link} to="/" />
+
+      <Menu.Menu position="right">
+        <Menu.Item name="logout" onClick={logout} />
+      </Menu.Menu>
+    </Menu>
+  ) : (
+    <Menu pointing secondary size="massive" color="teal">
+      <Menu.Item
+        name="home"
+        active={activeItem === "home"}
+        onClick={handleItemClick}
+        as={Link}
+        to="/"
+      />
+
+      <Menu.Menu position="right">
+        <Menu.Item
+          name="login"
+          active={activeItem === "login"}
+          onClick={handleItemClick}
+          as={Link}
+          to="/login"
+        />
+        <Menu.Item
+          name="register"
+          active={activeItem === "register"}
+          onClick={handleItemClick}
+          as={Link}
+          to="/register"
+        />
+      </Menu.Menu>
+    </Menu>
   );
-};
+
+  return menuBar;
+}
 
 export default MenuBar;

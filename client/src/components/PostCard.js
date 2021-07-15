@@ -1,72 +1,52 @@
-import {
-  Card,
-  CardContent,
-  Typography,
-  CardMedia,
-  IconButton,
-  Button,
-} from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import { Comment, FavoriteBorder } from "@material-ui/icons";
-import React from "react";
+import React, { useContext } from "react";
+import { Button, Card, Icon, Label, Image } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import moment from "moment";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-  },
-  details: {
-    display: "flex",
-    flexDirection: "column",
-  },
-  content: {
-    flex: "1 0 auto",
-  },
-  cover: {
-    width: 151,
-  },
-  controls: {
-    display: "flex",
-    alignItems: "center",
-    paddingLeft: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
-  },
-  playIcon: {
-    height: 38,
-    width: 38,
-  },
-}));
+// import { AuthContext } from '../context/auth';
 
-const PostCard = ({
+function PostCard({
   post: { body, createdAt, id, username, likeCount, commentCount, likes },
-}) => {
-  const classes = useStyles();
+}) {
+  // const { user } = useContext(AuthContext);
+
+  const likePost = () => console.log("Like");
+  const commentOnPost = () => console.log("Comment");
+
   return (
-    <Card className={classes.root}>
-      <div className={classes.details}>
-        <CardContent className={classes.content}>
-          <Typography variant="subtitle1">{body}</Typography>
-          <Button component={Link} to={`/posts/${id}`}>
-            {moment(createdAt).fromNow(true)}
+    <Card fluid>
+      <Card.Content>
+        <Image
+          floated="right"
+          size="mini"
+          src="https://react.semantic-ui.com/images/avatar/large/molly.png"
+        />
+        <Card.Header>{username}</Card.Header>
+        <Card.Meta as={Link} to={`/posts/${id}`}>
+          {moment(createdAt).fromNow(true)}
+        </Card.Meta>
+        <Card.Description>{body}</Card.Description>
+      </Card.Content>
+      <Card.Content extra>
+        <Button as="div" labelPosition="right" onClick={likePost}>
+          <Button color="teal" basic>
+            <Icon name="heart" />
           </Button>
-        </CardContent>
-        <div className={classes.controls}>
-          <IconButton aria-label="previous">
-            <FavoriteBorder />
-          </IconButton>
-          <IconButton aria-label="next">
-            <Comment />
-          </IconButton>
-        </div>
-      </div>
-      <CardMedia
-        className={classes.cover}
-        image="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cGVyc29ufGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&w=1000&q=80"
-        title="Live from space album cover"
-      />
+          <Label basic color="teal" pointing="left">
+            {likeCount}
+          </Label>
+        </Button>
+        <Button as="div" labelPosition="right" onClick={commentOnPost}>
+          <Button color="blue" basic>
+            <Icon name="comments" />
+          </Button>
+          <Label basic color="blue" pointing="left">
+            {commentCount}
+          </Label>
+        </Button>
+      </Card.Content>
     </Card>
   );
-};
+}
 
 export default PostCard;
