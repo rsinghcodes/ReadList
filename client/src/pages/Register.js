@@ -1,10 +1,11 @@
 import React, { useContext, useState } from "react";
-import { Button, Form } from "semantic-ui-react";
 import { useMutation } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 
 import { AuthContext } from "../context/auth";
-import { useForm } from "../util/hooks";
+import { useForm, Form } from "../util/useForm";
+import Input from "../components/controls/Input";
+import Button from "../components/controls/Button";
 
 const Register = (props) => {
   const context = useContext(AuthContext);
@@ -32,48 +33,38 @@ const Register = (props) => {
     addUser();
   }
   return (
-    <div className="form-container">
-      <Form onSubmit={onSubmit} noValidate className={loading ? "loading" : ""}>
-        <h1>Register</h1>
-        <Form.Input
-          label="Username"
-          placeholder="Username.."
+    <>
+      <Form onSubmit={onSubmit}>
+        <h2>Register</h2>
+        <Input
           name="username"
+          label="Username"
           type="text"
           value={values.username}
-          error={errors.username ? true : false}
           onChange={onChange}
         />
-        <Form.Input
-          label="Email"
-          placeholder="Email.."
+        <Input
           name="email"
+          label="Email"
           type="email"
           value={values.email}
-          error={errors.email ? true : false}
           onChange={onChange}
         />
-        <Form.Input
-          label="Password"
-          placeholder="Password.."
+        <Input
           name="password"
+          label="Password"
           type="password"
           value={values.password}
-          error={errors.password ? true : false}
           onChange={onChange}
         />
-        <Form.Input
-          label="Confirm Password"
-          placeholder="Confirm Password.."
+        <Input
           name="confirmPassword"
+          label="Confirm Password"
           type="password"
           value={values.confirmPassword}
-          error={errors.confirmPassword ? true : false}
           onChange={onChange}
         />
-        <Button type="submit" primary>
-          Register
-        </Button>
+        <Button type="submit">Register</Button>
       </Form>
       {Object.keys(errors).length > 0 && (
         <div className="ui error message">
@@ -84,7 +75,7 @@ const Register = (props) => {
           </ul>
         </div>
       )}
-    </div>
+    </>
   );
 };
 

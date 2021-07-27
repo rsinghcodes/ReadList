@@ -1,56 +1,81 @@
-import React, { useContext, useState } from "react";
-import { Menu } from "semantic-ui-react";
+import React, { useContext } from "react";
+
 import { Link } from "react-router-dom";
+import styled from "styled-components";
 
 import { AuthContext } from "../context/auth";
 
 function MenuBar() {
   const { user, logout } = useContext(AuthContext);
-  const pathname = window.location.pathname;
-
-  const path = pathname === "/" ? "home" : pathname.substr(1);
-  const [activeItem, setActiveItem] = useState(path);
-
-  const handleItemClick = (e, { name }) => setActiveItem(name);
 
   const menuBar = user ? (
-    <Menu pointing secondary size="massive" color="teal">
-      <Menu.Item name={user.username} active as={Link} to="/" />
-
-      <Menu.Menu position="right">
-        <Menu.Item name="logout" onClick={logout} />
-      </Menu.Menu>
-    </Menu>
+    <Nav>
+      <Logo>
+        <Link to="/">Means</Link>
+      </Logo>
+      {/* <NavLinks>
+        <NavLink onClick={logout}>Logout</NavLink>
+      </NavLinks> */}
+    </Nav>
   ) : (
-    <Menu pointing secondary size="massive" color="teal">
-      <Menu.Item
-        name="home"
-        active={activeItem === "home"}
-        onClick={handleItemClick}
-        as={Link}
-        to="/"
-      />
-
-      <Menu.Menu position="right">
-        <Menu.Item
-          name="login"
-          active={activeItem === "login"}
-          onClick={handleItemClick}
-          as={Link}
-          to="/login"
-        />
-        <Menu.Item
-          name="register"
-          active={activeItem === "register"}
-          onClick={handleItemClick}
-          as={Link}
-          to="/register"
-        />
-      </Menu.Menu>
-    </Menu>
+    <Nav>
+      <Logo>
+        <Link to="/">Means</Link>
+      </Logo>
+      <NavLinks>
+        <NavLink>
+          <Link to="/login">Login</Link>
+        </NavLink>
+        <NavLink>
+          <Link to="/register">Register</Link>
+        </NavLink>
+      </NavLinks>
+    </Nav>
   );
 
   return menuBar;
 }
 
 export default MenuBar;
+
+const Nav = styled.nav`
+  padding: 1rem;
+  background: #fff;
+  max-width: 64rem;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  border-bottom: 1px solid rgba(229, 231, 235, 1);
+`;
+
+const Logo = styled.h3`
+  font-size: 1.5rem;
+  font-weight: bold;
+
+  a {
+    color: #212121;
+  }
+`;
+
+const NavLinks = styled.ul`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const NavLink = styled.li`
+  padding: 1rem;
+  list-style: none;
+  cursor: pointer;
+
+  :last-child {
+    padding-right: 0;
+  }
+  a {
+    color: #212121;
+  }
+`;

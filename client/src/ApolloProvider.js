@@ -7,6 +7,8 @@ import { createHttpLink } from "apollo-link-http";
 import { ApolloProvider } from "@apollo/react-hooks";
 import { setContext } from "apollo-link-context";
 
+import GlobalStyle from "./global";
+
 const httpLink = createHttpLink({
   uri: "http://localhost:5000",
 });
@@ -27,6 +29,7 @@ const client = new ApolloClient({
 
 export default (
   <ApolloProvider client={client}>
+    <GlobalStyle />
     <App />
   </ApolloProvider>
 );

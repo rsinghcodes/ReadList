@@ -12,11 +12,9 @@ export default createGlobalStyle`
         -moz-osx-font-smoothing: grayscale;
     }
     body {
-        font-family: -apple-system, BlinkMacSystemFont, "Roboto", "Segoe UI", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+        font-family: 'Inter', sans-serif;
         overflow: visible;
-        @media screen and (max-width: 800px) {
-          padding: 10px;
-        }
+        color: #212121;
     }
     a {
         text-decoration: none;
