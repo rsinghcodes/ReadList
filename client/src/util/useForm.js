@@ -33,7 +33,7 @@ const StyledForm = styled.form`
   max-width: 30rem;
   width: 100%;
   margin: 0 auto;
-  background: #fff;
+  background: inherit;
   padding: calc(4 * 0.5rem);
   margin: calc(4 * 0.5rem) auto;
   border-radius: 4px;

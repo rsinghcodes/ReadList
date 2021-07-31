@@ -7,6 +7,8 @@ import Input from "../components/controls/Input";
 import { AuthContext } from "../context/auth";
 import { useForm, Form } from "../util/useForm";
 import Button from "../components/controls/Button";
+import { Heading } from "../components/Typography";
+import ErrorBox from "../components/controls/ErrorBox";
 
 function Login(props) {
   const context = useContext(AuthContext);
@@ -35,7 +37,7 @@ function Login(props) {
   return (
     <>
       <Form onSubmit={onSubmit}>
-        <h2>Login</h2>
+        <Heading textTransform="uppercase">Login</Heading>
         <Input
           name="username"
           label="Username"
@@ -50,53 +52,18 @@ function Login(props) {
           value={values.password}
           onChange={onChange}
         />
-        <Button type="submit">Login</Button>
+        <Button type="submit">Login</Button>{" "}
+        {Object.keys(errors).length > 0 && (
+          <ErrorBox>
+            <ul>
+              {Object.values(errors).map((value) => (
+                <li key={value}>{value}</li>
+              ))}
+            </ul>
+          </ErrorBox>
+        )}
       </Form>
-      {Object.keys(errors).length > 0 && (
-        <div className="ui error message">
-          <ul className="list">
-            {Object.values(errors).map((value) => (
-              <li key={value}>{value}</li>
-            ))}
-          </ul>
-        </div>
-      )}
     </>
-    // <div className="form-container">
-    //   <Form onSubmit={onSubmit} noValidate className={loading ? "loading" : ""}>
-    //     <h1>Login</h1>
-    //     <Form.Input
-    //       label="Username"
-    //       placeholder="Username.."
-    //       name="username"
-    //       type="text"
-    //       value={values.username}
-    //       error={errors.username ? true : false}
-    //       onChange={onChange}
-    //     />
-    //     <Form.Input
-    //       label="Password"
-    //       placeholder="Password.."
-    //       name="password"
-    //       type="password"
-    //       value={values.password}
-    //       error={errors.password ? true : false}
-    //       onChange={onChange}
-    //     />
-    //     <Button type="submit" primary>
-    //       Login
-    //     </Button>
-    //   </Form>
-    //   {Object.keys(errors).length > 0 && (
-    //     <div className="ui error message">
-    //       <ul className="list">
-    //         {Object.values(errors).map((value) => (
-    //           <li key={value}>{value}</li>
-    //         ))}
-    //       </ul>
-    //     </div>
-    //   )}
-    // </div>
   );
 }
 

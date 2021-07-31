@@ -6,6 +6,8 @@ import { AuthContext } from "../context/auth";
 import { useForm, Form } from "../util/useForm";
 import Input from "../components/controls/Input";
 import Button from "../components/controls/Button";
+import { Heading } from "../components/Typography";
+import ErrorBox from "../components/controls/ErrorBox";
 
 const Register = (props) => {
   const context = useContext(AuthContext);
@@ -35,7 +37,7 @@ const Register = (props) => {
   return (
     <>
       <Form onSubmit={onSubmit}>
-        <h2>Register</h2>
+        <Heading textTransform="uppercase">Register</Heading>
         <Input
           name="username"
           label="Username"
@@ -65,16 +67,16 @@ const Register = (props) => {
           onChange={onChange}
         />
         <Button type="submit">Register</Button>
+        {Object.keys(errors).length > 0 && (
+          <ErrorBox>
+            <ul>
+              {Object.values(errors).map((value) => (
+                <li key={value}>{value}</li>
+              ))}
+            </ul>
+          </ErrorBox>
+        )}
       </Form>
-      {Object.keys(errors).length > 0 && (
-        <div className="ui error message">
-          <ul className="list">
-            {Object.values(errors).map((value) => (
-              <li key={value}>{value}</li>
-            ))}
-          </ul>
-        </div>
-      )}
     </>
   );
 };

@@ -48,7 +48,7 @@ function SinglePost(props) {
 
   let postMarkup;
   if (!getPost) {
-    postMarkup = <p>Loading post..</p>;
+    postMarkup = <p>Loading post...</p>;
   } else {
     const {
       id,

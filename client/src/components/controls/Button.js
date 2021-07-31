@@ -1,20 +1,16 @@
-import React from "react";
 import styled from "styled-components";
 
-const Button = ({ type, children }) => {
-  return <StyledButton type={type}>{children}</StyledButton>;
-};
-
-export default Button;
-
-const StyledButton = styled.button`
+const Button = styled.button`
   width: 100%;
   outline: none;
   border: none;
   padding: 1rem;
-  border-radius: 0.2rem;
+  border-radius: var(--border-radius);
   font-family: inherit;
+  text-transform: uppercase;
   cursor: pointer;
-  background-color: #555bff;
-  color: white;
+  background-color: var(--primary);
+  color: var(--text-white);
 `;
+
+export default Button;

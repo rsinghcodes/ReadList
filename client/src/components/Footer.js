@@ -12,6 +12,7 @@ const FooterBar = styled.footer`
   width: 100%;
   margin: 0 auto;
   text-align: center;
-  padding: 2rem;
+  padding: 2rem 0;
+  color: var(--text);
   border-top: 1px solid rgba(229, 231, 235, 1);
 `;
