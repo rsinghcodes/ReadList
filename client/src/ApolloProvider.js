@@ -7,8 +7,7 @@ import { createHttpLink } from "apollo-link-http";
 import { ApolloProvider } from "@apollo/react-hooks";
 import { setContext } from "apollo-link-context";
 
-import { ThemeProvider } from "styled-components";
-import GlobalStyle from "./styles/global";
+import { ChakraProvider } from "@chakra-ui/react";
 import theme from "./styles/theme";
 
 const httpLink = createHttpLink({
@@ -31,9 +30,8 @@ const client = new ApolloClient({
 
 export default (
   <ApolloProvider client={client}>
-    <ThemeProvider theme={theme}>
+    <ChakraProvider theme={theme}>
       <App />
-      <GlobalStyle />
-    </ThemeProvider>
+    </ChakraProvider>
   </ApolloProvider>
 );

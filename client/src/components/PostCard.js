@@ -1,67 +1,26 @@
 import React from "react";
 import moment from "moment";
-import styled from "styled-components";
-
-import { Heading, Paragraph } from "./Typography";
 import { Link } from "react-router-dom";
 
-const Header = styled.header`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-`;
+import { Box, Heading, LinkBox, LinkOverlay, Text } from "@chakra-ui/react";
 
-const Card = styled.div`
-  display: block;
-  width: 100%;
-  color: var(--text);
-  border: 1px solid #eaeaea;
-  padding: 1rem;
-  margin: 1rem auto;
-  /* cursor: pointer; */
-  border-radius: var(--border-radius);
-  background-color: var(--secondaryBackground);
-  transition: color 0.15s ease, border-color 0.15s ease;
-
-  /* :hover,
-  :active,
-  :focus {
-    border-color: var(--primary);
-    color: var(--primary);
-  } */
-`;
-
-const Footer = styled.footer`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 10px;
-`;
-
-function PostCard({
-  post: { body, createdAt, id, username, likeCount, commentCount, likes },
-}) {
-  //
+function PostCard({ post: { body, createdAt, id } }) {
   return (
-    <Card>
-      <Header>
-        <Paragraph>By {username}</Paragraph>
-        <Paragraph>Posted {moment(createdAt).fromNow(true)} ago</Paragraph>
-      </Header>
-      <Heading as={Link} to={`/posts/${id}`}>
-        {body}
+    <LinkBox as="article" p="5" borderWidth="1px" rounded="md" w="100%">
+      <Box as="time" dateTime="2021-01-15 15:30:00 +0000 UTC">
+        {moment(createdAt).fromNow(true)} ago
+      </Box>
+
+      <Heading size="md" my="2">
+        <LinkOverlay as={Link} to={`/posts/${id}`}>
+          {body}
+        </LinkOverlay>
       </Heading>
-      <Footer>
-        <div style={{ display: "flex" }}>
-          <Paragraph style={{ marginRight: "10px" }}>
-            Likes {likeCount}
-          </Paragraph>
-          <Paragraph>Comment {commentCount}</Paragraph>
-        </div>
-        <Paragraph>5 min read</Paragraph>
-      </Footer>
-    </Card>
+      <Text>
+        Catch up on what’s been cookin’ at Smashing and explore some of the most
+        popular community resources.
+      </Text>
+    </LinkBox>
   );
 }
 

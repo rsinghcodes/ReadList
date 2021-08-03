@@ -8,7 +8,7 @@ const ErrorBox = styled.div`
   border-radius: var(--border-radius);
   margin-top: 1.5rem;
   padding: 1rem;
-  border: 1px solid;
+  /* border: 1px solid; */
 
   li {
     font-size: 1rem;

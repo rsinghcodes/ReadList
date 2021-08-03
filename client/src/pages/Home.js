@@ -1,40 +1,31 @@
 import React, { useContext } from "react";
-import styled from "styled-components";
 
 import { useQuery } from "@apollo/react-hooks";
 import { AuthContext } from "../context/auth";
 import { FETCH_POSTS_QUERY } from "../util/graphql";
 
-import { Heading } from "../components/Typography";
 import PostCard from "../components/PostCard";
-
-const Block = styled.div`
-  width: 100%;
-  border: 1px solid #eaeaea;
-  padding: 3rem;
-  margin-bottom: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--border-radius);
-  background: var(--secondaryBackground);
-`;
+import { Box, Center, Text, VStack } from "@chakra-ui/react";
 
 function Home() {
   const { user } = useContext(AuthContext);
   const { loading, data } = useQuery(FETCH_POSTS_QUERY);
   return (
     <>
-      <Block>
-        {user ? (
-          <Heading textTransform="uppercase">
-            Hi {user.username}, Welcome back!
-          </Heading>
-        ) : (
-          <Heading textTransform="uppercase">Trending Blogs</Heading>
-        )}
-      </Block>
-      <section style={{ width: "100%" }}>
+      <Box borderWidth="1px" borderRadius="md" overflow="hidden" my="5">
+        <Center h="150px">
+          {user ? (
+            <Text fontSize="4xl" fontWeight="bold" textTransform="uppercase">
+              Hi {user.username}, Welcome back!
+            </Text>
+          ) : (
+            <Text fontSize="4xl" fontWeight="bold" textTransform="uppercase">
+              Trending Blogs
+            </Text>
+          )}
+        </Center>
+      </Box>
+      <VStack spacing={4}>
         {loading ? (
           <h1>Loading posts...</h1>
         ) : (
@@ -45,7 +36,7 @@ function Home() {
               ))}
           </>
         )}
-      </section>
+      </VStack>
     </>
   );
 }

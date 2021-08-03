@@ -1,77 +1,72 @@
 import React, { useContext } from "react";
-import StyledLink from "./controls/StyledLink";
 import { Link } from "react-router-dom";
-import styled from "styled-components";
-import { Heading } from "./Typography";
+// import { AiOutlineBook } from "react-icons/ai";
 
 import { AuthContext } from "../context/auth";
+import {
+  chakra,
+  Button,
+  Flex,
+  Heading,
+  HStack,
+  IconButton,
+  Spacer,
+  useColorMode,
+  useColorModeValue,
+} from "@chakra-ui/react";
+import { SunIcon, MoonIcon } from "@chakra-ui/icons";
+import DrawerLogin from "../pages/DrawerLogin";
 
 function MenuBar() {
+  const bg = useColorModeValue("white", "gray.800");
   const { user, logout } = useContext(AuthContext);
+  const { colorMode, toggleColorMode } = useColorMode();
 
   const menuBar = user ? (
-    <NavLinks>
-      <li>
-        <StyledLink to="/">Hi, {user.username}</StyledLink>
-      </li>
-      <li>
-        <StyledLink to="/create-post">Create post</StyledLink>
-      </li>
-      <li>
-        <StyledLink onClick={logout} to="/">
-          Log Out
-        </StyledLink>
-      </li>
-    </NavLinks>
+    <>
+      <Button as={Link} to="/create-post" variant="ghost">
+        Create Post
+      </Button>
+      <Button colorScheme="red" onClick={logout}>
+        Log out
+      </Button>
+    </>
   ) : (
-    <NavLinks>
-      <li>
-        <StyledLink to="/login">Login</StyledLink>
-      </li>
-      <li>
-        <StyledLink to="/register">Register</StyledLink>
-      </li>
-    </NavLinks>
+    <DrawerLogin />
   );
 
   return (
-    <Header>
-      <Nav>
-        <Link to="/">
-          <Heading textTransform="uppercase">Means</Heading>
-        </Link>
-
-        {menuBar}
-      </Nav>
-    </Header>
+    <>
+      <chakra.header
+        transition="box-shadow 0.2s, background-color 0.2s"
+        pos="sticky"
+        top="0"
+        zIndex="3"
+        bg={bg}
+        left="0"
+        right="0"
+        width="full"
+        px="10"
+        py="5"
+      >
+        <Flex mx="auto">
+          <Flex alignItems="center" as={Link} to="/">
+            <Heading size="lg">Readmode</Heading>
+          </Flex>
+          <Spacer />
+          <HStack spacing="3">
+            <IconButton
+              aria-label="Toggle dark or light mode"
+              icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />}
+              onClick={toggleColorMode}
+              variant="ghost"
+            />
+            {menuBar}
+          </HStack>
+        </Flex>
+      </chakra.header>
+    </>
   );
 }
 
 export default MenuBar;
-
-const Header = styled.header`
-  background: var(--secondaryBackground);
-  position: sticky;
-  top: 0;
-  border-bottom: 1px solid #eaeaea;
-`;
-
-const Nav = styled.nav`
-  padding: 2rem 1rem;
-  max-width: 64rem;
-  width: 100%;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const NavLinks = styled.ul`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  li {
-    list-style: none;
-  }
-`;

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import styled from "styled-components";
 
 export const useForm = (callback, initialState = {}) => {
   const [values, setValues] = useState(initialState);
@@ -23,24 +22,24 @@ export const useForm = (callback, initialState = {}) => {
 export const Form = (props) => {
   const { children, ...other } = props;
   return (
-    <StyledForm autoComplete="off" {...other}>
+    <form autoComplete="off" {...other}>
       {children}
-    </StyledForm>
+    </form>
   );
 };
 
-const StyledForm = styled.form`
-  max-width: 30rem;
-  width: 100%;
-  margin: 0 auto;
-  background: inherit;
-  padding: calc(4 * 0.5rem);
-  margin: calc(4 * 0.5rem) auto;
-  border-radius: 4px;
-  border: 3px solid #212121;
-  box-shadow: 0.5rem 0.5rem 0 #212121;
+// const StyledForm = styled.form`
+//   max-width: 30rem;
+//   width: 100%;
+//   margin: 0 auto;
+//   background: inherit;
+//   padding: calc(4 * 0.5rem);
+//   margin: calc(4 * 0.5rem) auto;
+//   border-radius: 4px;
+//   border: 3px solid #212121;
+//   box-shadow: 0.5rem 0.5rem 0 #212121;
 
-  *:first-child {
-    margin-top: 0;
-  }
-`;
+//   *:first-child {
+//     margin-top: 0;
+//   }
+// `;

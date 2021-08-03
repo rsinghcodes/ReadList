@@ -1,15 +1,26 @@
-import React from "react";
-import { Button, Form } from "semantic-ui-react";
+import React, { useState } from "react";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { Box, Button, Input } from "@chakra-ui/react";
+
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
 
-import { useForm } from "../util/useForm";
+import { useForm, Form } from "../util/useForm";
 import { FETCH_POSTS_QUERY } from "../util/graphql";
 
 function PostForm() {
   const { values, onChange, onSubmit } = useForm(createPostCallback, {
     body: "",
   });
+
+  const [addData, setAddData] = useState("");
+  const [data, setData] = useState(0);
+
+  const handleChange = (event, editor) => {
+    const data = editor.getData();
+    setAddData(data);
+  };
 
   const [createPost, { error }] = useMutation(CREATE_POST_MUTATION, {
     variables: values,
@@ -30,23 +41,27 @@ function PostForm() {
   return (
     <>
       <Form onSubmit={onSubmit}>
-        <h2>Create a post:</h2>
-        <Form.Field>
-          <Form.Input
-            placeholder="Hi World!"
+        <Box my="10">
+          <Input
+            placeholder="Write title here..."
             name="body"
-            onChange={onChange}
             value={values.body}
-            error={error ? true : false}
+            onChange={onChange}
           />
-          <Button type="submit" color="teal">
-            Submit
-          </Button>
-        </Form.Field>
+        </Box>
+        <Box my="10">
+          <CKEditor
+            editor={ClassicEditor}
+            data={addData}
+            onChange={handleChange}
+          />
+        </Box>
+
+        <Button type="submit">Submit</Button>
       </Form>
       {error && (
-        <div className="ui error message" style={{ marginBottom: 20 }}>
-          <ul className="list">
+        <div style={{ marginBottom: 20 }}>
+          <ul>
             <li>{error.graphQLErrors[0].message}</li>
           </ul>
         </div>
