@@ -49,8 +49,15 @@ const Register = (props) => {
     addUser();
   }
   return (
-    <div style={{ minHeight: "80vh", display: "grid", placeItems: "center" }}>
-      <Box p="6" minW="md" borderWidth="1px" borderRadius="md">
+    <div
+      style={{
+        minHeight: "80vh",
+        display: "grid",
+        placeItems: "center",
+        marginTop: "1rem",
+      }}
+    >
+      <Box p="6" maxW="md" w="100%" borderWidth="1px" borderRadius="md">
         <Form onSubmit={onSubmit}>
           <Heading fontSize="3xl">Register</Heading>
           <FormControl id="username" mt="4">

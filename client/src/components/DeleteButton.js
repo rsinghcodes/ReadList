@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
-import { Button, Confirm, Icon } from "semantic-ui-react";
 import { FETCH_POSTS_QUERY } from "../util/graphql";
 
 const DeleteButton = ({ postId, commentId, callback }) => {

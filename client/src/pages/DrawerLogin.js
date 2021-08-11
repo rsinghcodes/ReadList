@@ -1,6 +1,8 @@
 import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import {
+  Alert,
+  AlertIcon,
   Box,
   Button,
   Drawer,
@@ -125,6 +127,16 @@ function DrawerLogin(props) {
                   </Button>
                 </Flex>
               </Stack>
+              {Object.keys(errors).length > 0 && (
+                <Box mt="4">
+                  {Object.values(errors).map((value) => (
+                    <Alert status="error" key={value} my="1">
+                      <AlertIcon />
+                      {value}
+                    </Alert>
+                  ))}
+                </Box>
+              )}
             </Form>
           </DrawerBody>
 

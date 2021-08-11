@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useMutation } from "@apollo/react-hooks";
 import gql from "graphql-tag";
-import { Button, Label, Icon } from "semantic-ui-react";
+import { Button, IconButton, Text } from "@chakra-ui/react";
+import { BiHeart } from "react-icons/bi";
 
 const LikeButton = ({ user, post: { id, likeCount, likes } }) => {
   const [liked, setLiked] = useState(false);
@@ -19,26 +20,23 @@ const LikeButton = ({ user, post: { id, likeCount, likes } }) => {
 
   const likeButton = user ? (
     liked ? (
-      <Button color="teal">
-        <Icon name="heart" />
-      </Button>
+      <IconButton aria-label="Like Icon" icon={<BiHeart type="solid" />} />
     ) : (
-      <Button color="teal" basic>
-        <Icon name="heart" />
-      </Button>
+      <IconButton aria-label="Like Icon" icon={<BiHeart />} />
     )
   ) : (
-    <Button as={Link} to="/login" color="teal" basic>
-      <Icon name="heart" />
-    </Button>
+    <IconButton
+      as={Link}
+      to="/login"
+      aria-label="Like Icons"
+      icon={<BiHeart type="solid" />}
+    />
   );
 
   return (
-    <Button as="div" labelPosition="right" onClick={likePost}>
+    <Button onClick={likePost}>
       {likeButton}
-      <Label basic color="teal" pointing="left">
-        {likeCount}
-      </Label>
+      <Text>{likeCount}</Text>
     </Button>
   );
 };

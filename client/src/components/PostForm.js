@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { Box, Button, Input } from "@chakra-ui/react";
+import { Box, Button, Flex, Input } from "@chakra-ui/react";
 
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
@@ -57,7 +57,9 @@ function PostForm() {
           />
         </Box>
 
-        <Button type="submit">Submit</Button>
+        <Button type="submit" colorScheme="teal">
+          Submit
+        </Button>
       </Form>
       {error && (
         <div style={{ marginBottom: 20 }}>

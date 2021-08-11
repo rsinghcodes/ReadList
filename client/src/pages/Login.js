@@ -20,12 +20,14 @@ import {
   InputRightElement,
   Link as ChakraLink,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 
 function Login(props) {
   const context = useContext(AuthContext);
   const [errors, setErrors] = useState({});
   const [show, setShow] = useState(false);
+  const toast = useToast();
 
   const { onChange, onSubmit, values } = useForm(loginUserCallback, {
     username: "",
@@ -49,7 +51,7 @@ function Login(props) {
 
   return (
     <div style={{ minHeight: "80vh", display: "grid", placeItems: "center" }}>
-      <Box p="6" minW="md" borderWidth="1px" borderRadius="md">
+      <Box p="6" maxW="md" w="100%" borderWidth="1px" borderRadius="md">
         <Form onSubmit={onSubmit}>
           <Heading fontSize="3xl">Login</Heading>
           <FormControl id="username" mt="4">
