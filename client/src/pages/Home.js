@@ -1,15 +1,24 @@
-import React, { useContext } from "react";
-
+import React from "react";
+import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/react-hooks";
-import { AuthContext } from "../context/auth";
+
 import { FETCH_POSTS_QUERY } from "../util/graphql";
 
 import PostCard from "../components/PostCard";
-import { Box, chakra, Text, useColorModeValue, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  chakra,
+  Flex,
+  Text,
+  useColorModeValue,
+  VStack,
+} from "@chakra-ui/react";
+import { EditIcon } from "@chakra-ui/icons";
 
 function Home() {
-  const { user } = useContext(AuthContext);
   const { loading, data } = useQuery(FETCH_POSTS_QUERY);
+
   return (
     <>
       <Box as="section" py="6rem">
@@ -38,9 +47,23 @@ function Home() {
             fontSize={{ base: "lg", lg: "xl" }}
             mt="6"
           >
-            Readmode is simple, and easy to use blogging application. Share
-            anything with ease and no cost.
+            ReadList is simple, and easy to use blogging application. Share
+            anything with ease and at zero cost.
           </Text>
+          <Flex mt="10" justify="center">
+            <Button
+              h="4rem"
+              px="40px"
+              fontSize="1.2rem"
+              as={Link}
+              to="/create-post"
+              size="lg"
+              colorScheme="teal"
+              rightIcon={<EditIcon fontSize="0.8em" />}
+            >
+              Create New Post
+            </Button>
+          </Flex>
         </Box>
       </Box>
       <VStack spacing={4}>

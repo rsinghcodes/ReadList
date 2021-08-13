@@ -118,7 +118,7 @@ function DrawerLogin(props) {
                     Cancel
                   </Button>
                   <Button
-                    colorScheme="blue"
+                    colorScheme="teal"
                     isLoading={loading}
                     loadingText="Loging"
                     type="submit"

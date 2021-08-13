@@ -59,7 +59,7 @@ const Register = (props) => {
     >
       <Box p="6" maxW="md" w="100%" borderWidth="1px" borderRadius="md">
         <Form onSubmit={onSubmit}>
-          <Heading fontSize="3xl">Register</Heading>
+          <Heading fontSize="2xl">Register</Heading>
           <FormControl id="username" mt="4">
             <FormLabel>Username</FormLabel>
             <Input
@@ -126,6 +126,7 @@ const Register = (props) => {
             type="submit"
             mt="4"
             width="100%"
+            colorScheme="teal"
           >
             Register
           </Button>

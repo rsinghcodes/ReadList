@@ -4,6 +4,8 @@ export const FETCH_POSTS_QUERY = gql`
   {
     getPosts {
       id
+      title
+      desc
       body
       createdAt
       username

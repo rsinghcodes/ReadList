@@ -4,8 +4,6 @@ import { useQuery, useMutation } from "@apollo/react-hooks";
 import moment from "moment";
 
 import { AuthContext } from "../context/auth";
-// import LikeButton from "../components/LikeButton";
-// import DeleteButton from "../components/DeleteButton";
 
 function SinglePost(props) {
   const postId = props.match.params.postId;
@@ -43,6 +41,8 @@ function SinglePost(props) {
   } else {
     const {
       id,
+      title,
+      desc,
       body,
       createdAt,
       username,

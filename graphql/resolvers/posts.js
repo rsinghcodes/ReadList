@@ -1,5 +1,6 @@
 const { AuthenticationError, UserInputError } = require("apollo-server");
 
+const { validatePostInput } = require("../../util/validators");
 const Post = require("../../models/Post");
 const checkAuth = require("../../util/check-auth");
 
@@ -27,16 +28,28 @@ module.exports = {
     },
   },
   Mutation: {
-    async createPost(_, { title, body }, context) {
+    async createPost(_, { title, desc, body }, context) {
       const user = checkAuth(context);
 
-      if (body.trim() === "") {
-        throw new Error("Post body must not be empty");
+      const { errors, valid } = validatePostInput(title, desc, body);
+
+      if (!valid) {
+        throw new UserInputError("Errors", { errors });
+      }
+
+      // Make sure same title doesn't already exist
+      const blogTitle = await Post.findOne({ title });
+      if (blogTitle) {
+        throw new UserInputError("Title is taken", {
+          errors: {
+            username: "This title is already taken.",
+          },
+        });
       }
 
       const newPost = new Post({
         title,
-        readTime,
+        desc,
         body,
         user: user.id,
         username: user.username,

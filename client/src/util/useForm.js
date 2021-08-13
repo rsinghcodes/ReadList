@@ -27,19 +27,3 @@ export const Form = (props) => {
     </form>
   );
 };
-
-// const StyledForm = styled.form`
-//   max-width: 30rem;
-//   width: 100%;
-//   margin: 0 auto;
-//   background: inherit;
-//   padding: calc(4 * 0.5rem);
-//   margin: calc(4 * 0.5rem) auto;
-//   border-radius: 4px;
-//   border: 3px solid #212121;
-//   box-shadow: 0.5rem 0.5rem 0 #212121;
-
-//   *:first-child {
-//     margin-top: 0;
-//   }
-// `;

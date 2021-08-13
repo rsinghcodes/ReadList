@@ -44,11 +44,14 @@ module.exports.validateLoginInput = (username, password) => {
   };
 };
 
-module.exports.validatePostInput = (title, body) => {
+module.exports.validatePostInput = (title, desc, body) => {
   const errors = {};
 
   if (title.trim() === "") {
     errors.title = "Title must not be empty";
+  }
+  if (desc.trim() === "") {
+    errors.title = "Desc must not be empty";
   }
   if (body.trim() === "") {
     errors.title = "Body must not be empty";

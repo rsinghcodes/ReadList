@@ -1,11 +1,10 @@
-import { Box, Center, Divider } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 import React from "react";
 
 const Footer = () => {
   return (
-    <Box>
-      <Divider mt="4" />
-      <Center h="100px">Proudly created by Raghvendra Singh.</Center>
+    <Box as="footer" mt={12} textAlign="center" borderTopWidth="1px" py="7">
+      <Text fontSize="sm">Proudly created by Raghvendra Singh.</Text>
     </Box>
   );
 };
