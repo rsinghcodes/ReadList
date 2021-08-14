@@ -8,7 +8,7 @@ import { ApolloProvider } from "@apollo/react-hooks";
 import { setContext } from "apollo-link-context";
 
 import { ChakraProvider } from "@chakra-ui/react";
-import theme from "./styles/theme";
+import theme from "./theme/theme";
 
 const httpLink = createHttpLink({
   uri: "http://localhost:5000",

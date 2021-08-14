@@ -13,12 +13,13 @@ import {
   useColorMode,
   useColorModeValue,
   Box,
+  Tooltip,
 } from "@chakra-ui/react";
 import { SunIcon, MoonIcon } from "@chakra-ui/icons";
+import { useViewportScroll } from "framer-motion";
 
 import { MobileNavContent } from "./mobile-nav";
-import DrawerLogin from "../pages/DrawerLogin";
-import { useViewportScroll } from "framer-motion";
+import DrawerLogin from "./DrawerLogin";
 
 function Header() {
   const { user, logout } = useContext(AuthContext);
@@ -83,16 +84,18 @@ function Header() {
             </Flex>
             <Spacer />
             <Flex justify="flex-end" align="center">
-              <IconButton
-                size="md"
-                fontSize="lg"
-                aria-label={`Switch to ${text} mode`}
-                variant="ghost"
-                color="current"
-                mr="3"
-                onClick={toggleColorMode}
-                icon={<SwitchIcon />}
-              />
+              <Tooltip hasArrow label={`Switch to ${text} mode`} fontSize="sm">
+                <IconButton
+                  size="md"
+                  fontSize="lg"
+                  aria-label={`Switch to ${text} mode`}
+                  variant="ghost"
+                  color="current"
+                  mr="3"
+                  onClick={toggleColorMode}
+                  icon={<SwitchIcon />}
+                />
+              </Tooltip>
               <HStack spacing="3" display={{ base: "none", md: "flex" }}>
                 {menuBar}
               </HStack>
