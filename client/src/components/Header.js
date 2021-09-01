@@ -1,13 +1,11 @@
 import React, { useContext, useRef, useState } from "react";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 import { AuthContext } from "../context/auth";
 import {
   chakra,
-  Button,
   Flex,
   Heading,
-  HStack,
   IconButton,
   Spacer,
   useColorMode,
@@ -18,11 +16,11 @@ import {
 import { SunIcon, MoonIcon } from "@chakra-ui/icons";
 import { useViewportScroll } from "framer-motion";
 
-import { MobileNavContent } from "./mobile-nav";
+import ProfileMenu from "./ProfileMenu";
 import DrawerLogin from "./DrawerLogin";
 
 function Header() {
-  const { user, logout } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
 
   const bg = useColorModeValue("white", "gray.800");
   const { toggleColorMode } = useColorMode();
@@ -42,18 +40,7 @@ function Header() {
 
   //--------- header shadow end --------------------
 
-  const menuBar = user ? (
-    <>
-      <Button as={Link} to="/create-post" variant="ghost">
-        Create Post
-      </Button>
-      <Button colorScheme="red" onClick={logout}>
-        Log Out
-      </Button>
-    </>
-  ) : (
-    <DrawerLogin />
-  );
+  const menuBar = user ? <ProfileMenu /> : <DrawerLogin />;
 
   return (
     <>
@@ -96,10 +83,7 @@ function Header() {
                   icon={<SwitchIcon />}
                 />
               </Tooltip>
-              <HStack spacing="3" display={{ base: "none", md: "flex" }}>
-                {menuBar}
-              </HStack>
-              <MobileNavContent />
+              {menuBar}
             </Flex>
           </Flex>
         </chakra.div>

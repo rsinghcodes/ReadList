@@ -13,7 +13,7 @@ import {
 
 function PostCard({ post: { title, desc, createdAt, id } }) {
   return (
-    <LinkBox as="article" p="5" borderWidth="1px" rounded="md" w="100%">
+    <LinkBox as="article" p="5" borderWidth="1px" rounded="lg" w="100%">
       <Box
         color={useColorModeValue("gray.500", "gray.400")}
         as="time"

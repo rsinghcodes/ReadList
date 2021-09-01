@@ -49,7 +49,7 @@ function Login(props) {
           <FormLabel htmlFor="username">Username</FormLabel>
           <Input
             id="username"
-            placeholder="Please enter user name"
+            placeholder="Please enter your username"
             name="username"
             type="text"
             value={values.username}
@@ -110,6 +110,7 @@ const LOGIN_USER = gql`
       id
       email
       username
+      fullname
       createdAt
       token
     }

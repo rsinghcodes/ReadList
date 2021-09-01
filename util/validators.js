@@ -1,10 +1,14 @@
 module.exports.validateRegisterInput = (
+  fullname,
   username,
   email,
   password,
   confirmPassword
 ) => {
   const errors = {};
+  if (fullname.trim() === "") {
+    errors.username = "Full Name must not be empty";
+  }
   if (username.trim() === "") {
     errors.username = "Username must not be empty";
   }
@@ -48,13 +52,13 @@ module.exports.validatePostInput = (title, desc, body) => {
   const errors = {};
 
   if (title.trim() === "") {
-    errors.title = "Title must not be empty";
+    errors.title = "Please enter title of post!";
   }
   if (desc.trim() === "") {
-    errors.title = "Desc must not be empty";
+    errors.title = "Please enter description of post!";
   }
   if (body.trim() === "") {
-    errors.title = "Body must not be empty";
+    errors.title = "Please enter markdown!";
   }
 
   return {

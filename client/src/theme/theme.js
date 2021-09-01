@@ -11,6 +11,70 @@ const theme = extendTheme({
       body: {
         color: mode("gray.700", "whiteAlpha.900")(props),
       },
+      ".prose": {
+        h1: {
+          fontSize: "4xl",
+          lineHeight: "1.6",
+          fontWeight: "700",
+        },
+        h2: {
+          fontSize: { base: "2xl", md: "3xl" },
+          lineHeight: "1.6",
+          fontWeight: "700",
+        },
+        h3: {
+          fontSize: "2xl",
+          lineHeight: "1.6",
+          fontWeight: "700",
+        },
+        p: {
+          fontSize: { base: "md", md: "lg" },
+          lineHeight: "1.6",
+          my: "5",
+        },
+        ul: { my: "4" },
+        ol: { my: "4" },
+        li: {
+          position: "relative",
+          pl: "2",
+          ml: "5",
+          my: "4",
+          fontSize: { base: "md", md: "lg" },
+          color: mode("gray.700", "whiteAlpha.800")(props),
+        },
+        blockquote: {
+          fontWeight: "500",
+          fontStyle: "italic",
+          borderLeftWidth: "0.25rem",
+          borderLeftColor: mode("gray.300", "whiteAlpha.300")(props),
+          my: "6",
+          pl: "4",
+        },
+        a: {
+          fontWeight: "500",
+          color: mode("blue.600", "blue.400")(props),
+          _hover: {
+            textDecoration: "underline",
+          },
+        },
+        code: {
+          bg: mode("gray.200", "gray.900")(props),
+          color: mode("gray.900", "whiteAlpha.800")(props),
+          fontSize: "90%",
+          p: "1",
+          borderRadius: "sm",
+        },
+        pre: {
+          bg: "gray.900",
+          borderRadius: "md",
+          p: "3",
+
+          code: {
+            color: "whiteAlpha.900",
+            bg: "transparent",
+          },
+        },
+      },
     }),
   },
   config: {

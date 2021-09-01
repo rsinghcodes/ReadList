@@ -53,6 +53,7 @@ module.exports = {
         body,
         user: user.id,
         username: user.username,
+        fullname: user.fullname,
         createdAt: new Date().toISOString(),
       });
 

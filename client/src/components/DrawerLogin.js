@@ -37,7 +37,7 @@ function DrawerLogin() {
         placement="right"
         initialFocusRef={firstField}
         onClose={onClose}
-        size="md"
+        size="sm"
       >
         <DrawerOverlay />
         <DrawerContent>
@@ -48,7 +48,7 @@ function DrawerLogin() {
             </DrawerHeader>
           ) : (
             <DrawerHeader borderBottomWidth="1px">
-              Login to your account
+              Log in to your account
             </DrawerHeader>
           )}
 

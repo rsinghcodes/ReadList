@@ -23,6 +23,7 @@ function Register(props) {
   const [show, setShow] = useState(false);
 
   const { onChange, onSubmit, values } = useForm(registerUser, {
+    fullname: "",
     username: "",
     email: "",
     password: "",
@@ -47,6 +48,18 @@ function Register(props) {
   return (
     <Form onSubmit={onSubmit}>
       <Stack spacing="24px">
+        <Box>
+          <FormLabel htmlFor="fullname">Full Name</FormLabel>
+          <Input
+            id="fullname"
+            placeholder="Enter Full Name"
+            name="fullname"
+            type="text"
+            value={values.fullname}
+            isInvalid={errors.fullname ? true : false}
+            onChange={onChange}
+          />
+        </Box>
         <Box>
           <FormLabel htmlFor="username">Username</FormLabel>
           <Input
@@ -91,7 +104,7 @@ function Register(props) {
           </InputGroup>
         </Box>
         <Box>
-          <FormLabel htmlFor="confirmPassword">Password</FormLabel>
+          <FormLabel htmlFor="confirmPassword">Confirm Password</FormLabel>
           <InputGroup size="md">
             <Input
               id="confirmPassword"
@@ -140,6 +153,7 @@ function Register(props) {
 
 const REGISTER_USER = gql`
   mutation register(
+    $fullname: String!
     $username: String!
     $email: String!
     $password: String!
@@ -147,6 +161,7 @@ const REGISTER_USER = gql`
   ) {
     register(
       registerInput: {
+        fullname: $fullname
         username: $username
         email: $email
         password: $password
@@ -155,7 +170,7 @@ const REGISTER_USER = gql`
     ) {
       id
       email
-      username
+      fullname
       createdAt
       token
     }

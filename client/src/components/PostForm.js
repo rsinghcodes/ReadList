@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import {
   Alert,
   AlertIcon,
@@ -15,7 +14,7 @@ import { useMutation } from "@apollo/react-hooks";
 import { useForm, Form } from "../util/useForm";
 import { FETCH_POSTS_QUERY } from "../util/graphql";
 
-function PostForm() {
+function PostForm(props) {
   const [errors, setErrors] = useState({});
   const { values, onChange, onSubmit } = useForm(createPostCallback, {
     title: "",
@@ -31,6 +30,7 @@ function PostForm() {
       });
       data.getPosts = [result.data.createPost, ...data.getPosts];
       proxy.writeQuery({ query: FETCH_POSTS_QUERY, data });
+      values.title = "";
       values.desc = "";
       values.body = "";
     },
@@ -64,6 +64,7 @@ function PostForm() {
         </Box>
         <Box my="5">
           <Textarea
+            rows="12"
             name="body"
             value={values.body}
             placeholder="Enter markdown here..."
@@ -72,7 +73,7 @@ function PostForm() {
         </Box>
 
         <Button type="submit" colorScheme="teal">
-          Submit
+          Publish
         </Button>
         {Object.keys(errors).length > 0 && (
           <Box mt="4">
@@ -97,6 +98,7 @@ const CREATE_POST_MUTATION = gql`
       desc
       body
       createdAt
+      fullname
       username
       likes {
         id

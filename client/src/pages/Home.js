@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/react-hooks";
 
 import { FETCH_POSTS_QUERY } from "../util/graphql";
+import { AuthContext } from "../context/auth";
 
 import PostCard from "../components/PostCard";
 import {
@@ -17,6 +18,7 @@ import {
 import { EditIcon } from "@chakra-ui/icons";
 
 function Home() {
+  const { user } = useContext(AuthContext);
   const { loading, data } = useQuery(FETCH_POSTS_QUERY);
 
   return (
@@ -51,18 +53,31 @@ function Home() {
             anything with ease and at zero cost.
           </Text>
           <Flex mt="10" justify="center">
-            <Button
-              h="4rem"
-              px="40px"
-              fontSize="1.2rem"
-              as={Link}
-              to="/create-post"
-              size="lg"
-              colorScheme="teal"
-              rightIcon={<EditIcon fontSize="0.8em" />}
-            >
-              Create New Post
-            </Button>
+            {user ? (
+              <Button
+                h="4rem"
+                px="40px"
+                fontSize="1.2rem"
+                as={Link}
+                to="/create-post"
+                size="lg"
+                colorScheme="teal"
+                rightIcon={<EditIcon fontSize="0.8em" />}
+              >
+                Create New Post
+              </Button>
+            ) : (
+              <Button
+                h="4rem"
+                px="40px"
+                fontSize="1.2rem"
+                size="lg"
+                colorScheme="teal"
+                rightIcon={<EditIcon fontSize="0.8em" />}
+              >
+                Create New Post
+              </Button>
+            )}
           </Flex>
         </Box>
       </Box>

@@ -15,6 +15,7 @@ function generateToken(user) {
       id: user.id,
       email: user.email,
       username: user.username,
+      fullname: user.fullname,
     },
     SECRET_KEY,
     { expiresIn: "1h" }
@@ -39,8 +40,10 @@ module.exports = {
 
       const match = await bcrypt.compare(password, user.password);
       if (!match) {
-        errors.general = "Wrong crendetials";
-        throw new UserInputError("Wrong crendetials", { errors });
+        errors.general = "Username or password is invalid!";
+        throw new UserInputError("Username or password is invalid!", {
+          errors,
+        });
       }
 
       const token = generateToken(user);
@@ -53,9 +56,12 @@ module.exports = {
     },
     async register(
       _,
-      { registerInput: { username, email, password, confirmPassword } }
+      {
+        registerInput: { fullname, username, email, password, confirmPassword },
+      }
     ) {
       const { valid, errors } = validateRegisterInput(
+        fullname,
         username,
         email,
         password,
@@ -77,6 +83,7 @@ module.exports = {
       password = await bcrypt.hash(password, 12);
 
       const newUser = new User({
+        fullname,
         email,
         username,
         password,
