@@ -7,6 +7,7 @@ export const FETCH_POSTS_QUERY = gql`
       title
       desc
       body
+      slug
       createdAt
       username
       fullname

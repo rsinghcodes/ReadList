@@ -1,7 +1,5 @@
 import React, { useContext, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
-
-import { AuthContext } from "../context/auth";
 import {
   chakra,
   Flex,
@@ -15,6 +13,8 @@ import {
 } from "@chakra-ui/react";
 import { SunIcon, MoonIcon } from "@chakra-ui/icons";
 import { useViewportScroll } from "framer-motion";
+
+import { AuthContext } from "../context/auth";
 
 import ProfileMenu from "./ProfileMenu";
 import DrawerLogin from "./DrawerLogin";

@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
-import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
+import gql from "graphql-tag";
 
 import { FETCH_POSTS_QUERY } from "../util/graphql";
 import {
@@ -44,14 +44,14 @@ function DeleteButton({ postId, commentId, callback }) {
     <>
       {commentId ? (
         <IconButton
-          aria-label="Delete Comment"
+          aria-label="Delete comment"
           icon={<DeleteIcon />}
           colorScheme="red"
           onClick={() => setConfirmOpen(true)}
         />
       ) : (
         <MenuItem
-          aria-label="Delete Post"
+          aria-label="Delete post"
           icon={<DeleteIcon />}
           onClick={() => setConfirmOpen(true)}
         >

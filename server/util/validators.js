@@ -7,7 +7,7 @@ module.exports.validateRegisterInput = (
 ) => {
   const errors = {};
   if (fullname.trim() === "") {
-    errors.username = "Full Name must not be empty";
+    errors.fullname = "Full Name must not be empty";
   }
   if (username.trim() === "") {
     errors.username = "Username must not be empty";
@@ -24,7 +24,7 @@ module.exports.validateRegisterInput = (
   if (password === "") {
     errors.password = "Password must not empty";
   } else if (password !== confirmPassword) {
-    errors.confirmPassword = "Passwords must match";
+    errors.confirmPassword = "Password doesn't match!";
   }
 
   return {
@@ -36,10 +36,10 @@ module.exports.validateRegisterInput = (
 module.exports.validateLoginInput = (username, password) => {
   const errors = {};
   if (username.trim() === "") {
-    errors.username = "Username must not be empty";
+    errors.username = "Please Enter Username!";
   }
   if (password.trim() === "") {
-    errors.password = "Password must not be empty";
+    errors.password = "Please Enter Password!";
   }
 
   return {
@@ -52,13 +52,13 @@ module.exports.validatePostInput = (title, desc, body) => {
   const errors = {};
 
   if (title.trim() === "") {
-    errors.title = "Please enter title of post!";
+    errors.title = "Please Enter Title of post!";
   }
   if (desc.trim() === "") {
-    errors.title = "Please enter description of post!";
+    errors.title = "Please Enter Description of post!";
   }
   if (body.trim() === "") {
-    errors.title = "Please enter markdown!";
+    errors.title = "Please Enter Markdown!";
   }
 
   return {

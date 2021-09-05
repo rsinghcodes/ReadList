@@ -6,7 +6,8 @@ import moment from "moment";
 
 import { AuthContext } from "../context/auth";
 import {
-  Avatar,
+  useClipboard,
+  useToast,
   Box,
   Divider,
   Flex,
@@ -25,14 +26,17 @@ import { ChevronDownIcon, EditIcon } from "@chakra-ui/icons";
 import DeleteButton from "../components/DeleteButton";
 import CommentForm from "../components/CommentForm";
 import { Link } from "react-router-dom";
+import CommentBox from "../components/CommentBox";
 
 function SinglePost(props) {
-  const postId = props.match.params.postId;
+  const slug = props.match.params.slug;
   const { user } = useContext(AuthContext);
+  const toast = useToast();
+  const { onCopy } = useClipboard(`http://localhost:3000${props.match.url}`);
 
   const { data } = useQuery(FETCH_POST_QUERY, {
     variables: {
-      postId,
+      slug,
     },
   });
 
@@ -89,7 +93,20 @@ function SinglePost(props) {
                   variant="outline"
                 />
                 <MenuList>
-                  <MenuItem icon={<BiShareAlt />}>Share Post</MenuItem>
+                  <MenuItem
+                    icon={<BiShareAlt />}
+                    onClick={() => {
+                      onCopy();
+                      toast({
+                        title: "Share Link copied to clipboard",
+                        status: "success",
+                        duration: 1300,
+                        isClosable: true,
+                      });
+                    }}
+                  >
+                    Share Post
+                  </MenuItem>
                   <MenuItem icon={<EditIcon />} as={Link} to="/edit/:postId">
                     Edit Post
                   </MenuItem>
@@ -109,45 +126,16 @@ function SinglePost(props) {
           {user && <CommentForm postId={id} />}
           <Divider my="3" />
           <HStack spacing="1rem">
-            <Tag size="lg" variant="subtle" colorScheme="blue">
+            <Tag size="lg" variant="subtle" colorScheme="gray">
               <TagLabel>{commentCount} Comments</TagLabel>
             </Tag>{" "}
-            <Tag size="lg" variant="subtle" colorScheme="blue">
+            <Tag size="lg" variant="subtle" colorScheme="gray">
               <TagLabel>{likeCount} Likes</TagLabel>
             </Tag>
           </HStack>
 
           {comments.map((comment) => (
-            <Box
-              key={comment.id}
-              display="flex"
-              justifyContent="space-between"
-              rounded="lg"
-              p="5"
-              mt="4"
-              mb="2"
-              // bg={useColorModeValue("white", "gray.700")}
-              bg={"gray.700"}
-            >
-              <Box display="flex">
-                <Avatar mr="16px" size="sm" loading="lazy" />
-                <Box fontSize="sm">
-                  <p>
-                    {comment.fullname}{" "}
-                    <Box as="span" opacity={0.7}>
-                      · {moment(comment.createdAt).fromNow()}
-                    </Box>
-                  </p>
-
-                  <Text fontSize={{ base: "md", md: "lg" }} mt="2">
-                    {comment.body}
-                  </Text>
-                </Box>
-              </Box>
-              {user && user.username === comment.username && (
-                <DeleteButton postId={id} commentId={comment.id} />
-              )}
-            </Box>
+            <CommentBox key={comment.id} postId={id} comment={comment} />
           ))}
         </Box>
       </>
@@ -157,8 +145,8 @@ function SinglePost(props) {
 }
 
 const FETCH_POST_QUERY = gql`
-  query ($postId: ID!) {
-    getPost(postId: $postId) {
+  query ($slug: String!) {
+    getPost(slug: $slug) {
       id
       title
       desc

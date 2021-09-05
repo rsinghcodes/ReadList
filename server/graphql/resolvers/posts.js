@@ -14,9 +14,10 @@ module.exports = {
         throw new Error(err);
       }
     },
-    async getPost(_, { postId }) {
+    async getPost(_, { slug }) {
       try {
-        const post = await Post.findById(postId);
+        const post = await Post.findOne({ slug });
+
         if (post) {
           return post;
         } else {

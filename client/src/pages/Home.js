@@ -53,24 +53,13 @@ function Home() {
             anything with ease and at zero cost.
           </Text>
           <Flex mt="10" justify="center">
-            {user ? (
+            {user && (
               <Button
                 h="4rem"
                 px="40px"
                 fontSize="1.2rem"
                 as={Link}
                 to="/create-post"
-                size="lg"
-                colorScheme="teal"
-                rightIcon={<EditIcon fontSize="0.8em" />}
-              >
-                Create New Post
-              </Button>
-            ) : (
-              <Button
-                h="4rem"
-                px="40px"
-                fontSize="1.2rem"
                 size="lg"
                 colorScheme="teal"
                 rightIcon={<EditIcon fontSize="0.8em" />}

@@ -75,6 +75,9 @@ function PostForm(props) {
         <Button type="submit" colorScheme="teal">
           Publish
         </Button>
+
+        {/* ---------------- Error handling ------------------ */}
+
         {Object.keys(errors).length > 0 && (
           <Box mt="4">
             {Object.values(errors).map((value) => (

@@ -1,9 +1,9 @@
 import React, { useState, useRef } from "react";
 import { useMutation } from "@apollo/react-hooks";
+import { Box, Button, Input } from "@chakra-ui/react";
 import gql from "graphql-tag";
 
 import { Form } from "../util/useForm";
-import { Box, Button, Input } from "@chakra-ui/react";
 
 function CommentForm({ postId }) {
   const commentInputRef = useRef(null);

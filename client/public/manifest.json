@@ -1,6 +1,6 @@
 {
-  "short_name": "Blog App",
-  "name": "Blog App",
+  "short_name": "Readlist",
+  "name": "Readlist - A blogging plateform",
   "icons": [
     {
       "src": "favicon.ico",

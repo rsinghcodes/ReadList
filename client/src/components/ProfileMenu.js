@@ -37,7 +37,9 @@ export default function ProfileMenu() {
           icon={<BsPerson fontSize="1.3rem" />}
         />
       )}
-      {/* -------------------------- */}
+
+      {/* -------------------- Mobile User Menu------------------ */}
+
       {user ? (
         <MenuList>
           <MenuItem display={{ base: "flex", md: "none" }}>

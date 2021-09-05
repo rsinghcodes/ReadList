@@ -25,7 +25,7 @@ function App() {
           <Switch>
             <Route exact path="/" component={Home} />
             <PrivateRoute exact path="/create-post" component={CreatePost} />
-            <Route exact path="/posts/:postId" component={SinglePost} />
+            <Route exact path="/posts/:slug" component={SinglePost} />
             <AuthRoute exact path="/edit/:postId" component={EditPost} />
             <Route component={NotFoundPage} />
           </Switch>

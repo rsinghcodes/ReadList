@@ -1,7 +1,6 @@
 import React from "react";
 import moment from "moment";
 import { Link } from "react-router-dom";
-
 import {
   Box,
   Heading,
@@ -11,7 +10,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 
-function PostCard({ post: { title, desc, createdAt, id } }) {
+function PostCard({ post: { title, desc, createdAt, slug } }) {
   return (
     <LinkBox as="article" p="5" borderWidth="1px" rounded="lg" w="100%">
       <Box
@@ -23,7 +22,7 @@ function PostCard({ post: { title, desc, createdAt, id } }) {
       </Box>
 
       <Heading size="md" my="2">
-        <LinkOverlay as={Link} to={`/posts/${id}`}>
+        <LinkOverlay as={Link} to={`/posts/${slug}`}>
           {title}
         </LinkOverlay>
       </Heading>

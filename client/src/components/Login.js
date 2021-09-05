@@ -30,7 +30,6 @@ function Login(props) {
   const [loginUser, { loading }] = useMutation(LOGIN_USER, {
     update(_, { data: { login: userData } }) {
       context.login(userData);
-      props.history.push("/");
     },
     onError(err) {
       setErrors(err.graphQLErrors[0].extensions.exception.errors);
@@ -90,6 +89,9 @@ function Login(props) {
           </Button>
         </Flex>
       </Stack>
+
+      {/* ------------ Error handling ------------------- */}
+
       {Object.keys(errors).length > 0 && (
         <Box mt="4">
           {Object.values(errors).map((value) => (

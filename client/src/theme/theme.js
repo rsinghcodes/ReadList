@@ -68,11 +68,20 @@ const theme = extendTheme({
           bg: "gray.900",
           borderRadius: "md",
           p: "3",
+          overflowX: "scroll",
+          "::-webkit-scrollbar": {
+            display: "none",
+          },
 
           code: {
             color: "whiteAlpha.900",
             bg: "transparent",
           },
+        },
+
+        "img, video": {
+          w: "100%",
+          h: "100%",
         },
       },
     }),
