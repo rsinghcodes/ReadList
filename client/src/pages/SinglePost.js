@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { useParams } from "react-router-dom";
 import { BiShareAlt } from "react-icons/bi";
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/react-hooks";
@@ -29,7 +30,7 @@ import { Link } from "react-router-dom";
 import CommentBox from "../components/CommentBox";
 
 function SinglePost(props) {
-  const slug = props.match.params.slug;
+  const { slug } = useParams();
   const { user } = useContext(AuthContext);
   const toast = useToast();
   const { onCopy } = useClipboard(`http://localhost:3000${props.match.url}`);
@@ -107,7 +108,7 @@ function SinglePost(props) {
                   >
                     Share Post
                   </MenuItem>
-                  <MenuItem icon={<EditIcon />} as={Link} to="/edit/:postId">
+                  <MenuItem icon={<EditIcon />} as={Link} to="/">
                     Edit Post
                   </MenuItem>
                   <DeleteButton postId={id} callback={deletePostCallback} />

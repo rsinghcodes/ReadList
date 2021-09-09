@@ -100,6 +100,7 @@ const CREATE_POST_MUTATION = gql`
       title
       desc
       body
+      slug
       createdAt
       fullname
       username
