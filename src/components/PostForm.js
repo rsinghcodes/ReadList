@@ -14,7 +14,7 @@ import { useMutation } from "@apollo/react-hooks";
 import { useForm, Form } from "../util/useForm";
 import { FETCH_POSTS_QUERY } from "../util/graphql";
 
-function PostForm(props) {
+function PostForm() {
   const [errors, setErrors] = useState({});
   const { values, onChange, onSubmit } = useForm(createPostCallback, {
     title: "",

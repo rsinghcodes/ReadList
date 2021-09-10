@@ -33,7 +33,9 @@ function SinglePost(props) {
   const { slug } = useParams();
   const { user } = useContext(AuthContext);
   const toast = useToast();
-  const { onCopy } = useClipboard(`http://localhost:3000${props.match.url}`);
+  const { onCopy } = useClipboard(
+    `https://readlistapp.netlify.app${props.match.url}`
+  );
 
   const { data } = useQuery(FETCH_POST_QUERY, {
     variables: {
