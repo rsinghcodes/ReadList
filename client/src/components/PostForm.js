@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Alert,
   AlertIcon,
@@ -6,43 +6,14 @@ import {
   Button,
   Input,
   Textarea,
+  Link,
+  Flex,
 } from "@chakra-ui/react";
+import { FiExternalLink } from "react-icons/fi";
 
-import gql from "graphql-tag";
-import { useMutation } from "@apollo/react-hooks";
+import { Form } from "../util/useForm";
 
-import { useForm, Form } from "../util/useForm";
-import { FETCH_POSTS_QUERY } from "../util/graphql";
-
-function PostForm(props) {
-  const [errors, setErrors] = useState({});
-  const { values, onChange, onSubmit } = useForm(createPostCallback, {
-    title: "",
-    desc: "",
-    body: "",
-  });
-
-  const [createPost] = useMutation(CREATE_POST_MUTATION, {
-    variables: values,
-    update(proxy, result) {
-      const data = proxy.readQuery({
-        query: FETCH_POSTS_QUERY,
-      });
-      data.getPosts = [result.data.createPost, ...data.getPosts];
-      proxy.writeQuery({ query: FETCH_POSTS_QUERY, data });
-      values.title = "";
-      values.desc = "";
-      values.body = "";
-    },
-    onError(err) {
-      setErrors(err.graphQLErrors[0].extensions.exception.errors);
-    },
-  });
-
-  function createPostCallback() {
-    createPost();
-  }
-
+function PostForm({ values, onChange, onSubmit, errors }) {
   return (
     <>
       <Form onSubmit={onSubmit}>
@@ -62,20 +33,28 @@ function PostForm(props) {
             onChange={onChange}
           />
         </Box>
-        <Box my="5">
+        <Box mt="5">
           <Textarea
             rows="12"
             name="body"
             value={values.body}
             placeholder="Enter markdown here..."
             onChange={onChange}
+            mb="3.5"
           />
+          <Link
+            href="https://guides.github.com/features/mastering-markdown/"
+            isExternal
+          >
+            Markdown is supported.{" "}
+            <FiExternalLink style={{ display: "inline-block" }} />
+          </Link>
         </Box>
-
-        <Button type="submit" colorScheme="teal">
-          Publish
-        </Button>
-
+        <Flex justifyContent="flex-end">
+          <Button type="submit" colorScheme="teal">
+            Publish
+          </Button>
+        </Flex>
         {/* ---------------- Error handling ------------------ */}
 
         {Object.keys(errors).length > 0 && (
@@ -92,33 +71,5 @@ function PostForm(props) {
     </>
   );
 }
-
-const CREATE_POST_MUTATION = gql`
-  mutation createPost($title: String!, $desc: String!, $body: String!) {
-    createPost(title: $title, desc: $desc, body: $body) {
-      id
-      title
-      desc
-      body
-      slug
-      createdAt
-      fullname
-      username
-      likes {
-        id
-        username
-        createdAt
-      }
-      likeCount
-      comments {
-        id
-        body
-        username
-        createdAt
-      }
-      commentCount
-    }
-  }
-`;
 
 export default PostForm;

@@ -3,7 +3,7 @@ import React from "react";
 
 import PostForm from "../components/PostForm";
 
-const CreatePost = () => {
+function EditPost() {
   return (
     <>
       <Heading fontSize="2xl" mt="5">
@@ -12,6 +12,6 @@ const CreatePost = () => {
       <PostForm />
     </>
   );
-};
+}
 
-export default CreatePost;
+export default EditPost;
