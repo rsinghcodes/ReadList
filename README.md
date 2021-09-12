@@ -8,11 +8,26 @@
 
 - **Server Enviornment** - NodeJS
 - **Framework** - ExpressJS
-- **For APIs** - GraphQL, Apollo
+- **For APIs** - GraphQL in conjunction with Apollo
 - **Frontend** - ReactJS, Chakra UI
-- **Database** - MongoDB
+- **Database** - MongoDB in conjunction with Mongoose
 - **Cloud database service** - MongoDB Atlas
 - **Deployment** - Heroku (Backend) & Netlify (Frontend)
+
+Authentication is implemented using a JSON Web Token (JWT) saved in local storage. Upon a successful login attempt made to the GraphQL endpoint, the response is a JWT containing the user data. This token is then added to every API request that requires authorisation.
+
+## :video_game: Functionality
+
+It has the following functionality:
+
+- User can register
+- User can login
+- Create and view posts.
+- Markdown supported.
+- Delete or update published posts.
+- Comment on published posts.
+- Like on published posts.
+- Copy to clipboard of share link.
 
 ## ⬇️ Installation & Set Up
 
@@ -28,20 +43,22 @@ git clone https://github.com/rsinghcodes/ReadList.git
 cd server
 ```
 
-**Step :three::** Create a `.env` file in the root directory of your project. Add environment-specific variables on new lines in the form of `NAME=VALUE`. For example:
+**Step :three::** Create a `.env` file in the server directory of the project. Add environment-specific variables in the form of `NAME=VALUE`. For example:
 
 ```
-MONGODB=
-SECRET_KEY=
+MONGODB=[YOUR MONGODB_URI]
+SECRET_KEY=[YOUR SECRET_KEY]
 ```
 
-**Step :four::** Install all the dependencies and then start the development server.
+**Step :four::** Install the dependencies and then start the development server.
 
 ```
 npm install
 
 npm run dev
 ```
+
+The GraphQL API is available at [http://localhost:5000](http://localhost:5000).
 
 **Step :five::** Open another terminal, navigate to client directory, install all the dependencies and now start Frontend application
 
