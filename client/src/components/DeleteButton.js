@@ -13,12 +13,15 @@ import {
   Button,
   IconButton,
   MenuItem,
+  useToast,
 } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
 
-function DeleteButton({ postId, commentId, callback }) {
+function DeleteButton({ postId, commentId, callback, history }) {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const cancelRef = useRef();
+  const toast = useToast();
+  const toastText = commentId ? "Comment" : "Post";
 
   const mutation = commentId ? DELETE_COMMENT_MUTATION : DELETE_POST_MUTATION;
 
@@ -33,6 +36,13 @@ function DeleteButton({ postId, commentId, callback }) {
         proxy.writeQuery({ query: FETCH_POSTS_QUERY, data });
       }
       if (callback) callback();
+      toast({
+        position: "top",
+        description: `Your ${toastText} has been successfully deleted.`,
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
     },
     variables: {
       postId,

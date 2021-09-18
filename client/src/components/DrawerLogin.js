@@ -11,6 +11,7 @@ import {
   Link,
   Text,
   useDisclosure,
+  useColorModeValue,
 } from "@chakra-ui/react";
 
 import Login from "./Login";
@@ -20,6 +21,7 @@ function DrawerLogin() {
   const [registerPage, setRegisterPage] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const firstField = useRef();
+  const bg = useColorModeValue("gray.50", "#011627");
 
   return (
     <>
@@ -40,7 +42,7 @@ function DrawerLogin() {
         size="sm"
       >
         <DrawerOverlay />
-        <DrawerContent>
+        <DrawerContent bg={bg}>
           <DrawerCloseButton />
           {registerPage ? (
             <DrawerHeader borderBottomWidth="1px">

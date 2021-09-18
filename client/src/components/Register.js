@@ -12,6 +12,7 @@ import {
   InputGroup,
   InputRightElement,
   Stack,
+  useToast,
 } from "@chakra-ui/react";
 
 import { useForm, Form } from "../util/useForm";
@@ -21,6 +22,7 @@ function Register(props) {
   const context = useContext(AuthContext);
   const [errors, setErrors] = useState({});
   const [show, setShow] = useState(false);
+  const toast = useToast();
 
   const { onChange, onSubmit, values } = useForm(registerUser, {
     fullname: "",
@@ -34,6 +36,13 @@ function Register(props) {
     update(_, { data: { register: userData } }) {
       context.login(userData);
       props.history.push("/");
+      toast({
+        position: "top",
+        description: "You have successfully registered.",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
     },
     onError(err) {
       setErrors(err.graphQLErrors[0].extensions.exception.errors);

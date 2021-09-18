@@ -56,7 +56,6 @@ function PostForm({ values, onChange, onSubmit, errors }) {
           </Button>
         </Flex>
         {/* ---------------- Error handling ------------------ */}
-
         {Object.keys(errors).length > 0 && (
           <Box mt="4">
             {Object.values(errors).map((value) => (

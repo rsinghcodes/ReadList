@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
 import { BiShareAlt } from "react-icons/bi";
-import gql from "graphql-tag";
 import { useQuery } from "@apollo/react-hooks";
 import moment from "moment";
 
@@ -22,12 +21,16 @@ import {
   Tag,
   TagLabel,
   HStack,
+  Avatar,
 } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
 import { ChevronDownIcon, EditIcon } from "@chakra-ui/icons";
+
+import { FETCH_POST_QUERY } from "../util/graphql";
 import DeleteButton from "../components/DeleteButton";
 import CommentForm from "../components/CommentForm";
-import { Link } from "react-router-dom";
 import CommentBox from "../components/CommentBox";
+import LikeButton from "../components/LikeButton";
 
 function SinglePost(props) {
   const { slug } = useParams();
@@ -58,7 +61,7 @@ function SinglePost(props) {
       fullname,
       username,
       comments,
-      // likes,
+      likes,
       likeCount,
       commentCount,
     } = data.getPost;
@@ -82,9 +85,17 @@ function SinglePost(props) {
           </Text>
           <Divider />
           <Flex my="3" alignItems="center" justifyContent="space-between">
-            <Text color="gray.500">
-              Published by: {fullname} · {moment(createdAt).fromNow()}
-            </Text>
+            <Box display="flex" alignItems="center">
+              <Avatar mr="16px" size="md" loading="lazy" />
+              <div>
+                <Text fontSize="lg" fontWeight="bold">
+                  {fullname}
+                </Text>
+                <Text color="gray.500" fontSize="sm">
+                  Published {moment(createdAt).fromNow()}
+                </Text>
+              </div>
+            </Box>
             {user && user.username === username && (
               <Menu>
                 <MenuButton
@@ -99,16 +110,17 @@ function SinglePost(props) {
                     onClick={() => {
                       onCopy();
                       toast({
-                        title: "Share Link copied to clipboard",
+                        position: "top",
+                        description: "Share Link copied to clipboard.",
                         status: "success",
-                        duration: 1300,
+                        duration: 2000,
                         isClosable: true,
                       });
                     }}
                   >
                     Share Post
                   </MenuItem>
-                  <MenuItem icon={<EditIcon />} as={Link} to="/">
+                  <MenuItem icon={<EditIcon />} as={Link} to={`/edit/${id}`}>
                     Edit Post
                   </MenuItem>
                   <DeleteButton postId={id} callback={deletePostCallback} />
@@ -129,10 +141,8 @@ function SinglePost(props) {
           <HStack spacing="1rem">
             <Tag size="lg" variant="subtle" colorScheme="gray">
               <TagLabel>{commentCount} Comments</TagLabel>
-            </Tag>{" "}
-            <Tag size="lg" variant="subtle" colorScheme="gray">
-              <TagLabel>{likeCount} Likes</TagLabel>
             </Tag>
+            <LikeButton user={user} post={{ id, likeCount, likes }} />
           </HStack>
 
           {comments.map((comment) => (
@@ -144,31 +154,5 @@ function SinglePost(props) {
   }
   return postMarkup;
 }
-
-const FETCH_POST_QUERY = gql`
-  query ($slug: String!) {
-    getPost(slug: $slug) {
-      id
-      title
-      desc
-      sanitizedHtml
-      createdAt
-      fullname
-      username
-      likeCount
-      likes {
-        username
-      }
-      commentCount
-      comments {
-        id
-        username
-        fullname
-        createdAt
-        body
-      }
-    }
-  }
-`;
 
 export default SinglePost;

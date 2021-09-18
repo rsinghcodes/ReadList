@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Heading } from "@chakra-ui/react";
+import { Heading, useToast } from "@chakra-ui/react";
 
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
@@ -8,7 +8,8 @@ import { useForm } from "../util/useForm";
 import { FETCH_POSTS_QUERY } from "../util/graphql";
 import PostForm from "../components/PostForm";
 
-function CreatePost() {
+function CreatePost(props) {
+  const toast = useToast();
   const [errors, setErrors] = useState({});
   const { values, onChange, onSubmit } = useForm(createPostCallback, {
     title: "",
@@ -27,6 +28,14 @@ function CreatePost() {
       values.title = "";
       values.desc = "";
       values.body = "";
+      props.history.push("/");
+      toast({
+        position: "top",
+        description: "Your Post has been successfully created.",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
     },
     onError(err) {
       setErrors(err.graphQLErrors[0].extensions.exception.errors);
