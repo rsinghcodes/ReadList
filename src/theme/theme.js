@@ -9,6 +9,7 @@ const theme = extendTheme({
   styles: {
     global: (props) => ({
       body: {
+        bg: mode("gray.50", "#011627")(props),
         color: mode("gray.700", "whiteAlpha.900")(props),
       },
       ".prose": {
@@ -58,23 +59,23 @@ const theme = extendTheme({
           },
         },
         code: {
-          bg: mode("gray.200", "gray.900")(props),
+          bg: mode("gray.200", "gray.800")(props),
           color: mode("gray.900", "whiteAlpha.800")(props),
           fontSize: "90%",
           p: "1",
           borderRadius: "sm",
         },
         pre: {
-          bg: "gray.900",
+          bg: mode("gray.200", "gray.800")(props),
           borderRadius: "md",
-          p: "3",
+          p: "6",
           overflowX: "scroll",
           "::-webkit-scrollbar": {
             display: "none",
           },
 
           code: {
-            color: "whiteAlpha.900",
+            color: mode("gray.900", "whiteAlpha.800")(props),
             bg: "transparent",
           },
         },

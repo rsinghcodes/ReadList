@@ -12,6 +12,7 @@ import {
   InputGroup,
   InputRightElement,
   Stack,
+  useToast,
 } from "@chakra-ui/react";
 
 import { AuthContext } from "../context/auth";
@@ -21,6 +22,7 @@ function Login(props) {
   const context = useContext(AuthContext);
   const [errors, setErrors] = useState({});
   const [show, setShow] = useState(false);
+  const toast = useToast();
 
   const { onChange, onSubmit, values } = useForm(loginUserCallback, {
     username: "",
@@ -30,6 +32,13 @@ function Login(props) {
   const [loginUser, { loading }] = useMutation(LOGIN_USER, {
     update(_, { data: { login: userData } }) {
       context.login(userData);
+      toast({
+        position: "top",
+        description: "You have successfully logged in.",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
     },
     onError(err) {
       setErrors(err.graphQLErrors[0].extensions.exception.errors);
