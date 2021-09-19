@@ -8,6 +8,7 @@ import PrivateRoute from "./util/PrivateRoute";
 
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 import Home from "./pages/Home";
 const CreatePost = lazy(() => import("./pages/CreatePost"));
@@ -21,15 +22,21 @@ function App() {
       <Router>
         <Header />
         <Container maxW="container.lg">
-          <Suspense fallback={<Progress size="xs" isIndeterminate />}>
-            <Switch>
-              <Route exact path="/" component={Home} />
-              <PrivateRoute exact path="/create-post" component={CreatePost} />
-              <Route exact path="/posts/:slug" component={SinglePost} />
-              <PrivateRoute exact path="/edit/:postId" component={EditPost} />
-              <Route component={NotFoundPage} />
-            </Switch>
-          </Suspense>
+          <ErrorBoundary>
+            <Suspense fallback={<Progress size="xs" isIndeterminate />}>
+              <Switch>
+                <Route exact path="/" component={Home} />
+                <PrivateRoute
+                  exact
+                  path="/create-post"
+                  component={CreatePost}
+                />
+                <Route exact path="/posts/:slug" component={SinglePost} />
+                <PrivateRoute exact path="/edit/:postId" component={EditPost} />
+                <Route component={NotFoundPage} />
+              </Switch>
+            </Suspense>
+          </ErrorBoundary>
           <Footer />
         </Container>
       </Router>
