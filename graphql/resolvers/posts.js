@@ -27,6 +27,19 @@ module.exports = {
         throw new Error(err);
       }
     },
+    async getPostforUpdate(_, { postId }) {
+      try {
+        const post = await Post.findById(postId);
+
+        if (post) {
+          return post;
+        } else {
+          throw new Error("Post not found");
+        }
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
   },
   Mutation: {
     async createPost(_, { title, desc, body }, context) {
@@ -65,6 +78,36 @@ module.exports = {
       });
 
       return post;
+    },
+    async updatePost(_, { postId, title, desc, body }, context) {
+      const user = checkAuth(context);
+
+      const { errors, valid } = validatePostInput(title, desc, body);
+
+      if (!valid) {
+        throw new UserInputError("Errors", { errors });
+      }
+
+      try {
+        const post = await Post.findById(postId);
+        if (user.username === post.username) {
+          const updatedPost = await Post.findByIdAndUpdate(
+            postId,
+            {
+              title,
+              desc,
+              body,
+            },
+            { new: true }
+          );
+
+          return updatedPost;
+        } else {
+          throw new AuthenticationError("Action not allowed");
+        }
+      } catch (err) {
+        throw new Error(err);
+      }
     },
     async deletePost(_, { postId }, context) {
       const user = checkAuth(context);

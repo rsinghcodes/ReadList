@@ -40,8 +40,8 @@ module.exports = {
 
       const match = await bcrypt.compare(password, user.password);
       if (!match) {
-        errors.general = "Username or password is invalid!";
-        throw new UserInputError("Username or password is invalid!", {
+        errors.general = "Password is invalid!";
+        throw new UserInputError("Password is invalid!", {
           errors,
         });
       }

@@ -2,15 +2,32 @@
 
 <p align="center">ReadList is a blog web application where people can share writings, content and their ideas online. This app allows readers to read, like, comment and share on other platforms or social handles.</p>
 
+![ReadList App preview](https://user-images.githubusercontent.com/67682451/132889761-9c09d42d-12bc-4070-907c-3b06dc44108d.png)
+
 ## 🚧 Technology Stack
 
 - **Server Enviornment** - NodeJS
 - **Framework** - ExpressJS
-- **For APIs** - GraphQL, Apollo
+- **For APIs** - GraphQL in conjunction with Apollo
 - **Frontend** - ReactJS, Chakra UI
-- **Database** - MongoDB
+- **Database** - MongoDB in conjunction with Mongoose
 - **Cloud database service** - MongoDB Atlas
-- **Deployment** - Work in Progress...
+- **Deployment** - Heroku (Backend) & Netlify (Frontend)
+
+Authentication is implemented using a JSON Web Token (JWT) saved in local storage. Upon a successful login attempt made to the GraphQL endpoint, the response is a JWT containing the user data. This token is then added to every API request that requires authorisation.
+
+## :video_game: Functionality
+
+It has the following functionality:
+
+- User can register
+- User can login
+- Create and view posts.
+- Markdown supported.
+- Delete or update published posts.
+- Comment on published posts.
+- Like on published posts.
+- Copy to clipboard of share link.
 
 ## ⬇️ Installation & Set Up
 
@@ -20,18 +37,30 @@
 git clone https://github.com/rsinghcodes/ReadList.git
 ```
 
-**Step :two::** Navigate to server directory, install all the dependencies and then start the development server
+**Step :two::** Navigate to server directory.
 
 ```
 cd server
+```
 
+**Step :three::** Create a `.env` file in the server directory of the project. Add environment-specific variables in the form of `NAME=VALUE`. For example:
+
+```
+MONGODB=[YOUR MONGODB_URI]
+SECRET_KEY=[YOUR SECRET_KEY]
+```
+
+**Step :four::** Install the dependencies and then start the development server.
+
+```
 npm install
 
 npm run dev
-
 ```
 
-**Step :three::** Open another terminal, navigate to client directory, install all the dependencies and now start Frontend application
+The GraphQL API is available at [http://localhost:5000](http://localhost:5000).
+
+**Step :five::** Open another terminal, navigate to client directory, install all the dependencies and now start Frontend application
 
 ```
 cd client
@@ -39,8 +68,11 @@ cd client
 npm install
 
 npm start
-
 ```
 
 Your app is ready to be run! ✨✨\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+## :satellite: Deployment
+
+See [here!](https://readlistapp.netlify.app/)

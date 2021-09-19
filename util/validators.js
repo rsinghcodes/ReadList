@@ -52,13 +52,13 @@ module.exports.validatePostInput = (title, desc, body) => {
   const errors = {};
 
   if (title.trim() === "") {
-    errors.title = "Please Enter Title of post!";
+    errors.title = "Please enter title of post!";
   }
   if (desc.trim() === "") {
-    errors.title = "Please Enter Description of post!";
+    errors.desc = "Please enter description of post!";
   }
   if (body.trim() === "") {
-    errors.title = "Please Enter Markdown!";
+    errors.body = "Please enter Markdown!";
   }
 
   return {
