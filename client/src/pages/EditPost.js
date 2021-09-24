@@ -1,21 +1,37 @@
 import { Heading, useToast } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { useMutation } from "@apollo/react-hooks";
+import { useQuery, useMutation } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 
 import { useForm } from "../util/useForm";
+import { FETCH_POST_FOR_UPDATE } from "../util/graphql";
 import PostForm from "../components/PostForm";
 
 function EditPost() {
   const { postId } = useParams();
   const toast = useToast();
   const [errors, setErrors] = useState({});
+  const [textBoxValue, setTextBoxValue] = useState({});
+
+  const { data } = useQuery(FETCH_POST_FOR_UPDATE, {
+    variables: {
+      postId,
+    },
+  });
+
+  useEffect(() => {
+    if (!data) {
+      setTextBoxValue({});
+    } else {
+      setTextBoxValue(data.getPostforUpdate);
+    }
+  }, [data]);
 
   const { values, onChange, onSubmit } = useForm(updatePostCallback, {
-    title: "",
-    desc: "",
-    body: "",
+    title: textBoxValue.title,
+    desc: textBoxValue.desc,
+    body: textBoxValue.body,
   });
 
   const [updatePost] = useMutation(UPDATE_POST_MUTATION, {
