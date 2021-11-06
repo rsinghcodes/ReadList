@@ -1,4 +1,10 @@
 const { AuthenticationError, UserInputError } = require("apollo-server");
+const marked = require("marked");
+const slugify = require("slugify");
+const createDomPurify = require("dompurify");
+const { JSDOM } = require("jsdom");
+
+const dompurify = createDomPurify(new JSDOM().window);
 
 const { validatePostInput } = require("../../util/validators");
 const Post = require("../../models/Post");
@@ -63,8 +69,10 @@ module.exports = {
 
       const newPost = new Post({
         title,
+        slug: slugify(title, { lower: true, strict: true }),
         desc,
         body,
+        sanitizedHtml: dompurify.sanitize(marked(body)),
         user: user.id,
         username: user.username,
         fullname: user.fullname,
@@ -91,15 +99,13 @@ module.exports = {
       try {
         const post = await Post.findById(postId);
         if (user.username === post.username) {
-          const updatedPost = await Post.findByIdAndUpdate(
-            postId,
-            {
-              title,
-              desc,
-              body,
-            },
-            { new: true }
-          );
+          const updatedPost = await Post.findByIdAndUpdate(postId, {
+            title,
+            slug: slugify(title, { lower: true, strict: true }),
+            desc,
+            body,
+            sanitizedHtml: dompurify.sanitize(marked(body)),
+          });
 
           return updatedPost;
         } else {
