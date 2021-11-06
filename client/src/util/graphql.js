@@ -60,8 +60,6 @@ export const FETCH_POST_FOR_UPDATE = gql`
       title
       desc
       body
-      slug
-      username
     }
   }
 `;

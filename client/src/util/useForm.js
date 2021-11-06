@@ -1,10 +1,11 @@
 import { useState } from "react";
 
-export const useForm = (callback, initialState = {}) => {
+export function useForm(callback, initialState = {}) {
   const [values, setValues] = useState(initialState);
 
   const onChange = (event) => {
-    setValues({ ...values, [event.target.name]: event.target.value });
+    const { name, value } = event.target;
+    setValues({ ...values, [name]: value });
   };
 
   const onSubmit = (event) => {
@@ -16,8 +17,9 @@ export const useForm = (callback, initialState = {}) => {
     onChange,
     onSubmit,
     values,
+    setValues,
   };
-};
+}
 
 export const Form = (props) => {
   const { children, ...other } = props;

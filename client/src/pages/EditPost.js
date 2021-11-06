@@ -12,7 +12,6 @@ function EditPost() {
   const { postId } = useParams();
   const toast = useToast();
   const [errors, setErrors] = useState({});
-  const [textBoxValue, setTextBoxValue] = useState({});
 
   const { data } = useQuery(FETCH_POST_FOR_UPDATE, {
     variables: {
@@ -20,19 +19,22 @@ function EditPost() {
     },
   });
 
+  const { values, setValues, onChange, onSubmit } = useForm(
+    updatePostCallback,
+    {
+      title: "",
+      desc: "",
+      body: "",
+    }
+  );
+
   useEffect(() => {
     if (!data) {
-      setTextBoxValue({});
+      setValues({});
     } else {
-      setTextBoxValue(data.getPostforUpdate);
+      setValues(data.getPostforUpdate);
     }
-  }, [data]);
-
-  const { values, onChange, onSubmit } = useForm(updatePostCallback, {
-    title: textBoxValue.title,
-    desc: textBoxValue.desc,
-    body: textBoxValue.body,
-  });
+  }, [data, setValues]);
 
   const [updatePost] = useMutation(UPDATE_POST_MUTATION, {
     variables: {
@@ -42,6 +44,9 @@ function EditPost() {
       body: values.body,
     },
     update() {
+      values.title = "";
+      values.desc = "";
+      values.body = "";
       toast({
         position: "top",
         description: "Your Post has been successfully updated.",
@@ -49,9 +54,6 @@ function EditPost() {
         duration: 2000,
         isClosable: true,
       });
-      values.title = "";
-      values.desc = "";
-      values.body = "";
     },
     onError(err) {
       setErrors(err.graphQLErrors[0].extensions.exception.errors);
