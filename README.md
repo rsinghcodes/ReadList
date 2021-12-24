@@ -8,6 +8,7 @@
 
 - **Server Enviornment** - NodeJS
 - **Framework** - ExpressJS
+- **Bundler** - Webpack
 - **For APIs** - GraphQL in conjunction with Apollo
 - **Frontend** - ReactJS, Chakra UI
 - **Database** - MongoDB in conjunction with Mongoose
@@ -46,27 +47,41 @@ cd server
 **Step :three::** Create a `.env` file in the server directory of the project. Add environment-specific variables in the form of `NAME=VALUE`. For example:
 
 ```
-MONGODB=[YOUR MONGODB_URI]
-SECRET_KEY=[YOUR SECRET_KEY]
+MONGODB=...
+SECRET_KEY=...
 ```
 
-**Step :four::** Install the dependencies and then start the development server.
+**Step :four::** Install the dependencies.
 
 ```
 npm install
-
-npm run dev
 ```
 
-The GraphQL API is available at [http://localhost:5000](http://localhost:5000).
+**Step :five::** Build with Webpack’s production configurations.
 
-**Step :five::** Open another terminal, navigate to client directory, install all the dependencies and now start Frontend application
+```
+npm run build
+```
+
+**Step :six::** Now to start server, open a new Terminal and run the compiled code.
+
+```
+npm start
+```
+
+**Server started at [http://localhost:4000](http://localhost:4000).**
+
+**Step :seven::** Open another terminal, navigate to client directory, install all the dependencies and now start Frontend application
 
 ```
 cd client
+```
 
+```
 npm install
+```
 
+```
 npm start
 ```
 

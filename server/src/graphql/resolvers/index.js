@@ -1,5 +1,6 @@
 const postsResolvers = require("./posts");
 const usersResolvers = require("./users");
+const adminResolvers = require("./admin");
 const commentsResolvers = require("./comments");
 
 module.exports = {
@@ -12,10 +13,8 @@ module.exports = {
   },
   Mutation: {
     ...usersResolvers.Mutation,
+    ...adminResolvers.Mutation,
     ...postsResolvers.Mutation,
     ...commentsResolvers.Mutation,
-  },
-  Subscription: {
-    ...postsResolvers.Subscription,
   },
 };

@@ -11,6 +11,7 @@ import Footer from "./components/Footer";
 import ErrorBoundary from "./components/ErrorBoundary";
 
 import Home from "./pages/Home";
+import Profile from "./pages/Profile";
 const CreatePost = lazy(() => import("./pages/CreatePost"));
 const SinglePost = lazy(() => import("./pages/SinglePost"));
 const EditPost = lazy(() => import("./pages/EditPost"));
@@ -33,6 +34,7 @@ function App() {
                 />
                 <Route exact path="/posts/:slug" component={SinglePost} />
                 <PrivateRoute exact path="/edit/:postId" component={EditPost} />
+                <PrivateRoute exact path="/profile" component={Profile} />
                 <Route component={NotFoundPage} />
               </Switch>
             </Suspense>
