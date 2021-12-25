@@ -1,12 +1,12 @@
 import React, { useContext, useState } from "react";
 import { useMutation } from "@apollo/react-hooks";
 import gql from "graphql-tag";
+import { useHistory } from "react-router-dom";
 import {
-  Alert,
-  AlertIcon,
-  Box,
   Button,
   Flex,
+  FormControl,
+  FormErrorMessage,
   FormLabel,
   Input,
   InputGroup,
@@ -23,19 +23,19 @@ function Register(props) {
   const [errors, setErrors] = useState({});
   const [show, setShow] = useState(false);
   const toast = useToast();
+  const history = useHistory();
 
   const { onChange, onSubmit, values } = useForm(registerUser, {
     fullname: "",
-    username: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
 
   const [addUser, { loading }] = useMutation(REGISTER_USER, {
-    update(_, { data: { register: userData } }) {
+    update(_, { data: { registerUser: userData } }) {
       context.login(userData);
-      props.history.push("/");
+      history.push("/");
       toast({
         position: "top",
         description: "You have successfully registered.",
@@ -45,7 +45,7 @@ function Register(props) {
       });
     },
     onError(err) {
-      setErrors(err.graphQLErrors[0].extensions.exception.errors);
+      setErrors(err.graphQLErrors[0].extensions.errors);
     },
     variables: values,
   });
@@ -57,7 +57,7 @@ function Register(props) {
   return (
     <Form onSubmit={onSubmit}>
       <Stack spacing="24px">
-        <Box>
+        <FormControl isInvalid={errors.fullname ? true : false}>
           <FormLabel htmlFor="fullname">Full Name</FormLabel>
           <Input
             id="fullname"
@@ -65,23 +65,13 @@ function Register(props) {
             name="fullname"
             type="text"
             value={values.fullname}
-            isInvalid={errors.fullname ? true : false}
             onChange={onChange}
           />
-        </Box>
-        <Box>
-          <FormLabel htmlFor="username">Username</FormLabel>
-          <Input
-            id="username"
-            placeholder="Enter username"
-            name="username"
-            type="text"
-            value={values.username}
-            isInvalid={errors.username ? true : false}
-            onChange={onChange}
-          />
-        </Box>
-        <Box>
+          {errors.fullname && (
+            <FormErrorMessage>{errors.fullname}</FormErrorMessage>
+          )}
+        </FormControl>
+        <FormControl isInvalid={errors.email ? true : false}>
           <FormLabel htmlFor="email">Email</FormLabel>
           <Input
             id="email"
@@ -89,11 +79,11 @@ function Register(props) {
             name="email"
             type="text"
             value={values.email}
-            isInvalid={errors.email ? true : false}
             onChange={onChange}
           />
-        </Box>
-        <Box>
+          {errors.email && <FormErrorMessage>{errors.email}</FormErrorMessage>}
+        </FormControl>
+        <FormControl isInvalid={errors.password ? true : false}>
           <FormLabel htmlFor="password">Password</FormLabel>
           <InputGroup size="md">
             <Input
@@ -102,7 +92,6 @@ function Register(props) {
               placeholder="Enter password"
               name="password"
               value={values.password}
-              isInvalid={errors.password ? true : false}
               onChange={onChange}
             />
             <InputRightElement width="4.5rem">
@@ -111,8 +100,11 @@ function Register(props) {
               </Button>
             </InputRightElement>
           </InputGroup>
-        </Box>
-        <Box>
+          {errors.password && (
+            <FormErrorMessage>{errors.password}</FormErrorMessage>
+          )}
+        </FormControl>
+        <FormControl isInvalid={errors.confirmPassword ? true : false}>
           <FormLabel htmlFor="confirmPassword">Confirm Password</FormLabel>
           <InputGroup size="md">
             <Input
@@ -122,7 +114,6 @@ function Register(props) {
               placeholder="Re-Enter password"
               name="confirmPassword"
               value={values.confirmPassword}
-              isInvalid={errors.confirmPassword ? true : false}
               onChange={onChange}
             />
             <InputRightElement width="4.5rem">
@@ -131,7 +122,10 @@ function Register(props) {
               </Button>
             </InputRightElement>
           </InputGroup>
-        </Box>
+          {errors.confirmPassword && (
+            <FormErrorMessage>{errors.confirmPassword}</FormErrorMessage>
+          )}
+        </FormControl>
         <Flex justifyContent="space-between">
           <Button variant="outline" onClick={props.onClose}>
             Cancel
@@ -146,33 +140,20 @@ function Register(props) {
           </Button>
         </Flex>
       </Stack>
-      {/* --------------------- Error handling ------------------ */}
-      {Object.keys(errors).length > 0 && (
-        <Box mt="4">
-          {Object.values(errors).map((value) => (
-            <Alert status="error" key={value} my="1">
-              <AlertIcon />
-              {value}
-            </Alert>
-          ))}
-        </Box>
-      )}
     </Form>
   );
 }
 
 const REGISTER_USER = gql`
-  mutation register(
+  mutation registerUser(
     $fullname: String!
-    $username: String!
     $email: String!
     $password: String!
     $confirmPassword: String!
   ) {
-    register(
+    registerUser(
       registerInput: {
         fullname: $fullname
-        username: $username
         email: $email
         password: $password
         confirmPassword: $confirmPassword

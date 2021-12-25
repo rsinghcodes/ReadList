@@ -38,7 +38,7 @@ function Home() {
             Create blog and share
             <Box as="span" color={useColorModeValue("teal.500", "teal.300")}>
               {" "}
-              with speed
+              with community.
             </Box>
           </chakra.h1>
 

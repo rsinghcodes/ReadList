@@ -51,9 +51,9 @@ module.exports = {
     async createPost(_, { title, desc, body }, context) {
       const user = checkAuth(context);
 
-      const { errors, valid } = validatePostInput(title, desc, body);
+      const { errors, isValid } = validatePostInput(title, desc, body);
 
-      if (!valid) {
+      if (!isValid) {
         throw new UserInputError("Errors", { errors });
       }
 
@@ -62,7 +62,7 @@ module.exports = {
       if (blogTitle) {
         throw new UserInputError("Title is taken", {
           errors: {
-            email: "This title is already taken.",
+            title: "This title is already taken.",
           },
         });
       }
@@ -80,10 +80,6 @@ module.exports = {
 
       const post = await newPost.save();
 
-      context.pubsub.publish("NEW_POST", {
-        newPost: post,
-      });
-
       return post;
     },
     async updatePost(_, { postId, title, desc, body }, context) {
@@ -97,7 +93,7 @@ module.exports = {
 
       try {
         const post = await Post.findById(postId);
-        if (user.username === post.username) {
+        if (user.email === post.email) {
           const updatedPost = await Post.findByIdAndUpdate(postId, {
             title,
             slug: slugify(title, { lower: true, strict: true }),

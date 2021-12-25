@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { UserInputError } = require("apollo-server");
+const { AuthenticationError, UserInputError } = require("apollo-server");
 
 const {
   validateRegisterInput,
@@ -8,6 +8,7 @@ const {
 } = require("../../util/validators");
 const User = require("../../models/User");
 const { SECRET_KEY } = require("../../config");
+const checkAuth = require("../../util/check-auth");
 
 function generateToken(user) {
   return jwt.sign(
@@ -24,6 +25,16 @@ function generateToken(user) {
 }
 
 module.exports = {
+  Query: {
+    async getUser(_, { userId }) {
+      try {
+        const user = await User.findById(userId);
+        return user;
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+  },
   Mutation: {
     async loginUser(_, { email, password }) {
       const { errors, isValid } = validateLoginInput(email, password);
@@ -35,8 +46,8 @@ module.exports = {
       const user = await User.findOne({ email });
 
       if (!user) {
-        errors.email = "Email not found";
-        throw new UserInputError("Email not found", { errors });
+        errors.email = "Email not found!";
+        throw new UserInputError("Email not found!", { errors });
       }
 
       const match = await bcrypt.compare(password, user.password);
@@ -73,7 +84,7 @@ module.exports = {
       if (user) {
         throw new UserInputError("Email is taken", {
           errors: {
-            email: "This email is taken",
+            email: "Account is already created using this email!",
           },
         });
       }
@@ -109,23 +120,19 @@ module.exports = {
       if (!isValid) {
         throw new UserInputError("Errors", { errors });
       }
-      // Make sure user doesnt already exist
-      const user = await User.findOne({ email });
-      if (user) {
-        throw new UserInputError("Email is taken", {
-          errors: {
-            email: "This email is taken",
-          },
-        });
-      }
+
       // hash password and create an auth token
       password = await bcrypt.hash(password, 12);
 
-      const updatedUser = await User.findByIdAndUpdate(userId, {
-        fullname,
-        email,
-        password,
-      });
+      const updatedUser = await User.findByIdAndUpdate(
+        userId,
+        {
+          fullname,
+          email,
+          password,
+        },
+        { new: true }
+      );
 
       return updatedUser;
     },

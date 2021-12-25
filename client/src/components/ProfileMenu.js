@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { BsPerson } from "react-icons/bs";
 import { FiLogOut } from "react-icons/fi";
+import { AiOutlineSetting } from "react-icons/ai";
 import {
   Menu,
   MenuButton,
@@ -13,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/auth";
-import { ChevronDownIcon, EditIcon, ViewIcon } from "@chakra-ui/icons";
+import { ChevronDownIcon, EditIcon } from "@chakra-ui/icons";
 
 export default function ProfileMenu() {
   const { user, logout } = useContext(AuthContext);
@@ -46,8 +47,12 @@ export default function ProfileMenu() {
             {user.fullname}
           </MenuItem>
           <MenuDivider display={{ base: "flex", md: "none" }} />
-          <MenuItem icon={<ViewIcon />} as={Link} to="/profile">
-            View Profile
+          <MenuItem
+            icon={<AiOutlineSetting size="1rem" />}
+            as={Link}
+            to="/profile"
+          >
+            Manage account
           </MenuItem>
           <MenuItem icon={<EditIcon />} as={Link} to="/create-post">
             Create post

@@ -11,7 +11,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import theme from "./theme/theme";
 
 const httpLink = createHttpLink({
-  uri: "http://localhost:5000",
+  uri: "http://localhost:4000",
 });
 
 const authLink = setContext(() => {

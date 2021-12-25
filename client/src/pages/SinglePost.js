@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { BiShareAlt } from "react-icons/bi";
 import { useQuery } from "@apollo/react-hooks";
 import moment from "moment";
+import { useHistory } from "react-router-dom";
 
 import { AuthContext } from "../context/auth";
 import {
@@ -36,6 +37,7 @@ function SinglePost(props) {
   const { slug } = useParams();
   const { user } = useContext(AuthContext);
   const toast = useToast();
+  const history = useHistory();
   const { onCopy } = useClipboard(`http://localhost:3000${props.match.url}`);
 
   const { data } = useQuery(FETCH_POST_QUERY, {
@@ -45,7 +47,7 @@ function SinglePost(props) {
   });
 
   function deletePostCallback() {
-    props.history.push("/");
+    history.push("/");
   }
 
   let postMarkup;
@@ -59,7 +61,7 @@ function SinglePost(props) {
       sanitizedHtml,
       createdAt,
       fullname,
-      username,
+      email,
       comments,
       likes,
       likeCount,
@@ -92,11 +94,11 @@ function SinglePost(props) {
                   {fullname}
                 </Text>
                 <Text color="gray.500" fontSize="sm">
-                  Published {moment(createdAt).fromNow()}
+                  Published {moment(createdAt).fromNow(true)}
                 </Text>
               </div>
             </Box>
-            {user && user.username === username && (
+            {user && user.email === email && (
               <Menu>
                 <MenuButton
                   as={IconButton}

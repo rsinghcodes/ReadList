@@ -7,19 +7,19 @@ const postSchema = new Schema(
     body: String,
     slug: String,
     sanitizedHtml: String,
-    username: String,
+    email: String,
     fullname: String,
     comments: [
       {
         body: String,
-        username: String,
+        email: String,
         fullname: String,
         createdAt: String,
       },
     ],
     likes: [
       {
-        username: String,
+        email: String,
         createdAt: String,
       },
     ],

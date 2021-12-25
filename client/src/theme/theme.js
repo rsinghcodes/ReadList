@@ -3,8 +3,8 @@ import { mode } from "@chakra-ui/theme-tools";
 
 const theme = extendTheme({
   fonts: {
-    body: "Inter",
-    heading: "Inter",
+    body: "Epilogue",
+    heading: "Epilogue",
   },
   styles: {
     global: (props) => ({

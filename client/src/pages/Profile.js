@@ -1,7 +1,8 @@
 import { useContext, useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import {
   Heading,
-  Box,
+  FormControl,
   Button,
   Flex,
   FormLabel,
@@ -9,11 +10,10 @@ import {
   InputGroup,
   InputRightElement,
   Stack,
-  Alert,
-  AlertIcon,
   useToast,
+  FormErrorMessage,
 } from "@chakra-ui/react";
-import { useMutation } from "@apollo/react-hooks";
+import { useMutation, useQuery } from "@apollo/react-hooks";
 
 import { useForm, Form } from "../util/useForm";
 import { AuthContext } from "../context/auth";
@@ -21,30 +21,37 @@ import { gql } from "@apollo/client";
 
 function Profile(props) {
   const context = useContext(AuthContext);
+  const userId = context.user.id;
   const [errors, setErrors] = useState({});
   const [show, setShow] = useState(false);
   const toast = useToast();
+  const history = useHistory();
 
   const { onChange, onSubmit, values, setValues } = useForm(updateData, {
     fullname: "",
-    username: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
 
+  const { data } = useQuery(FETCH_USER_QUERY, {
+    variables: {
+      userId,
+    },
+  });
+
   useEffect(() => {
-    if (!context.user) {
+    if (!data) {
       setValues({});
     } else {
-      setValues(context.user);
+      setValues(data.getUser);
     }
-  }, [context.user, setValues]);
+  }, [data, setValues]);
 
   const [updateUser, { loading }] = useMutation(UPDATE_USER, {
     update(_, { data: { updateUser: userData } }) {
       context.login(userData);
-      props.history.push("/");
+      history.push("/");
       toast({
         position: "top",
         description: "You have successfully updated.",
@@ -54,7 +61,8 @@ function Profile(props) {
       });
     },
     onError(err) {
-      setErrors(err.graphQLErrors[0].extensions.exception.errors);
+      console.log(err.graphQLErrors[0]);
+      // setErrors(err.graphQLErrors[0].extensions.errors);
     },
     variables: values,
   });
@@ -65,12 +73,12 @@ function Profile(props) {
 
   return (
     <>
-      <Heading fontSize="2xl" my="5" borderBottom="1px" pb="3">
-        Profile
+      <Heading fontSize="2xl" my="5" pb="3">
+        Your Profile
       </Heading>
       <Form onSubmit={onSubmit}>
         <Stack spacing="24px">
-          <Box>
+          <FormControl isInvalid={errors.fullname ? true : false}>
             <FormLabel htmlFor="fullname">Full Name</FormLabel>
             <Input
               id="fullname"
@@ -78,23 +86,13 @@ function Profile(props) {
               name="fullname"
               type="text"
               value={values.fullname}
-              isInvalid={errors.fullname ? true : false}
               onChange={onChange}
             />
-          </Box>
-          <Box>
-            <FormLabel htmlFor="username">Username</FormLabel>
-            <Input
-              id="username"
-              placeholder="Enter username"
-              name="username"
-              type="text"
-              value={values.username}
-              isInvalid={errors.username ? true : false}
-              onChange={onChange}
-            />
-          </Box>
-          <Box>
+            {errors.fullname && (
+              <FormErrorMessage>{errors.fullname}</FormErrorMessage>
+            )}
+          </FormControl>
+          <FormControl isInvalid={errors.email ? true : false}>
             <FormLabel htmlFor="email">Your Email</FormLabel>
             <Input
               id="email"
@@ -103,10 +101,12 @@ function Profile(props) {
               type="text"
               isDisabled={true}
               value={values.email}
-              isInvalid={errors.email ? true : false}
             />
-          </Box>
-          <Box>
+            {errors.email && (
+              <FormErrorMessage>{errors.email}</FormErrorMessage>
+            )}
+          </FormControl>
+          <FormControl isInvalid={errors.password ? true : false}>
             <FormLabel htmlFor="password">Password</FormLabel>
             <InputGroup size="md">
               <Input
@@ -115,7 +115,6 @@ function Profile(props) {
                 placeholder="Enter new password"
                 name="password"
                 value={values.password}
-                isInvalid={errors.password ? true : false}
                 onChange={onChange}
               />
               <InputRightElement width="4.5rem">
@@ -124,8 +123,11 @@ function Profile(props) {
                 </Button>
               </InputRightElement>
             </InputGroup>
-          </Box>
-          <Box>
+            {errors.password && (
+              <FormErrorMessage>{errors.password}</FormErrorMessage>
+            )}
+          </FormControl>
+          <FormControl isInvalid={errors.confirmPassword ? true : false}>
             <FormLabel htmlFor="confirmPassword">Confirm Password</FormLabel>
             <InputGroup size="md">
               <Input
@@ -135,7 +137,6 @@ function Profile(props) {
                 placeholder="Re-Enter new password"
                 name="confirmPassword"
                 value={values.confirmPassword}
-                isInvalid={errors.confirmPassword ? true : false}
                 onChange={onChange}
               />
               <InputRightElement width="4.5rem">
@@ -144,8 +145,20 @@ function Profile(props) {
                 </Button>
               </InputRightElement>
             </InputGroup>
-          </Box>
+            {errors.confirmPassword && (
+              <FormErrorMessage>{errors.confirmPassword}</FormErrorMessage>
+            )}
+          </FormControl>
           <Flex justifyContent="flex-end">
+            <Button
+              colorScheme="red"
+              // isLoading={loading}
+              // loadingText="Saving..."
+              // type="submit"
+              mr="7"
+            >
+              Delete my account
+            </Button>
             <Button
               colorScheme="teal"
               isLoading={loading}
@@ -156,26 +169,24 @@ function Profile(props) {
             </Button>
           </Flex>
         </Stack>
-        {/* ---------------- Error handling ------------------ */}
-        {Object.keys(errors).length > 0 && (
-          <Box mt="4">
-            {Object.values(errors).map((value) => (
-              <Alert status="error" key={value} my="1">
-                <AlertIcon />
-                {value}
-              </Alert>
-            ))}
-          </Box>
-        )}
       </Form>
     </>
   );
 }
 
+const FETCH_USER_QUERY = gql`
+  query ($userId: ID!) {
+    getUser(userId: $userId) {
+      fullname
+      email
+    }
+  }
+`;
+
 const UPDATE_USER = gql`
   mutation updateUser(
     $fullname: String!
-    $username: String!
+    $email: String!
     $password: String!
     $confirmPassword: String!
     $userId: ID!
@@ -183,7 +194,7 @@ const UPDATE_USER = gql`
     updateUser(
       updateInput: {
         fullname: $fullname
-        username: $username
+        email: $email
         password: $password
         confirmPassword: $confirmPassword
       }
@@ -192,8 +203,6 @@ const UPDATE_USER = gql`
       id
       email
       fullname
-      password
-      confirmPassword
     }
   }
 `;

@@ -17,7 +17,7 @@ import {
 } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
 
-function DeleteButton({ postId, commentId, callback, history }) {
+function DeleteButton({ postId, commentId, callback }) {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const cancelRef = useRef();
   const toast = useToast();
@@ -110,7 +110,7 @@ const DELETE_COMMENT_MUTATION = gql`
       id
       comments {
         id
-        username
+        email
         fullname
         createdAt
         body

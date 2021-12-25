@@ -57,29 +57,33 @@ SECRET_KEY=...
 npm install
 ```
 
-**Step :five::** Build with Webpack’s production configurations.
+**Step :five::** Start build with Webpack’s development configurations.
 
 ```
 npm run build
 ```
 
-**Step :six::** Now to start server, open a new Terminal and run the compiled code.
+**Step :six::** Now to start server in development mode, open a new Terminal and run the compiled code.
 
 ```
-npm start
+npm run dev
 ```
 
 **Server started at [http://localhost:4000](http://localhost:4000).**
 
-**Step :seven::** Open another terminal, navigate to client directory, install all the dependencies and now start Frontend application
+**Step :seven::** Open another new terminal, navigate to client directory.
 
 ```
 cd client
 ```
 
+**Step :eight::** Install all the dependencies.
+
 ```
 npm install
 ```
+
+**Step :nine::** Now start Frontend application
 
 ```
 npm start
