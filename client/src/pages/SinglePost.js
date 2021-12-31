@@ -94,7 +94,7 @@ function SinglePost(props) {
                   {fullname}
                 </Text>
                 <Text color="gray.500" fontSize="sm">
-                  Published {moment(createdAt).fromNow(true)}
+                  Published {moment(createdAt).fromNow()}
                 </Text>
               </div>
             </Box>

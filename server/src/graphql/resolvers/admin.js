@@ -7,6 +7,7 @@ const {
   validateLoginInput,
 } = require("../../util/validators");
 const Admin = require("../../models/Admin");
+const User = require("../../models/User");
 const { SECRET_KEY } = require("../../config");
 
 function generateToken(user) {
@@ -24,6 +25,16 @@ function generateToken(user) {
 }
 
 module.exports = {
+  Query: {
+    async getAllUsers() {
+      try {
+        const user = await User.find();
+        return user;
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+  },
   Mutation: {
     async loginAdmin(_, { email, password }) {
       const { errors, isValid } = validateLoginInput(email, password);

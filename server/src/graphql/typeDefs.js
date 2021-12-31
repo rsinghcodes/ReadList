@@ -44,7 +44,7 @@ module.exports = gql`
     createdAt: String!
     updatedAt: String!
   }
-  input RegisterInput {
+  input UserInput {
     fullname: String!
     password: String!
     confirmPassword: String!
@@ -52,19 +52,19 @@ module.exports = gql`
   }
   input UpdateUserInput {
     fullname: String!
-    email: String!
     password: String!
     confirmPassword: String!
   }
   type Query {
     getUser(userId: ID!): User
+    getAllUsers: [User]
     getPosts: [Post]
     getPost(slug: String!): Post
     getPostforUpdate(postId: ID!): Post
   }
   type Mutation {
-    registerAdmin(registerInput: RegisterInput): Admin!
-    registerUser(registerInput: RegisterInput): User!
+    registerAdmin(registerInput: UserInput): Admin!
+    registerUser(registerInput: UserInput): User!
     loginAdmin(email: String!, password: String!): Admin!
     loginUser(email: String!, password: String!): User!
     updateUser(updateInput: UpdateUserInput, userId: ID!): User!

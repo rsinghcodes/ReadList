@@ -76,6 +76,7 @@ module.exports = {
         user: user.id,
         email: user.email,
         fullname: user.fullname,
+        createdAt: new Date().toISOString(),
       });
 
       const post = await newPost.save();
@@ -85,22 +86,26 @@ module.exports = {
     async updatePost(_, { postId, title, desc, body }, context) {
       const user = checkAuth(context);
 
-      const { errors, valid } = validatePostInput(title, desc, body);
+      const { errors, isValid } = validatePostInput(title, desc, body);
 
-      if (!valid) {
+      if (!isValid) {
         throw new UserInputError("Errors", { errors });
       }
 
       try {
         const post = await Post.findById(postId);
         if (user.email === post.email) {
-          const updatedPost = await Post.findByIdAndUpdate(postId, {
-            title,
-            slug: slugify(title, { lower: true, strict: true }),
-            desc,
-            body,
-            sanitizedHtml: dompurify.sanitize(marked(body)),
-          });
+          const updatedPost = await Post.findByIdAndUpdate(
+            postId,
+            {
+              title,
+              slug: slugify(title, { lower: true, strict: true }),
+              desc,
+              body,
+              sanitizedHtml: dompurify.sanitize(marked(body)),
+            },
+            { new: true }
+          );
 
           return updatedPost;
         } else {
@@ -115,7 +120,7 @@ module.exports = {
 
       try {
         const post = await Post.findById(postId);
-        if (user.email === post.email) {
+        if (user.email === post.email || user.admin === true) {
           await post.delete();
           return "Post deleted successfully";
         } else {

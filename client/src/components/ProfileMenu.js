@@ -47,13 +47,25 @@ export default function ProfileMenu() {
             {user.fullname}
           </MenuItem>
           <MenuDivider display={{ base: "flex", md: "none" }} />
-          <MenuItem
-            icon={<AiOutlineSetting size="1rem" />}
-            as={Link}
-            to="/profile"
-          >
-            Manage account
-          </MenuItem>
+          {user.admin && (
+            <MenuItem
+              icon={<AiOutlineSetting size="1rem" />}
+              as={Link}
+              to="/dashboard"
+            >
+              Dashboard
+            </MenuItem>
+          )}
+          {user.user && (
+            <MenuItem
+              icon={<AiOutlineSetting size="1rem" />}
+              as={Link}
+              to="/profile"
+            >
+              Manage account
+            </MenuItem>
+          )}
+
           <MenuItem icon={<EditIcon />} as={Link} to="/create-post">
             Create post
           </MenuItem>

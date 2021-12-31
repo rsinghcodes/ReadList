@@ -1,14 +1,15 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { AuthenticationError, UserInputError } = require("apollo-server");
+const { UserInputError } = require("apollo-server");
 
 const {
   validateRegisterInput,
   validateLoginInput,
+  validateNewUpdateInput,
 } = require("../../util/validators");
 const User = require("../../models/User");
+const Post = require("../../models/Post");
 const { SECRET_KEY } = require("../../config");
-const checkAuth = require("../../util/check-auth");
 
 function generateToken(user) {
   return jwt.sign(
@@ -109,14 +110,14 @@ module.exports = {
     },
     async updateUser(
       _,
-      { updateInput: { fullname, email, password, confirmPassword }, userId }
+      { updateInput: { fullname, password, confirmPassword }, userId }
     ) {
-      const { isValid, errors } = validateRegisterInput(
+      const { isValid, errors } = validateNewUpdateInput(
         fullname,
-        email,
         password,
         confirmPassword
       );
+
       if (!isValid) {
         throw new UserInputError("Errors", { errors });
       }
@@ -126,15 +127,15 @@ module.exports = {
 
       const updatedUser = await User.findByIdAndUpdate(
         userId,
-        {
-          fullname,
-          email,
-          password,
-        },
+        { fullname, password },
         { new: true }
       );
 
-      return updatedUser;
+      await Post.findOneAndUpdate(userId, { fullname }, { new: true });
+
+      const token = generateToken(updatedUser);
+
+      return { ...updatedUser._doc, id: updatedUser._id, token };
     },
   },
 };
