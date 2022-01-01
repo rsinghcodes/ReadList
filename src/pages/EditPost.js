@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import gql from "graphql-tag";
+import { useHistory } from "react-router-dom";
 
 import { useForm } from "../util/useForm";
 import { FETCH_POST_FOR_UPDATE } from "../util/graphql";
@@ -11,6 +12,7 @@ import PostForm from "../components/PostForm";
 function EditPost() {
   const { postId } = useParams();
   const toast = useToast();
+  const history = useHistory();
   const [errors, setErrors] = useState({});
 
   const { data } = useQuery(FETCH_POST_FOR_UPDATE, {
@@ -47,6 +49,7 @@ function EditPost() {
       values.title = "";
       values.desc = "";
       values.body = "";
+      history.push("/");
       toast({
         position: "top",
         description: "Your Post has been successfully updated.",
@@ -56,7 +59,8 @@ function EditPost() {
       });
     },
     onError(err) {
-      setErrors(err.graphQLErrors[0].extensions.exception.errors);
+      console.log(err.graphQLErrors[0]);
+      setErrors(err.graphQLErrors[0].extensions.errors);
     },
   });
 
@@ -93,15 +97,15 @@ const UPDATE_POST_MUTATION = gql`
       slug
       createdAt
       fullname
-      username
+      email
       likeCount
       likes {
-        username
+        email
       }
       commentCount
       comments {
         id
-        username
+        email
         fullname
         createdAt
         body

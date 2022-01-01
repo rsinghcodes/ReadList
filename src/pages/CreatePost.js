@@ -38,7 +38,7 @@ function CreatePost(props) {
       });
     },
     onError(err) {
-      setErrors(err.graphQLErrors[0].extensions.exception.errors);
+      setErrors(err.graphQLErrors[0].extensions.errors);
     },
   });
 
@@ -71,17 +71,17 @@ const CREATE_POST_MUTATION = gql`
       slug
       createdAt
       fullname
-      username
+      email
       likes {
         id
-        username
+        email
         createdAt
       }
       likeCount
       comments {
         id
         body
-        username
+        email
         createdAt
       }
       commentCount

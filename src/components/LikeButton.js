@@ -9,7 +9,7 @@ function LikeButton({ user, post: { id, likeCount, likes } }) {
   const tooltipText = liked ? "Unlike" : "Like";
 
   useEffect(() => {
-    if (user && likes.find((like) => like.username === user.username)) {
+    if (user && likes.find((like) => like.email === user.email)) {
       setLiked(true);
     } else setLiked(false);
   }, [user, likes]);
@@ -53,7 +53,7 @@ const LIKE_POST_MUTATION = gql`
       id
       likes {
         id
-        username
+        email
       }
       likeCount
     }

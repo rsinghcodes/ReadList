@@ -1,12 +1,12 @@
 import React, { useContext, useState } from "react";
 import { useMutation } from "@apollo/react-hooks";
 import gql from "graphql-tag";
+import { useHistory } from "react-router-dom";
 import {
-  Alert,
-  AlertIcon,
-  Box,
   Button,
   Flex,
+  FormControl,
+  FormErrorMessage,
   FormLabel,
   Input,
   InputGroup,
@@ -23,15 +23,17 @@ function Login(props) {
   const [errors, setErrors] = useState({});
   const [show, setShow] = useState(false);
   const toast = useToast();
+  const history = useHistory();
 
   const { onChange, onSubmit, values } = useForm(loginUserCallback, {
-    username: "",
+    email: "",
     password: "",
   });
 
   const [loginUser, { loading }] = useMutation(LOGIN_USER, {
-    update(_, { data: { login: userData } }) {
+    update(_, { data: { loginUser: userData } }) {
       context.login(userData);
+      history.push("/");
       toast({
         position: "top",
         description: "You have successfully logged in.",
@@ -41,7 +43,7 @@ function Login(props) {
       });
     },
     onError(err) {
-      setErrors(err.graphQLErrors[0].extensions.exception.errors);
+      setErrors(err.graphQLErrors[0].extensions.errors);
     },
     variables: values,
   });
@@ -53,19 +55,19 @@ function Login(props) {
   return (
     <Form onSubmit={onSubmit}>
       <Stack spacing="24px">
-        <Box>
-          <FormLabel htmlFor="username">Username</FormLabel>
+        <FormControl isInvalid={errors.email ? true : false}>
+          <FormLabel htmlFor="email">Email</FormLabel>
           <Input
-            id="username"
-            placeholder="Please enter your username"
-            name="username"
+            id="email"
+            placeholder="Please enter your email"
+            name="email"
             type="text"
-            value={values.username}
-            isInvalid={errors.username ? true : false}
+            value={values.email}
             onChange={onChange}
           />
-        </Box>
-        <Box>
+          {errors.email && <FormErrorMessage>{errors.email}</FormErrorMessage>}
+        </FormControl>
+        <FormControl isInvalid={errors.password ? true : false}>
           <FormLabel htmlFor="password">Password</FormLabel>
           <InputGroup size="md">
             <Input
@@ -74,7 +76,6 @@ function Login(props) {
               type={show ? "text" : "password"}
               name="password"
               value={values.password}
-              isInvalid={errors.password ? true : false}
               onChange={onChange}
             />
             <InputRightElement width="4.5rem">
@@ -83,7 +84,10 @@ function Login(props) {
               </Button>
             </InputRightElement>
           </InputGroup>
-        </Box>
+          {errors.password && (
+            <FormErrorMessage>{errors.password}</FormErrorMessage>
+          )}
+        </FormControl>
         <Flex justifyContent="space-between">
           <Button variant="outline" onClick={props.onClose}>
             Cancel
@@ -98,29 +102,15 @@ function Login(props) {
           </Button>
         </Flex>
       </Stack>
-
-      {/* ------------ Error handling ------------------- */}
-
-      {Object.keys(errors).length > 0 && (
-        <Box mt="4">
-          {Object.values(errors).map((value) => (
-            <Alert status="error" key={value} my="1">
-              <AlertIcon />
-              {value}
-            </Alert>
-          ))}
-        </Box>
-      )}
     </Form>
   );
 }
 
 const LOGIN_USER = gql`
-  mutation login($username: String!, $password: String!) {
-    login(username: $username, password: $password) {
+  mutation loginUser($email: String!, $password: String!) {
+    loginUser(email: $email, password: $password) {
       id
       email
-      username
       fullname
       createdAt
       token

@@ -5,16 +5,22 @@ import { Container, Progress } from "@chakra-ui/react";
 
 import { AuthProvider } from "./context/auth";
 import PrivateRoute from "./util/PrivateRoute";
+import AuthRoute from "./util/AuthRoute";
+import AdminPrivateRoute from "./util/AdminPrivateRoute";
 
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import ErrorBoundary from "./components/ErrorBoundary";
 
 import Home from "./pages/Home";
+const Profile = lazy(() => import("./pages/Profile"));
+const UpdateProfile = lazy(() => import("./pages/UpdateProfile"));
 const CreatePost = lazy(() => import("./pages/CreatePost"));
 const SinglePost = lazy(() => import("./pages/SinglePost"));
 const EditPost = lazy(() => import("./pages/EditPost"));
 const NotFoundPage = lazy(() => import("./pages/404"));
+const AdminLogin = lazy(() => import("./pages/Admin/AdminLogin"));
+const AdminDashboard = lazy(() => import("./pages/Admin/AdminDashboard"));
 
 function App() {
   return (
@@ -26,6 +32,12 @@ function App() {
             <Suspense fallback={<Progress size="xs" isIndeterminate />}>
               <Switch>
                 <Route exact path="/" component={Home} />
+                <AuthRoute exact path="/admin" component={AdminLogin} />
+                <AdminPrivateRoute
+                  exact
+                  path="/dashboard"
+                  component={AdminDashboard}
+                />
                 <PrivateRoute
                   exact
                   path="/create-post"
@@ -33,6 +45,12 @@ function App() {
                 />
                 <Route exact path="/posts/:slug" component={SinglePost} />
                 <PrivateRoute exact path="/edit/:postId" component={EditPost} />
+                <PrivateRoute
+                  exact
+                  path="/profile/update"
+                  component={UpdateProfile}
+                />
+                <PrivateRoute exact path="/profile" component={Profile} />
                 <Route component={NotFoundPage} />
               </Switch>
             </Suspense>

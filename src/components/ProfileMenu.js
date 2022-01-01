@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { BsPerson } from "react-icons/bs";
 import { FiLogOut } from "react-icons/fi";
+import { AiOutlineSetting } from "react-icons/ai";
 import {
   Menu,
   MenuButton,
@@ -46,6 +47,25 @@ export default function ProfileMenu() {
             {user.fullname}
           </MenuItem>
           <MenuDivider display={{ base: "flex", md: "none" }} />
+          {user.admin && (
+            <MenuItem
+              icon={<AiOutlineSetting size="1rem" />}
+              as={Link}
+              to="/dashboard"
+            >
+              Dashboard
+            </MenuItem>
+          )}
+          {user.user && (
+            <MenuItem
+              icon={<AiOutlineSetting size="1rem" />}
+              as={Link}
+              to="/profile"
+            >
+              Manage account
+            </MenuItem>
+          )}
+
           <MenuItem icon={<EditIcon />} as={Link} to="/create-post">
             Create post
           </MenuItem>

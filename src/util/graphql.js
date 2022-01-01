@@ -9,16 +9,15 @@ export const FETCH_POSTS_QUERY = gql`
       body
       slug
       createdAt
-      username
       fullname
       likeCount
       likes {
-        username
+        email
       }
       commentCount
       comments {
         id
-        username
+        email
         fullname
         createdAt
         body
@@ -36,15 +35,15 @@ export const FETCH_POST_QUERY = gql`
       sanitizedHtml
       createdAt
       fullname
-      username
+      email
       likeCount
       likes {
-        username
+        email
       }
       commentCount
       comments {
         id
-        username
+        email
         fullname
         createdAt
         body
@@ -60,6 +59,16 @@ export const FETCH_POST_FOR_UPDATE = gql`
       title
       desc
       body
+    }
+  }
+`;
+
+export const FETCH_USERS_QUERY = gql`
+  {
+    getUsers {
+      id
+      email
+      fullname
     }
   }
 `;
