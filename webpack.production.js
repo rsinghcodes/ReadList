@@ -2,6 +2,7 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const { merge } = require("webpack-merge");
 const nodeExternals = require("webpack-node-externals");
 const path = require("path");
+require("regenerator-runtime/runtime");
 
 const common = require("./webpack.common.js");
 
