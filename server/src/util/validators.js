@@ -19,7 +19,7 @@ module.exports.validateRegisterInput = (
   if (Validator.isEmpty(email)) {
     errors.email = "Email field is required";
   } else if (!Validator.isEmail(email)) {
-    errors.email = "Email is invalid";
+    errors.email = "Please choose valid Email format";
   }
   if (Validator.isEmpty(password)) {
     errors.password = "Password field is required";
@@ -48,7 +48,7 @@ module.exports.validateLoginInput = (email, password) => {
   if (Validator.isEmpty(email)) {
     errors.email = "Email field is required";
   } else if (!Validator.isEmail(email)) {
-    errors.email = "Email is invalid";
+    errors.email = "Please choose valid Email format!";
   }
   if (Validator.isEmpty(password)) {
     errors.password = "Password field is required";

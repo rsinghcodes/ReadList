@@ -62,3 +62,13 @@ export const FETCH_POST_FOR_UPDATE = gql`
     }
   }
 `;
+
+export const FETCH_USERS_QUERY = gql`
+  {
+    getUsers {
+      id
+      email
+      fullname
+    }
+  }
+`;

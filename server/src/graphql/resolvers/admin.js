@@ -1,14 +1,16 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { UserInputError } = require("apollo-server");
+const { UserInputError, AuthenticationError } = require("apollo-server");
 
 const {
   validateRegisterInput,
   validateLoginInput,
 } = require("../../util/validators");
+const { SECRET_KEY } = require("../../config");
 const Admin = require("../../models/Admin");
 const User = require("../../models/User");
-const { SECRET_KEY } = require("../../config");
+const Post = require("../../models/Post");
+const checkAuth = require("../../util/check-auth");
 
 function generateToken(user) {
   return jwt.sign(
@@ -26,7 +28,7 @@ function generateToken(user) {
 
 module.exports = {
   Query: {
-    async getAllUsers() {
+    async getUsers() {
       try {
         const user = await User.find();
         return user;
@@ -66,6 +68,7 @@ module.exports = {
         token,
       };
     },
+
     async registerAdmin(
       _,
       { registerInput: { fullname, email, password, confirmPassword } }
@@ -106,6 +109,36 @@ module.exports = {
         id: res._id,
         token,
       };
+    },
+
+    async deletePostByAdmin(_, { postId }, context) {
+      const user = checkAuth(context);
+
+      try {
+        if (user.admin) {
+          await Post.findByIdAndDelete(postId);
+          return "Post deleted successfully";
+        } else {
+          throw new AuthenticationError("Action not allowed");
+        }
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+
+    async deleteUserByAdmin(_, { userId }, context) {
+      const user = checkAuth(context);
+
+      try {
+        if (user.admin) {
+          await User.findByIdAndDelete(userId);
+          return "User deleted successfully";
+        } else {
+          throw new AuthenticationError("Action not allowed");
+        }
+      } catch (err) {
+        throw new Error(err);
+      }
     },
   },
 };

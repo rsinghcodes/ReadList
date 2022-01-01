@@ -9,7 +9,6 @@ const postSchema = new Schema({
   email: String,
   fullname: String,
   createdAt: String,
-  updatedAt: String,
   comments: [
     {
       body: String,

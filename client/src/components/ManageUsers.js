@@ -1,52 +1,79 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import {
-  Table,
-  TableCaption,
-  Tbody,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  Button,
+  IconButton,
   Td,
-  Tfoot,
-  Th,
-  Thead,
   Tr,
 } from "@chakra-ui/react";
+import { DeleteIcon } from "@chakra-ui/icons";
+import { useMutation } from "@apollo/react-hooks";
+import gql from "graphql-tag";
 
-const ManageUsers = () => {
+const ManageUsers = ({ user }) => {
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const cancelRef = useRef();
+
+  const [deleteUserByAdmin] = useMutation(DELETE_USER_MUTATION, {
+    update() {
+      setConfirmOpen(false);
+      window.location.reload(false);
+    },
+    variables: { userId: user.id },
+  });
+
   return (
-    <Table variant="simple">
-      <TableCaption>Manage Users</TableCaption>
-      <Thead>
-        <Tr>
-          <Th>Full Name</Th>
-          <Th>Email</Th>
-          <Th isNumeric>Action</Th>
-        </Tr>
-      </Thead>
-      <Tbody>
-        <Tr>
-          <Td>inches</Td>
-          <Td>millimetres (mm)</Td>
-          <Td isNumeric>25.4</Td>
-        </Tr>
-        <Tr>
-          <Td>feet</Td>
-          <Td>centimetres (cm)</Td>
-          <Td isNumeric>30.48</Td>
-        </Tr>
-        <Tr>
-          <Td>yards</Td>
-          <Td>metres (m)</Td>
-          <Td isNumeric>0.91444</Td>
-        </Tr>
-      </Tbody>
-      <Tfoot>
-        <Tr>
-          <Th>Full Name</Th>
-          <Th>Email</Th>
-          <Th isNumeric>Action</Th>
-        </Tr>
-      </Tfoot>
-    </Table>
+    <Tr>
+      <Td>{user.fullname}</Td>
+      <Td>{user.email}</Td>
+      <Td isNumeric>
+        <IconButton
+          aria-label="Delete post"
+          icon={<DeleteIcon />}
+          colorScheme="red"
+          onClick={() => setConfirmOpen(true)}
+        />
+
+        <AlertDialog
+          isOpen={confirmOpen}
+          leastDestructiveRef={cancelRef}
+          onClose={() => setConfirmOpen(false)}
+        >
+          <AlertDialogOverlay>
+            <AlertDialogContent>
+              <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                Delete Post
+              </AlertDialogHeader>
+
+              <AlertDialogBody>
+                Are you sure? You can't undo this action afterwards.
+              </AlertDialogBody>
+
+              <AlertDialogFooter>
+                <Button ref={cancelRef} onClick={() => setConfirmOpen(false)}>
+                  No
+                </Button>
+                <Button colorScheme="red" onClick={deleteUserByAdmin} ml={3}>
+                  Yes
+                </Button>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialogOverlay>
+        </AlertDialog>
+      </Td>
+    </Tr>
   );
 };
+
+const DELETE_USER_MUTATION = gql`
+  mutation deleteUserByAdmin($userId: ID!) {
+    deleteUserByAdmin(userId: $userId)
+  }
+`;
 
 export default ManageUsers;

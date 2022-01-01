@@ -56,8 +56,8 @@ const AdminLogin = () => {
   }
 
   return (
-    <Center h={`80vh`} padding={10}>
-      <Box borderWidth="1px" borderRadius="lg" padding={6}>
+    <Center h="auto" padding={10}>
+      <Box maxW="sm" w="sm" borderWidth="1px" borderRadius="lg" padding={6}>
         <Heading as="h4" size="md">
           Admin Login
         </Heading>

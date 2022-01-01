@@ -6,6 +6,7 @@ import { Container, Progress } from "@chakra-ui/react";
 import { AuthProvider } from "./context/auth";
 import PrivateRoute from "./util/PrivateRoute";
 import AuthRoute from "./util/AuthRoute";
+import AdminPrivateRoute from "./util/AdminPrivateRoute";
 
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -32,7 +33,7 @@ function App() {
               <Switch>
                 <Route exact path="/" component={Home} />
                 <AuthRoute exact path="/admin" component={AdminLogin} />
-                <PrivateRoute
+                <AdminPrivateRoute
                   exact
                   path="/dashboard"
                   component={AdminDashboard}

@@ -57,7 +57,7 @@ module.exports = gql`
   }
   type Query {
     getUser(userId: ID!): User
-    getAllUsers: [User]
+    getUsers: [User]
     getPosts: [Post]
     getPost(slug: String!): Post
     getPostforUpdate(postId: ID!): Post
@@ -71,6 +71,8 @@ module.exports = gql`
     createPost(title: String!, desc: String!, body: String!): Post!
     updatePost(postId: ID!, title: String!, desc: String!, body: String!): Post!
     deletePost(postId: ID!): String!
+    deletePostByAdmin(postId: ID!): String!
+    deleteUserByAdmin(userId: ID!): String!
     createComment(postId: String!, body: String!): Post!
     deleteComment(postId: ID!, commentId: ID!): Post!
     likePost(postId: ID!): Post!

@@ -120,7 +120,7 @@ module.exports = {
 
       try {
         const post = await Post.findById(postId);
-        if (user.email === post.email || user.admin === true) {
+        if (user.email === post.email) {
           await post.delete();
           return "Post deleted successfully";
         } else {
