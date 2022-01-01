@@ -51,9 +51,9 @@ module.exports = {
     async createPost(_, { title, desc, body }, context) {
       const user = checkAuth(context);
 
-      const { errors, valid } = validatePostInput(title, desc, body);
+      const { errors, isValid } = validatePostInput(title, desc, body);
 
-      if (!valid) {
+      if (!isValid) {
         throw new UserInputError("Errors", { errors });
       }
 
@@ -62,7 +62,7 @@ module.exports = {
       if (blogTitle) {
         throw new UserInputError("Title is taken", {
           errors: {
-            username: "This title is already taken.",
+            title: "This title is already taken.",
           },
         });
       }
@@ -74,38 +74,38 @@ module.exports = {
         body,
         sanitizedHtml: dompurify.sanitize(marked(body)),
         user: user.id,
-        username: user.username,
+        email: user.email,
         fullname: user.fullname,
         createdAt: new Date().toISOString(),
       });
 
       const post = await newPost.save();
 
-      context.pubsub.publish("NEW_POST", {
-        newPost: post,
-      });
-
       return post;
     },
     async updatePost(_, { postId, title, desc, body }, context) {
       const user = checkAuth(context);
 
-      const { errors, valid } = validatePostInput(title, desc, body);
+      const { errors, isValid } = validatePostInput(title, desc, body);
 
-      if (!valid) {
+      if (!isValid) {
         throw new UserInputError("Errors", { errors });
       }
 
       try {
         const post = await Post.findById(postId);
-        if (user.username === post.username) {
-          const updatedPost = await Post.findByIdAndUpdate(postId, {
-            title,
-            slug: slugify(title, { lower: true, strict: true }),
-            desc,
-            body,
-            sanitizedHtml: dompurify.sanitize(marked(body)),
-          });
+        if (user.email === post.email) {
+          const updatedPost = await Post.findByIdAndUpdate(
+            postId,
+            {
+              title,
+              slug: slugify(title, { lower: true, strict: true }),
+              desc,
+              body,
+              sanitizedHtml: dompurify.sanitize(marked(body)),
+            },
+            { new: true }
+          );
 
           return updatedPost;
         } else {
@@ -120,7 +120,7 @@ module.exports = {
 
       try {
         const post = await Post.findById(postId);
-        if (user.username === post.username) {
+        if (user.email === post.email) {
           await post.delete();
           return "Post deleted successfully";
         } else {
@@ -131,15 +131,15 @@ module.exports = {
       }
     },
     async likePost(_, { postId }, context) {
-      const { username } = checkAuth(context);
+      const { email } = checkAuth(context);
 
       const post = await Post.findById(postId);
       if (post) {
-        if (post.likes.find((like) => like.username === username)) {
-          post.likes = post.likes.filter((like) => like.username !== username);
+        if (post.likes.find((like) => like.email === email)) {
+          post.likes = post.likes.filter((like) => like.email !== email);
         } else {
           post.likes.push({
-            username,
+            email,
             createdAt: new Date().toISOString(),
           });
         }
@@ -147,11 +147,6 @@ module.exports = {
         await post.save();
         return post;
       } else throw new UserInputError("Post not found");
-    },
-  },
-  Subscription: {
-    newPost: {
-      subscribe: (_, __, { pubsub }) => pubsub.asyncIterator("NEW_POST"),
     },
   },
 };
