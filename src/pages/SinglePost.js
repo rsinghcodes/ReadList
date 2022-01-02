@@ -23,6 +23,7 @@ import {
   TagLabel,
   HStack,
   Avatar,
+  Tooltip,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { ChevronDownIcon, EditIcon } from "@chakra-ui/icons";
@@ -100,7 +101,7 @@ function SinglePost(props) {
                 </Text>
               </div>
             </Box>
-            {user && user.email === email && (
+            {user && user.email === email ? (
               <Menu>
                 <MenuButton
                   as={IconButton}
@@ -130,6 +131,25 @@ function SinglePost(props) {
                   <DeleteButton postId={id} callback={deletePostCallback} />
                 </MenuList>
               </Menu>
+            ) : (
+              <Tooltip label="Copy Share Link">
+                <IconButton
+                  variant="outline"
+                  aria-label="Copy Share Link"
+                  fontSize="20px"
+                  icon={<BiShareAlt />}
+                  onClick={() => {
+                    onCopy();
+                    toast({
+                      position: "top",
+                      description: "Share Link copied to clipboard.",
+                      status: "success",
+                      duration: 2000,
+                      isClosable: true,
+                    });
+                  }}
+                />
+              </Tooltip>
             )}
           </Flex>
           <Divider marginBottom="3.5" />
