@@ -132,6 +132,7 @@ module.exports = {
       try {
         if (user.admin) {
           await User.findByIdAndDelete(userId);
+          await Post.deleteMany({ user: userId });
           return "User deleted successfully";
         } else {
           throw new AuthenticationError("Action not allowed");

@@ -69,6 +69,8 @@ export const FETCH_USERS_QUERY = gql`
       id
       email
       fullname
+      createdAt
+      updatedAt
     }
   }
 `;

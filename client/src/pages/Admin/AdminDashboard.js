@@ -46,6 +46,7 @@ const AdminDashboard = () => {
                     <Th>Title</Th>
                     <Th>Description</Th>
                     <Th>Posted By</Th>
+                    <Th>Published</Th>
                     <Th isNumeric>Action</Th>
                   </Tr>
                 </Thead>
@@ -67,6 +68,8 @@ const AdminDashboard = () => {
                   <Tr>
                     <Th>FullName</Th>
                     <Th>Email</Th>
+                    <Th>Account Created</Th>
+                    <Th>Account Updated</Th>
                     <Th isNumeric>Action</Th>
                   </Tr>
                 </Thead>
