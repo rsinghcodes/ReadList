@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { UserInputError } = require("apollo-server");
+const { UserInputError, AuthenticationError } = require("apollo-server");
 
 const {
   validateRegisterInput,
@@ -10,6 +10,7 @@ const {
 const User = require("../../models/User");
 const Post = require("../../models/Post");
 const { SECRET_KEY } = require("../../config");
+const checkAuth = require("../../util/check-auth");
 
 function generateToken(user) {
   return jwt.sign(
@@ -96,6 +97,8 @@ module.exports = {
         fullname,
         email,
         password,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       });
 
       const res = await newUser.save();
@@ -127,7 +130,7 @@ module.exports = {
 
       const updatedUser = await User.findByIdAndUpdate(
         userId,
-        { fullname, password },
+        { fullname, password, updatedAt: new Date().toISOString() },
         { new: true }
       );
 
@@ -136,6 +139,23 @@ module.exports = {
       const token = generateToken(updatedUser);
 
       return { ...updatedUser._doc, id: updatedUser._id, token };
+    },
+    async deleteUser(_, { userId }, context) {
+      const user = checkAuth(context);
+
+      try {
+        const current = await User.findById(userId);
+
+        if (user.email === current.email) {
+          await current.delete();
+          await Post.deleteMany({ user: userId });
+          return "User deleted successfully";
+        } else {
+          throw new AuthenticationError("Action not allowed");
+        }
+      } catch (err) {
+        throw new Error(err);
+      }
     },
   },
 };
