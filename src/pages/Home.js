@@ -1,11 +1,6 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/react-hooks";
-
-import { FETCH_POSTS_QUERY } from "../util/graphql";
-import { AuthContext } from "../context/auth";
-
-import PostCard from "../components/PostCard";
 import {
   Box,
   Button,
@@ -17,13 +12,17 @@ import {
 } from "@chakra-ui/react";
 import { EditIcon } from "@chakra-ui/icons";
 
+import { FETCH_POSTS_QUERY } from "../util/graphql";
+import { AuthContext } from "../context/auth";
+import PostCard from "../components/PostCard";
+
 function Home() {
   const { user } = useContext(AuthContext);
   const { loading, data } = useQuery(FETCH_POSTS_QUERY);
 
   return (
     <>
-      <Box as="section" py="6rem">
+      <Box as="section" pt="24" pb="14">
         <Box textAlign="center">
           <chakra.h1
             maxW="16ch"
@@ -52,8 +51,8 @@ function Home() {
             ReadList is simple, and easy to use blogging application. Share
             anything with ease and at zero cost.
           </Text>
-          <Flex mt="10" justify="center">
-            {user && (
+          {user && (
+            <Flex mt="10" justify="center">
               <Button
                 h="4rem"
                 px="40px"
@@ -66,8 +65,8 @@ function Home() {
               >
                 Create New Post
               </Button>
-            )}
-          </Flex>
+            </Flex>
+          )}
         </Box>
       </Box>
       <VStack spacing={4}>

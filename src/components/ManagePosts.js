@@ -10,10 +10,13 @@ import {
   AlertDialogOverlay,
   Button,
   IconButton,
+  Flex,
+  Link,
 } from "@chakra-ui/react";
 import { useMutation } from "@apollo/react-hooks";
 import gql from "graphql-tag";
-import { DeleteIcon } from "@chakra-ui/icons";
+import { DeleteIcon, ExternalLinkIcon } from "@chakra-ui/icons";
+import moment from "moment";
 
 const ManagePosts = ({ post }) => {
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -33,14 +36,24 @@ const ManagePosts = ({ post }) => {
         <Td>{post.title}</Td>
         <Td>{post.desc}</Td>
         <Td>{post.fullname}</Td>
-        <Td isNumeric>
-          <IconButton
-            aria-label="Delete post"
-            icon={<DeleteIcon />}
-            colorScheme="red"
-            onClick={() => setConfirmOpen(true)}
-          />
-
+        <Td>{moment(post.createdAt).fromNow()}</Td>
+        <Td>
+          <Flex>
+            <Link href={`/posts/${post.slug}`} isExternal>
+              <IconButton
+                aria-label="Visit Post"
+                icon={<ExternalLinkIcon />}
+                colorScheme="teal"
+              />
+            </Link>
+            <IconButton
+              aria-label="Delete post"
+              icon={<DeleteIcon />}
+              colorScheme="red"
+              onClick={() => setConfirmOpen(true)}
+              ml={2}
+            />
+          </Flex>
           <AlertDialog
             isOpen={confirmOpen}
             leastDestructiveRef={cancelRef}

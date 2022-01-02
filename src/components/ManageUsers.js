@@ -14,6 +14,7 @@ import {
 import { DeleteIcon } from "@chakra-ui/icons";
 import { useMutation } from "@apollo/react-hooks";
 import gql from "graphql-tag";
+import moment from "moment";
 
 const ManageUsers = ({ user }) => {
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -31,6 +32,8 @@ const ManageUsers = ({ user }) => {
     <Tr>
       <Td>{user.fullname}</Td>
       <Td>{user.email}</Td>
+      <Td>{moment(user.createdAt).fromNow()}</Td>
+      <Td>{moment(user.updatedAt).fromNow()}</Td>
       <Td isNumeric>
         <IconButton
           aria-label="Delete post"
