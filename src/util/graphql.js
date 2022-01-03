@@ -6,22 +6,10 @@ export const FETCH_POSTS_QUERY = gql`
       id
       title
       desc
-      body
+      sanitizedHtml
       slug
       createdAt
       fullname
-      likeCount
-      likes {
-        email
-      }
-      commentCount
-      comments {
-        id
-        email
-        fullname
-        createdAt
-        body
-      }
     }
   }
 `;
