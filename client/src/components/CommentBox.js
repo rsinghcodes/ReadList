@@ -34,7 +34,7 @@ function CommentBox({ postId, comment }) {
           </Text>
         </Box>
       </Box>
-      {user && user.username === comment.username && (
+      {user && user.email === comment.email && (
         <DeleteButton postId={postId} commentId={comment.id} />
       )}
     </Box>
