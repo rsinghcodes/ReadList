@@ -19,7 +19,6 @@ import { gql } from "@apollo/client";
 import { Link } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import { AuthContext } from "../context/auth";
-import { FETCH_POSTS_QUERY } from "../util/graphql";
 
 const Profile = () => {
   const context = useContext(AuthContext);

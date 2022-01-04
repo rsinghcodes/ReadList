@@ -4,6 +4,7 @@ import { BiShareAlt } from "react-icons/bi";
 import { useQuery } from "@apollo/react-hooks";
 import moment from "moment";
 import { useHistory } from "react-router-dom";
+import readingTime from "reading-time";
 
 import { AuthContext } from "../context/auth";
 import {
@@ -26,7 +27,7 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import { ChevronDownIcon, EditIcon } from "@chakra-ui/icons";
+import { ChevronDownIcon, EditIcon, TimeIcon } from "@chakra-ui/icons";
 
 import { FETCH_POST_QUERY } from "../util/graphql";
 import DeleteButton from "../components/DeleteButton";
@@ -69,6 +70,8 @@ function SinglePost(props) {
       commentCount,
     } = data.getPost;
 
+    const { text } = readingTime(sanitizedHtml);
+
     postMarkup = (
       <>
         <Box marginTop={{ base: "3.5", md: "7" }}>
@@ -97,6 +100,12 @@ function SinglePost(props) {
                 <Text color="gray.500" fontSize="sm">
                   Published {moment(createdAt).fromNow()}
                 </Text>
+                <Flex alignItems="center">
+                  <TimeIcon w={3.5} h={3.5} color="gray.500" />
+                  <Text color="gray.500" fontSize="sm" ml={1.5}>
+                    {text}
+                  </Text>
+                </Flex>
               </div>
             </Box>
             {user && user.email === email ? (

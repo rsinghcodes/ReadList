@@ -22,7 +22,7 @@ function Home() {
 
   return (
     <>
-      <Box as="section" pt="24" pb="14">
+      <Box as="section" pt="24" pb="16">
         <Box textAlign="center">
           <chakra.h1
             maxW="16ch"
