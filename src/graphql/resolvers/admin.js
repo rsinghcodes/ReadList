@@ -36,6 +36,14 @@ module.exports = {
         throw new Error(err);
       }
     },
+    async getAdmins() {
+      try {
+        const admin = await Admin.find();
+        return admin;
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
   },
   Mutation: {
     async loginAdmin(_, { email, password }) {
@@ -98,6 +106,7 @@ module.exports = {
         fullname,
         email,
         password,
+        createdAt: new Date().toISOString(),
       });
 
       const res = await newAdmin.save();
@@ -134,6 +143,37 @@ module.exports = {
           await User.findByIdAndDelete(userId);
           await Post.deleteMany({ user: userId });
           return "User deleted successfully";
+        } else {
+          throw new AuthenticationError("Action not allowed");
+        }
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+
+    async deleteAdmin(_, { adminId }, context) {
+      const user = checkAuth(context);
+
+      try {
+        if (user.admin) {
+          await Admin.findByIdAndDelete(adminId);
+          await Post.deleteMany({ user: adminId });
+          return "Admin deleted successfully";
+        } else {
+          throw new AuthenticationError("Action not allowed");
+        }
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+
+    async accountPermission(_, { userId, access }, context) {
+      const user = checkAuth(context);
+
+      try {
+        if (user.admin) {
+          await User.findByIdAndUpdate(userId, { access }, { new: true });
+          return "Access changed";
         } else {
           throw new AuthenticationError("Action not allowed");
         }

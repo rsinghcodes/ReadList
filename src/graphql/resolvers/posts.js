@@ -33,9 +33,47 @@ module.exports = {
         throw new Error(err);
       }
     },
+    async searchPost(_, { filter }) {
+      let searchQuery = {};
+
+      // run if search is provided
+      if (filter) {
+        // update the search query
+        searchQuery = {
+          $or: [
+            { title: { $regex: filter, $options: "i" } },
+            { desc: { $regex: filter, $options: "i" } },
+          ],
+        };
+      }
+      try {
+        const post = await Post.find(searchQuery);
+
+        if (post) {
+          return post;
+        } else {
+          throw new Error("Post not found");
+        }
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
     async getPostforUpdate(_, { postId }) {
       try {
         const post = await Post.findById(postId);
+
+        if (post) {
+          return post;
+        } else {
+          throw new Error("Post not found");
+        }
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+    async getUserPosts(_, { userId }) {
+      try {
+        const post = await Post.find({ user: userId }).sort({ createdAt: -1 });
 
         if (post) {
           return post;
