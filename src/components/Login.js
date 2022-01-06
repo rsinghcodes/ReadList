@@ -23,7 +23,7 @@ import { useForm, Form } from "../util/useForm";
 function Login(props) {
   const context = useContext(AuthContext);
   const [errors, setErrors] = useState({});
-  const [accessError, setAccessError] = useState("");
+  const [accessError, setAccessError] = useState(false);
   const [show, setShow] = useState(false);
   const toast = useToast();
   const history = useHistory();
@@ -49,11 +49,8 @@ function Login(props) {
       if (err.graphQLErrors[0].extensions.errors) {
         setErrors(err.graphQLErrors[0].extensions.errors);
       }
-      if (
-        err.graphQLErrors[0].extensions.exception.stacktrace[0] ===
-        "ForbiddenError: Access denied!"
-      ) {
-        setAccessError(err.graphQLErrors[0].extensions.exception.stacktrace[0]);
+      if (err.graphQLErrors[0].extensions.code === "FORBIDDEN") {
+        setAccessError(true);
         setErrors({});
       }
     },

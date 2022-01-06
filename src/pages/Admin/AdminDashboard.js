@@ -70,7 +70,7 @@ const AdminDashboard = () => {
           </TabPanel>
           <TabPanel>
             {users.loading ? (
-              <p>Loading posts...</p>
+              <p>Loading users...</p>
             ) : (
               <Table>
                 <Thead>
@@ -94,7 +94,7 @@ const AdminDashboard = () => {
           </TabPanel>
           <TabPanel>
             {admins.loading ? (
-              <p>Loading posts...</p>
+              <p>Loading admins...</p>
             ) : (
               <Table>
                 <Thead>

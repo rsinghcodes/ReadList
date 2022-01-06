@@ -27,7 +27,7 @@ function Posts() {
     },
   });
 
-  const [searchPost, spost] = useLazyQuery(FETCH_SEARCHED_POSTS_QUERY);
+  const [searchPost, searchedPosts] = useLazyQuery(FETCH_SEARCHED_POSTS_QUERY);
 
   const onKeyDown = (e) => {
     if (e.key === "Enter") {
@@ -39,7 +39,7 @@ function Posts() {
     }
   };
 
-  console.log(spost.data);
+  searchedPosts.data && console.log(searchedPosts.data);
 
   return (
     <>
