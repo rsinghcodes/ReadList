@@ -14,6 +14,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 
 import Home from "./pages/Home";
 const Profile = lazy(() => import("./pages/Profile"));
+const Posts = lazy(() => import("./pages/Posts"));
 const UpdateProfile = lazy(() => import("./pages/UpdateProfile"));
 const CreatePost = lazy(() => import("./pages/CreatePost"));
 const SinglePost = lazy(() => import("./pages/SinglePost"));
@@ -51,6 +52,7 @@ function App() {
                   component={UpdateProfile}
                 />
                 <PrivateRoute exact path="/profile" component={Profile} />
+                <PrivateRoute exact path="/posts" component={Posts} />
                 <Route component={NotFoundPage} />
               </Switch>
             </Suspense>

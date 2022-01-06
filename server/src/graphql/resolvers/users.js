@@ -1,6 +1,10 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { UserInputError, AuthenticationError } = require("apollo-server");
+const {
+  UserInputError,
+  AuthenticationError,
+  ForbiddenError,
+} = require("apollo-server");
 
 const {
   validateRegisterInput,
@@ -60,6 +64,10 @@ module.exports = {
         });
       }
 
+      if (!user.access) {
+        throw new ForbiddenError("Access denied!");
+      }
+
       const token = generateToken(user);
 
       return {
@@ -99,6 +107,7 @@ module.exports = {
         password,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
+        access: true,
       });
 
       const res = await newUser.save();

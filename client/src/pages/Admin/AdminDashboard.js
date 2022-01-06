@@ -14,15 +14,22 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { lazy } from "react";
+import ManageAdmins from "../../components/ManageAdmins";
 
-import ManagePosts from "../../components/ManagePosts";
-import ManageUsers from "../../components/ManageUsers";
-import { FETCH_POSTS_QUERY, FETCH_USERS_QUERY } from "../../util/graphql";
+import {
+  FETCH_POSTS_QUERY,
+  FETCH_USERS_QUERY,
+  FETCH_ADMINS_QUERY,
+} from "../../util/graphql";
+const ManagePosts = lazy(() => import("../../components/ManagePosts"));
+const ManageUsers = lazy(() => import("../../components/ManageUsers"));
+const AdminRegister = lazy(() => import("../../components/AdminRegister"));
 
 const AdminDashboard = () => {
   const posts = useQuery(FETCH_POSTS_QUERY);
   const users = useQuery(FETCH_USERS_QUERY);
+  const admins = useQuery(FETCH_ADMINS_QUERY);
 
   return (
     <Box>
@@ -34,6 +41,8 @@ const AdminDashboard = () => {
         <TabList>
           <Tab>Manage Posts</Tab>
           <Tab>Manage Users</Tab>
+          <Tab>Manage Admins</Tab>
+          <Tab>Create New Admin</Tab>
         </TabList>
         <TabPanels>
           <TabPanel>
@@ -68,6 +77,7 @@ const AdminDashboard = () => {
                   <Tr>
                     <Th>FullName</Th>
                     <Th>Email</Th>
+                    <Th>Access</Th>
                     <Th>Account Created</Th>
                     <Th>Account Updated</Th>
                     <Th isNumeric>Action</Th>
@@ -81,6 +91,31 @@ const AdminDashboard = () => {
                 </Tbody>
               </Table>
             )}
+          </TabPanel>
+          <TabPanel>
+            {admins.loading ? (
+              <p>Loading posts...</p>
+            ) : (
+              <Table>
+                <Thead>
+                  <Tr>
+                    <Th>FullName</Th>
+                    <Th>Email</Th>
+                    <Th>Account Created</Th>
+                    <Th isNumeric>Action</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {admins.data.getAdmins &&
+                    admins.data.getAdmins.map((admin) => (
+                      <ManageAdmins admin={admin} key={admin.id} />
+                    ))}
+                </Tbody>
+              </Table>
+            )}
+          </TabPanel>
+          <TabPanel>
+            <AdminRegister />
           </TabPanel>
         </TabPanels>
       </Tabs>

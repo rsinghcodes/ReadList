@@ -3,6 +3,8 @@ import { useMutation } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import { useHistory } from "react-router-dom";
 import {
+  Alert,
+  AlertIcon,
   Button,
   Flex,
   FormControl,
@@ -21,6 +23,7 @@ import { useForm, Form } from "../util/useForm";
 function Login(props) {
   const context = useContext(AuthContext);
   const [errors, setErrors] = useState({});
+  const [accessError, setAccessError] = useState("");
   const [show, setShow] = useState(false);
   const toast = useToast();
   const history = useHistory();
@@ -43,7 +46,16 @@ function Login(props) {
       });
     },
     onError(err) {
-      setErrors(err.graphQLErrors[0].extensions.errors);
+      if (err.graphQLErrors[0].extensions.errors) {
+        setErrors(err.graphQLErrors[0].extensions.errors);
+      }
+      if (
+        err.graphQLErrors[0].extensions.exception.stacktrace[0] ===
+        "ForbiddenError: Access denied!"
+      ) {
+        setAccessError(err.graphQLErrors[0].extensions.exception.stacktrace[0]);
+        setErrors({});
+      }
     },
     variables: values,
   });
@@ -101,6 +113,12 @@ function Login(props) {
             Login
           </Button>
         </Flex>
+        {accessError && (
+          <Alert status="error">
+            <AlertIcon />
+            Account access denied!
+          </Alert>
+        )}
       </Stack>
     </Form>
   );

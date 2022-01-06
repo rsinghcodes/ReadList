@@ -55,10 +55,22 @@ export const FETCH_USERS_QUERY = gql`
   {
     getUsers {
       id
+      fullname
+      email
+      createdAt
+      updatedAt
+      access
+    }
+  }
+`;
+
+export const FETCH_ADMINS_QUERY = gql`
+  {
+    getAdmins {
+      id
       email
       fullname
       createdAt
-      updatedAt
     }
   }
 `;

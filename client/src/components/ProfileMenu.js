@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { BsPerson } from "react-icons/bs";
-import { FiLogOut } from "react-icons/fi";
+import { FiEye, FiLogOut } from "react-icons/fi";
 import { AiOutlineSetting } from "react-icons/ai";
 import {
   Menu,
@@ -62,12 +62,15 @@ export default function ProfileMenu() {
               as={Link}
               to="/profile"
             >
-              Manage account
+              Manage Account
             </MenuItem>
           )}
 
+          <MenuItem icon={<FiEye />} as={Link} to="/posts">
+            View Your Posts
+          </MenuItem>
           <MenuItem icon={<EditIcon />} as={Link} to="/create-post">
-            Create post
+            Create Post
           </MenuItem>
           <MenuItem icon={<FiLogOut />} onClick={logout}>
             Log Out

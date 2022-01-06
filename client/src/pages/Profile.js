@@ -15,7 +15,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import React, { useContext, useRef, useState } from "react";
-import { gql } from "@apollo/client";
+import gql from "graphql-tag";
 import { Link } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import { AuthContext } from "../context/auth";
