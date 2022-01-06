@@ -15,6 +15,7 @@ import { EditIcon } from "@chakra-ui/icons";
 import { FETCH_POSTS_QUERY } from "../util/graphql";
 import { AuthContext } from "../context/auth";
 import PostCard from "../components/PostCard";
+import Search from "../components/Search";
 
 function Home() {
   const { user } = useContext(AuthContext);
@@ -22,7 +23,8 @@ function Home() {
 
   return (
     <>
-      <Box as="section" pt="24" pb="16">
+      <Box as="section" pb="16">
+        <Search />
         <Box textAlign="center">
           <chakra.h1
             maxW="16ch"
