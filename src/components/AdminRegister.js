@@ -1,45 +1,38 @@
-import { useContext, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useMutation } from "@apollo/react-hooks";
 import {
-  Heading,
-  FormControl,
   Button,
-  Flex,
+  FormControl,
+  FormErrorMessage,
   FormLabel,
   Input,
   InputGroup,
   InputRightElement,
   Stack,
   useToast,
-  FormErrorMessage,
 } from "@chakra-ui/react";
-import { useMutation } from "@apollo/react-hooks";
-
-import { useForm, Form } from "../util/useForm";
-import { AuthContext } from "../context/auth";
 import gql from "graphql-tag";
+import React, { useState } from "react";
+import { Form, useForm } from "../util/useForm";
 
-function UpdateProfile() {
-  const context = useContext(AuthContext);
-  const userId = context.user.id;
+const AdminRegister = () => {
+  const initialRef = React.useRef();
+
   const [errors, setErrors] = useState({});
   const [show, setShow] = useState(false);
   const toast = useToast();
-  const history = useHistory();
 
-  const { onChange, onSubmit, values } = useForm(updateData, {
+  const { onChange, onSubmit, values } = useForm(registerAdmin, {
     fullname: "",
+    email: "",
     password: "",
     confirmPassword: "",
   });
 
-  const [updateUser, { loading }] = useMutation(UPDATE_USER, {
-    update(_, { data: { updateUser: userData } }) {
-      context.login(userData);
-      history.push("/");
+  const [addAdmin, { loading }] = useMutation(REGISTER_ADMIN, {
+    update() {
       toast({
         position: "top",
-        description: "You password successfully updated.",
+        description: "Admin successfully registered.",
         status: "success",
         duration: 2000,
         isClosable: true,
@@ -48,30 +41,23 @@ function UpdateProfile() {
     onError(err) {
       setErrors(err.graphQLErrors[0].extensions.errors);
     },
-    variables: {
-      fullname: values.fullname,
-      password: values.password,
-      confirmPassword: values.confirmPassword,
-      userId,
-    },
+    variables: values,
   });
 
-  function updateData() {
-    updateUser();
+  function registerAdmin() {
+    addAdmin();
   }
 
   return (
     <>
-      <Heading fontSize="2xl" my="5" pb="3">
-        Update Profile
-      </Heading>
       <Form onSubmit={onSubmit}>
         <Stack spacing="24px">
           <FormControl isInvalid={errors.fullname ? true : false}>
             <FormLabel htmlFor="fullname">Full Name</FormLabel>
             <Input
+              ref={initialRef}
               id="fullname"
-              placeholder="Enter new Full Name"
+              placeholder="Enter Full Name"
               name="fullname"
               type="text"
               value={values.fullname}
@@ -81,13 +67,27 @@ function UpdateProfile() {
               <FormErrorMessage>{errors.fullname}</FormErrorMessage>
             )}
           </FormControl>
+          <FormControl isInvalid={errors.email ? true : false}>
+            <FormLabel htmlFor="email">Email</FormLabel>
+            <Input
+              id="email"
+              placeholder="Enter email"
+              name="email"
+              type="text"
+              value={values.email}
+              onChange={onChange}
+            />
+            {errors.email && (
+              <FormErrorMessage>{errors.email}</FormErrorMessage>
+            )}
+          </FormControl>
           <FormControl isInvalid={errors.password ? true : false}>
-            <FormLabel htmlFor="password">New Password</FormLabel>
+            <FormLabel htmlFor="password">Password</FormLabel>
             <InputGroup size="md">
               <Input
                 pr="4.5rem"
                 type={show ? "text" : "password"}
-                placeholder="Enter new password"
+                placeholder="Enter password"
                 name="password"
                 value={values.password}
                 onChange={onChange}
@@ -103,15 +103,13 @@ function UpdateProfile() {
             )}
           </FormControl>
           <FormControl isInvalid={errors.confirmPassword ? true : false}>
-            <FormLabel htmlFor="confirmPassword">
-              Confirm new Password
-            </FormLabel>
+            <FormLabel htmlFor="confirmPassword">Confirm Password</FormLabel>
             <InputGroup size="md">
               <Input
                 id="confirmPassword"
                 pr="4.5rem"
                 type={show ? "text" : "password"}
-                placeholder="Re-Enter new password"
+                placeholder="Re-Enter password"
                 name="confirmPassword"
                 value={values.confirmPassword}
                 onChange={onChange}
@@ -126,36 +124,34 @@ function UpdateProfile() {
               <FormErrorMessage>{errors.confirmPassword}</FormErrorMessage>
             )}
           </FormControl>
-          <Flex justifyContent="flex-end">
-            <Button
-              colorScheme="teal"
-              isLoading={loading}
-              loadingText="Saving..."
-              type="submit"
-            >
-              Save
-            </Button>
-          </Flex>
+          <Button
+            colorScheme="teal"
+            isLoading={loading}
+            loadingText="Registering"
+            type="submit"
+          >
+            Register
+          </Button>
         </Stack>
       </Form>
     </>
   );
-}
+};
 
-const UPDATE_USER = gql`
-  mutation updateUser(
+const REGISTER_ADMIN = gql`
+  mutation registerAdmin(
     $fullname: String!
+    $email: String!
     $password: String!
     $confirmPassword: String!
-    $userId: ID!
   ) {
-    updateUser(
-      updateInput: {
+    registerAdmin(
+      registerInput: {
         fullname: $fullname
+        email: $email
         password: $password
         confirmPassword: $confirmPassword
       }
-      userId: $userId
     ) {
       id
       email
@@ -166,4 +162,4 @@ const UPDATE_USER = gql`
   }
 `;
 
-export default UpdateProfile;
+export default AdminRegister;
