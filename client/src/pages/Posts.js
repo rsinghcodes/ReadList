@@ -27,7 +27,9 @@ function Posts() {
     },
   });
 
-  const [searchPost, spost] = useLazyQuery(FETCH_SEARCHED_POSTS_QUERY);
+  const [searchPost, searchedPost] = useLazyQuery(FETCH_SEARCHED_POSTS_QUERY);
+
+  searchPost.data && console.log(searchedPost.data);
 
   const onKeyDown = (e) => {
     if (e.key === "Enter") {
