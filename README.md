@@ -2,7 +2,8 @@
 
 <p align="center">ReadList is a blog web application where people can share writings, content and their ideas online. This app allows readers to read, like, comment and share on other platforms or social handles.</p>
 
-![ReadList App preview](https://user-images.githubusercontent.com/67682451/132889761-9c09d42d-12bc-4070-907c-3b06dc44108d.png)
+![ReadList App preview](https://user-images.githubusercontent.com/67682451/149627685-e53e0702-83cf-4433-acb0-98103a622cb1.png)
+
 
 ## 🚧 Technology Stack
 
@@ -21,14 +22,26 @@ Authentication is implemented using a JSON Web Token (JWT) saved in local storag
 
 It has the following functionality:
 
-- User can register
-- User can login
+- User can register.
+- User can login.
+- Manage Account - Delete Account or Update Full Name or password.
 - Create and view posts.
+- Search posts.
 - Markdown supported.
 - Delete or update published posts.
 - Comment on published posts.
 - Like on published posts.
 - Copy to clipboard of share link.
+
+**Admin**
+- Admin can delete user or user's posts.
+- Search posts.
+- Delete comments.
+- Create or Delete new Admin.
+- Grant or Revoke user account from login.
+![Admin](https://user-images.githubusercontent.com/67682451/149628367-61b650aa-0289-42a0-a027-e374bd14bc8a.png)
+
+
 
 ## ⬇️ Installation & Set Up
 
@@ -90,7 +103,7 @@ npm start
 ```
 
 Your app is ready to be run! ✨✨\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+**Open [http://localhost:3000](http://localhost:3000) to view it in the browser.**
 
 ## :satellite: Deployment
 
