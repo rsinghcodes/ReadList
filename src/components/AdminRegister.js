@@ -1,4 +1,8 @@
+import * as Yup from "yup";
 import { useMutation } from "@apollo/react-hooks";
+import { useFormik, Form, FormikProvider } from "formik";
+import React, { useState } from "react";
+import gql from "graphql-tag";
 import {
   Button,
   FormControl,
@@ -10,23 +14,45 @@ import {
   Stack,
   useToast,
 } from "@chakra-ui/react";
-import gql from "graphql-tag";
-import React, { useState } from "react";
-import { Form, useForm } from "../util/useForm";
 
 const AdminRegister = () => {
   const initialRef = React.useRef();
-
-  const [errors, setErrors] = useState({});
   const [show, setShow] = useState(false);
   const toast = useToast();
 
-  const { onChange, onSubmit, values } = useForm(registerAdmin, {
-    fullname: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+  const RegisterSchema = Yup.object().shape({
+    fullname: Yup.string()
+      .min(2, "Fullname is too Short!")
+      .max(50, "Fullname is too Long!")
+      .required("Fullname is required"),
+    email: Yup.string()
+      .email("Email must be a valid email address")
+      .required("Email is required"),
+    password: Yup.string()
+      .min(6, "Password must be at least 6 characters")
+      .max(30, "Password is too Long!")
+      .required("Password is required"),
+    confirmPassword: Yup.string()
+      .min(6, "Password must be at least 6 characters")
+      .max(30, "Password is too Long!")
+      .required("Confirm password field is required"),
   });
+
+  const formik = useFormik({
+    initialValues: {
+      fullname: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+    validationSchema: RegisterSchema,
+    onSubmit: () => {
+      addAdmin();
+    },
+  });
+
+  const { errors, setErrors, touched, values, handleSubmit, getFieldProps } =
+    formik;
 
   const [addAdmin, { loading }] = useMutation(REGISTER_ADMIN, {
     update() {
@@ -44,15 +70,11 @@ const AdminRegister = () => {
     variables: values,
   });
 
-  function registerAdmin() {
-    addAdmin();
-  }
-
   return (
-    <>
-      <Form onSubmit={onSubmit}>
+    <FormikProvider value={formik}>
+      <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
         <Stack spacing="24px">
-          <FormControl isInvalid={errors.fullname ? true : false}>
+          <FormControl isInvalid={Boolean(touched.fullname && errors.fullname)}>
             <FormLabel htmlFor="fullname">Full Name</FormLabel>
             <Input
               ref={initialRef}
@@ -60,12 +82,11 @@ const AdminRegister = () => {
               placeholder="Enter Full Name"
               name="fullname"
               type="text"
-              value={values.fullname}
-              onChange={onChange}
+              {...getFieldProps("fullname")}
             />
-            {errors.fullname && (
-              <FormErrorMessage>{errors.fullname}</FormErrorMessage>
-            )}
+            <FormErrorMessage>
+              {touched.fullname && errors.fullname}
+            </FormErrorMessage>
           </FormControl>
           <FormControl isInvalid={errors.email ? true : false}>
             <FormLabel htmlFor="email">Email</FormLabel>
@@ -74,14 +95,11 @@ const AdminRegister = () => {
               placeholder="Enter email"
               name="email"
               type="text"
-              value={values.email}
-              onChange={onChange}
+              {...getFieldProps("email")}
             />
-            {errors.email && (
-              <FormErrorMessage>{errors.email}</FormErrorMessage>
-            )}
+            <FormErrorMessage>{touched.email && errors.email}</FormErrorMessage>
           </FormControl>
-          <FormControl isInvalid={errors.password ? true : false}>
+          <FormControl isInvalid={Boolean(touched.password && errors.password)}>
             <FormLabel htmlFor="password">Password</FormLabel>
             <InputGroup size="md">
               <Input
@@ -89,8 +107,7 @@ const AdminRegister = () => {
                 type={show ? "text" : "password"}
                 placeholder="Enter password"
                 name="password"
-                value={values.password}
-                onChange={onChange}
+                {...getFieldProps("password")}
               />
               <InputRightElement width="4.5rem">
                 <Button h="1.75rem" size="sm" onClick={() => setShow(!show)}>
@@ -98,11 +115,15 @@ const AdminRegister = () => {
                 </Button>
               </InputRightElement>
             </InputGroup>
-            {errors.password && (
-              <FormErrorMessage>{errors.password}</FormErrorMessage>
-            )}
+            <FormErrorMessage>
+              {touched.password && errors.password}
+            </FormErrorMessage>
           </FormControl>
-          <FormControl isInvalid={errors.confirmPassword ? true : false}>
+          <FormControl
+            isInvalid={Boolean(
+              touched.confirmPassword && errors.confirmPassword
+            )}
+          >
             <FormLabel htmlFor="confirmPassword">Confirm Password</FormLabel>
             <InputGroup size="md">
               <Input
@@ -111,8 +132,7 @@ const AdminRegister = () => {
                 type={show ? "text" : "password"}
                 placeholder="Re-Enter password"
                 name="confirmPassword"
-                value={values.confirmPassword}
-                onChange={onChange}
+                {...getFieldProps("confirmPassword")}
               />
               <InputRightElement width="4.5rem">
                 <Button h="1.75rem" size="sm" onClick={() => setShow(!show)}>
@@ -120,9 +140,9 @@ const AdminRegister = () => {
                 </Button>
               </InputRightElement>
             </InputGroup>
-            {errors.confirmPassword && (
-              <FormErrorMessage>{errors.confirmPassword}</FormErrorMessage>
-            )}
+            <FormErrorMessage>
+              {touched.confirmPassword && errors.confirmPassword}
+            </FormErrorMessage>
           </FormControl>
           <Button
             colorScheme="teal"
@@ -134,7 +154,7 @@ const AdminRegister = () => {
           </Button>
         </Stack>
       </Form>
-    </>
+    </FormikProvider>
   );
 };
 

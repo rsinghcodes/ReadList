@@ -3,8 +3,6 @@ import { useMutation } from "@apollo/react-hooks";
 import { Box, Button, Input } from "@chakra-ui/react";
 import gql from "graphql-tag";
 
-import { Form } from "../util/useForm";
-
 function CommentForm({ postId }) {
   const commentInputRef = useRef(null);
 
@@ -21,7 +19,7 @@ function CommentForm({ postId }) {
     },
   });
   return (
-    <Form>
+    <>
       <Box mt="5">
         <Input
           placeholder="Comment on this Post.."
@@ -40,7 +38,7 @@ function CommentForm({ postId }) {
       >
         Publish Comment
       </Button>
-    </Form>
+    </>
   );
 }
 
