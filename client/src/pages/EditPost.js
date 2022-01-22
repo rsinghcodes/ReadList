@@ -1,11 +1,12 @@
+import * as Yup from "yup";
 import { Heading, useToast } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import { useHistory } from "react-router-dom";
+import { useFormik } from "formik";
 
-import { useForm } from "../util/useForm";
 import { FETCH_POST_FOR_UPDATE } from "../util/graphql";
 import PostForm from "../components/PostForm";
 
@@ -13,7 +14,6 @@ function EditPost() {
   const { postId } = useParams();
   const toast = useToast();
   const history = useHistory();
-  const [errors, setErrors] = useState({});
 
   const { data } = useQuery(FETCH_POST_FOR_UPDATE, {
     variables: {
@@ -21,14 +21,25 @@ function EditPost() {
     },
   });
 
-  const { values, setValues, onChange, onSubmit } = useForm(
-    updatePostCallback,
-    {
+  const EditPostSchema = Yup.object().shape({
+    title: Yup.string().required("Title is required"),
+    desc: Yup.string().required("Description is required"),
+    body: Yup.string().required("Markdown is required"),
+  });
+
+  const formik = useFormik({
+    initialValues: {
       title: "",
       desc: "",
       body: "",
-    }
-  );
+    },
+    validationSchema: EditPostSchema,
+    onSubmit: () => {
+      updatePost();
+    },
+  });
+
+  const { values, setValues, setErrors } = formik;
 
   useEffect(() => {
     if (!data) {
@@ -41,9 +52,7 @@ function EditPost() {
   const [updatePost] = useMutation(UPDATE_POST_MUTATION, {
     variables: {
       postId,
-      title: values.title,
-      desc: values.desc,
-      body: values.body,
+      ...values,
     },
     update() {
       values.title = "";
@@ -59,25 +68,16 @@ function EditPost() {
       });
     },
     onError(err) {
-      console.log(err.graphQLErrors[0]);
       setErrors(err.graphQLErrors[0].extensions.errors);
     },
   });
 
-  function updatePostCallback() {
-    updatePost();
-  }
   return (
     <>
       <Heading fontSize="2xl" mt="5">
         Edit Post
       </Heading>
-      <PostForm
-        values={values}
-        onChange={onChange}
-        onSubmit={onSubmit}
-        errors={errors}
-      />
+      <PostForm formik={formik} />
     </>
   );
 }

@@ -1,4 +1,5 @@
 import React from "react";
+import { Form, FormikProvider } from "formik";
 import {
   FormControl,
   Button,
@@ -11,40 +12,37 @@ import {
 } from "@chakra-ui/react";
 import { FiExternalLink } from "react-icons/fi";
 
-import { Form } from "../util/useForm";
+function PostForm({ formik }) {
+  const { errors, touched, handleSubmit, getFieldProps } = formik;
 
-function PostForm({ values, onChange, onSubmit, errors }) {
   return (
-    <>
-      <Form onSubmit={onSubmit}>
-        <FormControl mt="5" isInvalid={errors.title ? true : false}>
+    <FormikProvider value={formik}>
+      <Form noValidate onSubmit={handleSubmit}>
+        <FormControl mt="5" isInvalid={Boolean(touched.title && errors.title)}>
           <Input
             placeholder="Write title here..."
             name="title"
-            value={values.title}
-            onChange={onChange}
+            {...getFieldProps("title")}
           />
-          {errors.title && <FormErrorMessage>{errors.title}</FormErrorMessage>}
+          <FormErrorMessage>{touched.title && errors.title}</FormErrorMessage>
         </FormControl>
-        <FormControl my="5" isInvalid={errors.desc ? true : false}>
+        <FormControl my="5" isInvalid={Boolean(touched.desc && errors.desc)}>
           <Input
             placeholder="Write description here..."
             name="desc"
-            value={values.desc}
-            onChange={onChange}
+            {...getFieldProps("desc")}
           />
-          {errors.desc && <FormErrorMessage>{errors.desc}</FormErrorMessage>}
+          <FormErrorMessage>{touched.desc && errors.desc}</FormErrorMessage>
         </FormControl>
-        <FormControl mt="5" isInvalid={errors.body ? true : false}>
+        <FormControl mt="5" isInvalid={Boolean(touched.body && errors.body)}>
           <Textarea
             rows="12"
             name="body"
-            value={values.body}
             placeholder="Enter markdown here..."
-            onChange={onChange}
             mb="3.5"
+            {...getFieldProps("body")}
           />
-          {errors.body && <FormErrorMessage>{errors.body}</FormErrorMessage>}
+          <FormErrorMessage>{touched.body && errors.body}</FormErrorMessage>
           <Box mt="7" display="flex" alignItems="center">
             <Link
               href="https://guides.github.com/features/mastering-markdown/"
@@ -64,7 +62,7 @@ function PostForm({ values, onChange, onSubmit, errors }) {
           </Button>
         </Flex>
       </Form>
-    </>
+    </FormikProvider>
   );
 }
 

@@ -1,21 +1,36 @@
-import React, { useState } from "react";
+import * as Yup from "yup";
+import React from "react";
 import { Heading, useToast } from "@chakra-ui/react";
+import { useFormik } from "formik";
 
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
 
-import { useForm } from "../util/useForm";
 import { FETCH_POSTS_QUERY } from "../util/graphql";
 import PostForm from "../components/PostForm";
 
 function CreatePost(props) {
   const toast = useToast();
-  const [errors, setErrors] = useState({});
-  const { values, onChange, onSubmit } = useForm(createPostCallback, {
-    title: "",
-    desc: "",
-    body: "",
+
+  const CreatePostSchema = Yup.object().shape({
+    title: Yup.string().required("Title is required"),
+    desc: Yup.string().required("Description is required"),
+    body: Yup.string().required("Markdown is required"),
   });
+
+  const formik = useFormik({
+    initialValues: {
+      title: "",
+      desc: "",
+      body: "",
+    },
+    validationSchema: CreatePostSchema,
+    onSubmit: () => {
+      createPost();
+    },
+  });
+
+  const { values, setErrors } = formik;
 
   const [createPost] = useMutation(CREATE_POST_MUTATION, {
     variables: values,
@@ -42,21 +57,12 @@ function CreatePost(props) {
     },
   });
 
-  function createPostCallback() {
-    createPost();
-  }
-
   return (
     <>
       <Heading fontSize="2xl" mt="5">
         Create Post
       </Heading>
-      <PostForm
-        values={values}
-        onChange={onChange}
-        onSubmit={onSubmit}
-        errors={errors}
-      />
+      <PostForm formik={formik} />
     </>
   );
 }

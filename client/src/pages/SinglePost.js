@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { BiShareAlt } from "react-icons/bi";
 import { useQuery } from "@apollo/react-hooks";
@@ -47,6 +47,10 @@ function SinglePost(props) {
       slug,
     },
   });
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   function deletePostCallback() {
     history.push("/");
