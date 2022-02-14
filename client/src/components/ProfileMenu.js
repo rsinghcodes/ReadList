@@ -20,8 +20,6 @@ export default function ProfileMenu() {
   const { user, logout } = useContext(AuthContext);
   const [isLargerThan48em] = useMediaQuery('(min-width: 48em)');
 
-  console.log(user);
-
   return (
     <Menu>
       {isLargerThan48em ? (
