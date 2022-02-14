@@ -1,4 +1,4 @@
-const { gql } = require("apollo-server");
+const { gql } = require('apollo-server');
 
 module.exports = gql`
   type Post {
@@ -34,6 +34,7 @@ module.exports = gql`
     token: String!
     fullname: String!
     createdAt: String!
+    role: String!
   }
   type User {
     id: ID!
@@ -43,6 +44,7 @@ module.exports = gql`
     createdAt: String!
     updatedAt: String!
     access: Boolean!
+    role: String!
   }
   input UserInput {
     fullname: String!

@@ -1,5 +1,5 @@
-import React, { useContext, useRef, useState } from "react";
-import { NavLink } from "react-router-dom";
+import React, { useContext, useRef, useState } from 'react';
+import { NavLink } from 'react-router-dom';
 import {
   chakra,
   Flex,
@@ -10,22 +10,22 @@ import {
   useColorModeValue,
   Box,
   Tooltip,
-} from "@chakra-ui/react";
-import { SunIcon, MoonIcon } from "@chakra-ui/icons";
-import { useViewportScroll } from "framer-motion";
+} from '@chakra-ui/react';
+import { SunIcon, MoonIcon } from '@chakra-ui/icons';
+import { useViewportScroll } from 'framer-motion';
 
-import { AuthContext } from "../context/auth";
+import { AuthContext } from '../context/auth';
 
-import ProfileMenu from "./ProfileMenu";
-import DrawerLogin from "./DrawerLogin";
+import ProfileMenu from './ProfileMenu';
+import DrawerLogin from './DrawerLogin';
 
 function Header() {
   const { user } = useContext(AuthContext);
 
-  const bg = useColorModeValue("white", "gray.800");
+  const bg = useColorModeValue('white', 'gray.800');
   const { toggleColorMode } = useColorMode();
   const SwitchIcon = useColorModeValue(MoonIcon, SunIcon);
-  const text = useColorModeValue("dark", "light");
+  const text = useColorModeValue('dark', 'light');
 
   // -------- for header shadow -------------------
 
@@ -46,7 +46,7 @@ function Header() {
     <>
       <chakra.header
         ref={ref}
-        shadow={y > height ? "sm" : undefined}
+        shadow={y > height ? 'sm' : undefined}
         transition="box-shadow 0.2s, background-color 0.2s"
         pos="sticky"
         top="0"
@@ -59,11 +59,11 @@ function Header() {
         <chakra.div height="4.5rem" mx="auto" maxW="8xl">
           <Flex w="100%" h="100%" px="6" align="center" justify="space-between">
             <Flex alignItems="center" as={NavLink} to="/">
-              <Heading fontSize={{ base: "1.3rem", lg: "1.7rem" }}>
+              <Heading fontSize={{ base: '1.3rem', lg: '1.7rem' }}>
                 read
                 <Box
                   as="span"
-                  color={useColorModeValue("teal.500", "teal.300")}
+                  color={useColorModeValue('teal.500', 'teal.300')}
                 >
                   list
                 </Box>

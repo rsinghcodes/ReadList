@@ -1,5 +1,5 @@
-import { useLazyQuery } from "@apollo/react-hooks";
-import { SearchIcon } from "@chakra-ui/icons";
+import { useLazyQuery } from '@apollo/react-hooks';
+import { SearchIcon } from '@chakra-ui/icons';
 import {
   Box,
   Center,
@@ -10,15 +10,15 @@ import {
   ModalContent,
   ModalOverlay,
   useDisclosure,
-} from "@chakra-ui/react";
-import gql from "graphql-tag";
-import React from "react";
-import { Link } from "react-router-dom";
+} from '@chakra-ui/react';
+import gql from 'graphql-tag';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-import SearchButton from "./SearchButton";
+import SearchButton from './SearchButton';
 
 const Search = () => {
-  const [query, setQuery] = React.useState("");
+  const [query, setQuery] = React.useState('');
   const [active, setActive] = React.useState(0);
   const [shouldCloseModal, setShouldCloseModal] = React.useState(true);
   const modal = useDisclosure();
@@ -33,31 +33,31 @@ const Search = () => {
 
   const onKeyDown = React.useCallback(
     (e) => {
-      eventRef.current = "keyboard";
+      eventRef.current = 'keyboard';
       // eslint-disable-next-line default-case
       switch (e.key) {
-        case "ArrowDown": {
+        case 'ArrowDown': {
           e.preventDefault();
           if (active + 1 < data.searchPost.length) {
             setActive(active + 1);
           }
           break;
         }
-        case "ArrowUp": {
+        case 'ArrowUp': {
           e.preventDefault();
           if (active - 1 >= 0) {
             setActive(active - 1);
           }
           break;
         }
-        case "Control":
-        case "Alt":
-        case "Shift": {
+        case 'Control':
+        case 'Alt':
+        case 'Shift': {
           e.preventDefault();
           setShouldCloseModal(true);
           break;
         }
-        case "Enter": {
+        case 'Enter': {
           searchPost({
             variables: {
               filter: query,
@@ -71,7 +71,7 @@ const Search = () => {
 
   React.useEffect(() => {
     if (modal.isOpen && query.length > 0) {
-      setQuery("");
+      setQuery('');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modal.isOpen]);
@@ -106,15 +106,15 @@ const Search = () => {
               spellCheck="false"
               maxLength={64}
               sx={{
-                w: "100%",
-                h: "68px",
-                pl: "68px",
-                fontWeight: "medium",
+                w: '100%',
+                h: '68px',
+                pl: '68px',
+                fontWeight: 'medium',
                 outline: 0,
-                bg: "white",
-                ".chakra-ui-dark &": { bg: "gray.700" },
+                bg: 'white',
+                '.chakra-ui-dark &': { bg: 'gray.700' },
               }}
-              placeholder="Search the blogs"
+              placeholder="Search the blog"
               value={query}
               onChange={(e) => {
                 setQuery(e.target.value);
@@ -131,8 +131,8 @@ const Search = () => {
               <Box
                 sx={{
                   px: 4,
-                  bg: "white",
-                  ".chakra-ui-dark &": { bg: "gray.700" },
+                  bg: 'white',
+                  '.chakra-ui-dark &': { bg: 'gray.700' },
                 }}
               >
                 {loading ? (
@@ -157,7 +157,7 @@ const Search = () => {
                               aria-selected={selected ? true : undefined}
                               onMouseEnter={() => {
                                 setActive(index);
-                                eventRef.current = "mouse";
+                                eventRef.current = 'mouse';
                               }}
                               onClick={() => {
                                 if (shouldCloseModal) {
@@ -167,21 +167,21 @@ const Search = () => {
                               role="option"
                               key={item.id}
                               sx={{
-                                display: "flex",
-                                alignItems: "center",
+                                display: 'flex',
+                                alignItems: 'center',
                                 minH: 16,
                                 mt: 2,
                                 px: 4,
                                 py: 2,
-                                rounded: "lg",
-                                bg: "gray.100",
-                                ".chakra-ui-dark &": { bg: "gray.600" },
+                                rounded: 'lg',
+                                bg: 'gray.100',
+                                '.chakra-ui-dark &': { bg: 'gray.600' },
                                 _selected: {
-                                  bg: "teal.500",
-                                  color: "white",
+                                  bg: 'teal.500',
+                                  color: 'white',
                                   mark: {
-                                    color: "white",
-                                    textDecoration: "underline",
+                                    color: 'white',
+                                    textDecoration: 'underline',
                                   },
                                 },
                               }}

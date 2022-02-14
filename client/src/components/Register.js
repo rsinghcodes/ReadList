@@ -1,9 +1,9 @@
-import * as Yup from "yup";
-import React, { useContext, useState } from "react";
-import { useMutation } from "@apollo/react-hooks";
-import gql from "graphql-tag";
-import { useHistory } from "react-router-dom";
-import { useFormik, Form, FormikProvider } from "formik";
+import * as Yup from 'yup';
+import React, { useContext, useState } from 'react';
+import { useMutation } from '@apollo/react-hooks';
+import gql from 'graphql-tag';
+import { useNavigate } from 'react-router-dom';
+import { useFormik, Form, FormikProvider } from 'formik';
 import {
   Button,
   Flex,
@@ -15,41 +15,41 @@ import {
   InputRightElement,
   Stack,
   useToast,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 
-import { AuthContext } from "../context/auth";
+import { AuthContext } from '../context/auth';
 
 function Register(props) {
   const context = useContext(AuthContext);
 
   const [show, setShow] = useState(false);
   const toast = useToast();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const RegisterSchema = Yup.object().shape({
     fullname: Yup.string()
-      .min(2, "Fullname is too Short!")
-      .max(50, "Fullname is too Long!")
-      .required("Fullname is required"),
+      .min(2, 'Fullname is too Short!')
+      .max(50, 'Fullname is too Long!')
+      .required('Fullname is required'),
     email: Yup.string()
-      .email("Email must be a valid email address")
-      .required("Email is required"),
+      .email('Email must be a valid email address')
+      .required('Email is required'),
     password: Yup.string()
-      .min(6, "Password must be at least 6 characters")
-      .max(30, "Password is too Long!")
-      .required("Password is required"),
+      .min(6, 'Password must be at least 6 characters')
+      .max(30, 'Password is too Long!')
+      .required('Password is required'),
     confirmPassword: Yup.string()
-      .min(6, "Password must be at least 6 characters")
-      .max(30, "Password is too Long!")
-      .required("Confirm password field is required"),
+      .min(6, 'Password must be at least 6 characters')
+      .max(30, 'Password is too Long!')
+      .required('Confirm password field is required'),
   });
 
   const formik = useFormik({
     initialValues: {
-      fullname: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
+      fullname: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
     },
     validationSchema: RegisterSchema,
     onSubmit: () => {
@@ -63,11 +63,11 @@ function Register(props) {
   const [addUser, { loading }] = useMutation(REGISTER_USER, {
     update(_, { data: { registerUser: userData } }) {
       context.login(userData);
-      history.push("/");
+      navigate('/', { replace: true });
       toast({
-        position: "top",
-        description: "You have successfully registered.",
-        status: "success",
+        position: 'top',
+        description: 'You have successfully registered.',
+        status: 'success',
         duration: 2000,
         isClosable: true,
       });
@@ -89,7 +89,7 @@ function Register(props) {
               placeholder="Enter Full Name"
               name="fullname"
               type="text"
-              {...getFieldProps("fullname")}
+              {...getFieldProps('fullname')}
             />
             <FormErrorMessage>
               {touched.fullname && errors.fullname}
@@ -102,7 +102,7 @@ function Register(props) {
               placeholder="Enter email"
               name="email"
               type="text"
-              {...getFieldProps("email")}
+              {...getFieldProps('email')}
             />
             <FormErrorMessage>{touched.email && errors.email}</FormErrorMessage>
           </FormControl>
@@ -111,14 +111,14 @@ function Register(props) {
             <InputGroup size="md">
               <Input
                 pr="4.5rem"
-                type={show ? "text" : "password"}
+                type={show ? 'text' : 'password'}
                 placeholder="Enter password"
                 name="password"
-                {...getFieldProps("password")}
+                {...getFieldProps('password')}
               />
               <InputRightElement width="4.5rem">
                 <Button h="1.75rem" size="sm" onClick={() => setShow(!show)}>
-                  {show ? "Hide" : "Show"}
+                  {show ? 'Hide' : 'Show'}
                 </Button>
               </InputRightElement>
             </InputGroup>
@@ -136,14 +136,14 @@ function Register(props) {
               <Input
                 id="confirmPassword"
                 pr="4.5rem"
-                type={show ? "text" : "password"}
+                type={show ? 'text' : 'password'}
                 placeholder="Re-Enter password"
                 name="confirmPassword"
-                {...getFieldProps("confirmPassword")}
+                {...getFieldProps('confirmPassword')}
               />
               <InputRightElement width="4.5rem">
                 <Button h="1.75rem" size="sm" onClick={() => setShow(!show)}>
-                  {show ? "Hide" : "Show"}
+                  {show ? 'Hide' : 'Show'}
                 </Button>
               </InputRightElement>
             </InputGroup>
@@ -190,6 +190,7 @@ const REGISTER_USER = gql`
       fullname
       createdAt
       token
+      role
     }
   }
 `;

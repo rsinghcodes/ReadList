@@ -1,34 +1,19 @@
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const bcrypt = require('bcryptjs');
 const {
   UserInputError,
   AuthenticationError,
   ForbiddenError,
-} = require("apollo-server");
+} = require('apollo-server');
 
 const {
   validateRegisterInput,
   validateLoginInput,
   validateNewUpdateInput,
-} = require("../../util/validators");
-const User = require("../../models/User");
-const Post = require("../../models/Post");
-const { SECRET_KEY } = require("../../config");
-const checkAuth = require("../../util/check-auth");
-
-function generateToken(user) {
-  return jwt.sign(
-    {
-      id: user.id,
-      email: user.email,
-      fullname: user.fullname,
-      admin: false,
-      user: true,
-    },
-    SECRET_KEY,
-    { expiresIn: "1h" }
-  );
-}
+} = require('../../util/validators');
+const User = require('../../models/User');
+const Post = require('../../models/Post');
+const checkAuth = require('../../util/check-auth');
+const generateToken = require('../../middleware/createToken');
 
 module.exports = {
   Query: {
@@ -46,26 +31,26 @@ module.exports = {
       const { errors, isValid } = validateLoginInput(email, password);
 
       if (!isValid) {
-        throw new UserInputError("Errors", { errors });
+        throw new UserInputError('Errors', { errors });
       }
 
       const user = await User.findOne({ email });
 
       if (!user) {
-        errors.email = "Email not found!";
-        throw new UserInputError("Email not found!", { errors });
+        errors.email = 'Email not found!';
+        throw new UserInputError('Email not found!', { errors });
       }
 
       const match = await bcrypt.compare(password, user.password);
       if (!match) {
-        errors.password = "Password is invalid!";
-        throw new UserInputError("Password is invalid!", {
+        errors.password = 'Password is invalid!';
+        throw new UserInputError('Password is invalid!', {
           errors,
         });
       }
 
       if (!user.access) {
-        throw new ForbiddenError("Access denied!");
+        throw new ForbiddenError('Access denied!');
       }
 
       const token = generateToken(user);
@@ -87,14 +72,14 @@ module.exports = {
         confirmPassword
       );
       if (!isValid) {
-        throw new UserInputError("Errors", { errors });
+        throw new UserInputError('Errors', { errors });
       }
       // Make sure user doesnt already exist
       const user = await User.findOne({ email });
       if (user) {
-        throw new UserInputError("Email is taken", {
+        throw new UserInputError('Email is taken', {
           errors: {
-            email: "Account is already created using this email!",
+            email: 'Account is already created using this email!',
           },
         });
       }
@@ -108,6 +93,7 @@ module.exports = {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         access: true,
+        role: 'user',
       });
 
       const res = await newUser.save();
@@ -131,7 +117,7 @@ module.exports = {
       );
 
       if (!isValid) {
-        throw new UserInputError("Errors", { errors });
+        throw new UserInputError('Errors', { errors });
       }
 
       // hash password and create an auth token
@@ -143,11 +129,15 @@ module.exports = {
         { new: true }
       );
 
-      await Post.findOneAndUpdate(userId, { fullname }, { new: true });
+      await Post.find({ user: userId }).updateMany({ fullname });
 
       const token = generateToken(updatedUser);
 
-      return { ...updatedUser._doc, id: updatedUser._id, token };
+      return {
+        ...updatedUser._doc,
+        id: updatedUser._id,
+        token,
+      };
     },
     async deleteUser(_, { userId }, context) {
       const user = checkAuth(context);
@@ -158,9 +148,9 @@ module.exports = {
         if (user.email === current.email) {
           await current.delete();
           await Post.deleteMany({ user: userId });
-          return "User deleted successfully";
+          return 'User deleted successfully';
         } else {
-          throw new AuthenticationError("Action not allowed");
+          throw new AuthenticationError('Action not allowed');
         }
       } catch (err) {
         throw new Error(err);

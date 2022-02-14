@@ -1,15 +1,15 @@
-import React, { useContext } from "react";
-import { useQuery } from "@apollo/react-hooks";
-import { Box, Button, Flex, Heading, VStack } from "@chakra-ui/react";
-import gql from "graphql-tag";
-import { Link } from "react-router-dom";
-import { EditIcon } from "@chakra-ui/icons";
+import React, { useContext } from 'react';
+import { useQuery } from '@apollo/react-hooks';
+import { Box, Button, Flex, Heading, VStack } from '@chakra-ui/react';
+import gql from 'graphql-tag';
+import { Link } from 'react-router-dom';
+import { EditIcon } from '@chakra-ui/icons';
 
-import { AuthContext } from "../context/auth";
-import PostCard from "../components/PostCard";
-import Search from "../components/Search";
+import { AuthContext } from '../context/auth';
+import PostCard from '../components/PostCard';
+import Search from '../components/Search';
 
-function Posts() {
+function UserPosts() {
   const { user } = useContext(AuthContext);
 
   const { loading, data } = useQuery(FETCH_USERS_POSTS_QUERY, {
@@ -21,7 +21,7 @@ function Posts() {
   return (
     <>
       <Search />
-      <VStack spacing={4} mt={3}>
+      <VStack spacing={4} mt="8">
         {loading ? (
           <h1>Loading posts...</h1>
         ) : (
@@ -75,4 +75,4 @@ const FETCH_USERS_POSTS_QUERY = gql`
   }
 `;
 
-export default Posts;
+export default UserPosts;

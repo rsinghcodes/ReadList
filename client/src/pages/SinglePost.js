@@ -1,12 +1,12 @@
-import React, { useContext, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { BiShareAlt } from "react-icons/bi";
-import { useQuery } from "@apollo/react-hooks";
-import moment from "moment";
-import { useHistory } from "react-router-dom";
-import readingTime from "reading-time";
+import React, { useContext, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { BiShareAlt } from 'react-icons/bi';
+import { useQuery } from '@apollo/react-hooks';
+import moment from 'moment';
+import { useNavigate } from 'react-router-dom';
+import readingTime from 'reading-time';
 
-import { AuthContext } from "../context/auth";
+import { AuthContext } from '../context/auth';
 import {
   useClipboard,
   useToast,
@@ -25,22 +25,22 @@ import {
   HStack,
   Avatar,
   Tooltip,
-} from "@chakra-ui/react";
-import { Link } from "react-router-dom";
-import { ChevronDownIcon, EditIcon, TimeIcon } from "@chakra-ui/icons";
+} from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
+import { ChevronDownIcon, EditIcon, TimeIcon } from '@chakra-ui/icons';
 
-import { FETCH_POST_QUERY } from "../util/graphql";
-import DeleteButton from "../components/DeleteButton";
-import CommentForm from "../components/CommentForm";
-import CommentBox from "../components/CommentBox";
-import LikeButton from "../components/LikeButton";
+import { FETCH_POST_QUERY } from '../util/graphql';
+import DeleteButton from '../components/DeleteButton';
+import CommentForm from '../components/CommentForm';
+import CommentBox from '../components/CommentBox';
+import LikeButton from '../components/LikeButton';
 
-function SinglePost(props) {
+function SinglePost() {
+  const navigate = useNavigate();
   const { slug } = useParams();
   const { user } = useContext(AuthContext);
   const toast = useToast();
-  const history = useHistory();
-  const { onCopy } = useClipboard(`http://localhost:3000${props.match.url}`);
+  const { onCopy } = useClipboard(`http://localhost:3000/posts/${slug}`);
 
   const { data } = useQuery(FETCH_POST_QUERY, {
     variables: {
@@ -53,7 +53,7 @@ function SinglePost(props) {
   }, []);
 
   function deletePostCallback() {
-    history.push("/");
+    navigate('/', { replace: true });
   }
 
   let postMarkup;
@@ -78,9 +78,9 @@ function SinglePost(props) {
 
     postMarkup = (
       <>
-        <Box marginTop={{ base: "3.5", md: "7" }}>
+        <Box marginTop={{ base: '3.5', md: '7' }}>
           <Heading
-            fontSize={{ base: "3xl", md: "4xl" }}
+            fontSize={{ base: '3xl', md: '4xl' }}
             letterSpacing="tight"
             marginBottom="3.5"
           >
@@ -88,7 +88,7 @@ function SinglePost(props) {
           </Heading>
           <Text
             color="gray.500"
-            fontSize={{ base: "xl", md: "2xl" }}
+            fontSize={{ base: 'xl', md: '2xl' }}
             marginBottom="3.5"
           >
             {desc}
@@ -126,9 +126,9 @@ function SinglePost(props) {
                     onClick={() => {
                       onCopy();
                       toast({
-                        position: "top",
-                        description: "Share Link copied to clipboard.",
-                        status: "success",
+                        position: 'top',
+                        description: 'Share Link copied to clipboard.',
+                        status: 'success',
                         duration: 2000,
                         isClosable: true,
                       });
@@ -152,9 +152,9 @@ function SinglePost(props) {
                   onClick={() => {
                     onCopy();
                     toast({
-                      position: "top",
-                      description: "Share Link copied to clipboard.",
-                      status: "success",
+                      position: 'top',
+                      description: 'Share Link copied to clipboard.',
+                      status: 'success',
                       duration: 2000,
                       isClosable: true,
                     });

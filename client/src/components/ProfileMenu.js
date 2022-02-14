@@ -1,7 +1,7 @@
-import { useContext } from "react";
-import { BsPerson } from "react-icons/bs";
-import { FiEye, FiLogOut } from "react-icons/fi";
-import { AiOutlineSetting } from "react-icons/ai";
+import { useContext } from 'react';
+import { BsPerson } from 'react-icons/bs';
+import { FiEye, FiLogOut } from 'react-icons/fi';
+import { AiOutlineSetting } from 'react-icons/ai';
 import {
   Menu,
   MenuButton,
@@ -11,14 +11,16 @@ import {
   MenuDivider,
   useMediaQuery,
   IconButton,
-} from "@chakra-ui/react";
-import { Link } from "react-router-dom";
-import { AuthContext } from "../context/auth";
-import { ChevronDownIcon, EditIcon } from "@chakra-ui/icons";
+} from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
+import { AuthContext } from '../context/auth';
+import { ChevronDownIcon, EditIcon } from '@chakra-ui/icons';
 
 export default function ProfileMenu() {
   const { user, logout } = useContext(AuthContext);
-  const [isLargerThan48em] = useMediaQuery("(min-width: 48em)");
+  const [isLargerThan48em] = useMediaQuery('(min-width: 48em)');
+
+  console.log(user);
 
   return (
     <Menu>
@@ -43,11 +45,11 @@ export default function ProfileMenu() {
 
       {user ? (
         <MenuList>
-          <MenuItem display={{ base: "flex", md: "none" }}>
+          <MenuItem display={{ base: 'flex', md: 'none' }}>
             {user.fullname}
           </MenuItem>
-          <MenuDivider display={{ base: "flex", md: "none" }} />
-          {user.admin && (
+          <MenuDivider display={{ base: 'flex', md: 'none' }} />
+          {user.role === 'admin' && (
             <MenuItem
               icon={<AiOutlineSetting size="1rem" />}
               as={Link}
@@ -56,7 +58,7 @@ export default function ProfileMenu() {
               Dashboard
             </MenuItem>
           )}
-          {user.user && (
+          {user.role === 'user' && (
             <MenuItem
               icon={<AiOutlineSetting size="1rem" />}
               as={Link}
@@ -66,7 +68,7 @@ export default function ProfileMenu() {
             </MenuItem>
           )}
 
-          <MenuItem icon={<FiEye />} as={Link} to="/posts">
+          <MenuItem icon={<FiEye />} as={Link} to="/view-posts">
             View Your Posts
           </MenuItem>
           <MenuItem icon={<EditIcon />} as={Link} to="/create-post">
