@@ -1,30 +1,15 @@
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const { UserInputError, AuthenticationError } = require("apollo-server");
+const bcrypt = require('bcryptjs');
+const { UserInputError, AuthenticationError } = require('apollo-server');
 
 const {
   validateRegisterInput,
   validateLoginInput,
-} = require("../../util/validators");
-const { SECRET_KEY } = require("../../config");
-const Admin = require("../../models/Admin");
-const User = require("../../models/User");
-const Post = require("../../models/Post");
-const checkAuth = require("../../util/check-auth");
-
-function generateToken(user) {
-  return jwt.sign(
-    {
-      id: user.id,
-      email: user.email,
-      fullname: user.fullname,
-      admin: true,
-      user: false,
-    },
-    SECRET_KEY,
-    { expiresIn: "1h" }
-  );
-}
+} = require('../../util/validators');
+const Admin = require('../../models/Admin');
+const User = require('../../models/User');
+const Post = require('../../models/Post');
+const checkAuth = require('../../util/check-auth');
+const generateToken = require('../../middleware/createToken');
 
 module.exports = {
   Query: {
@@ -50,20 +35,20 @@ module.exports = {
       const { errors, isValid } = validateLoginInput(email, password);
 
       if (!isValid) {
-        throw new UserInputError("Errors", { errors });
+        throw new UserInputError('Errors', { errors });
       }
 
       const admin = await Admin.findOne({ email });
 
       if (!admin) {
-        errors.email = "Email not found";
-        throw new UserInputError("Email not found", { errors });
+        errors.email = 'Email not found';
+        throw new UserInputError('Email not found', { errors });
       }
 
       const match = await bcrypt.compare(password, admin.password);
       if (!match) {
-        errors.password = "Password is invalid!";
-        throw new UserInputError("Password is invalid!", {
+        errors.password = 'Password is invalid!';
+        throw new UserInputError('Password is invalid!', {
           errors,
         });
       }
@@ -88,14 +73,14 @@ module.exports = {
         confirmPassword
       );
       if (!isValid) {
-        throw new UserInputError("Errors", { errors });
+        throw new UserInputError('Errors', { errors });
       }
       // Make sure user doesnt already exist
       const admin = await Admin.findOne({ email });
       if (admin) {
-        throw new UserInputError("Email is taken", {
+        throw new UserInputError('Email is taken', {
           errors: {
-            email: "This email is taken",
+            email: 'This email is taken',
           },
         });
       }
@@ -107,6 +92,7 @@ module.exports = {
         email,
         password,
         createdAt: new Date().toISOString(),
+        role: 'admin',
       });
 
       const res = await newAdmin.save();
@@ -124,11 +110,11 @@ module.exports = {
       const user = checkAuth(context);
 
       try {
-        if (user.admin) {
+        if (user.role == 'admin') {
           await Post.findByIdAndDelete(postId);
-          return "Post deleted successfully";
+          return 'Post deleted successfully';
         } else {
-          throw new AuthenticationError("Action not allowed");
+          throw new AuthenticationError('Action not allowed');
         }
       } catch (err) {
         throw new Error(err);
@@ -139,12 +125,12 @@ module.exports = {
       const user = checkAuth(context);
 
       try {
-        if (user.admin) {
+        if (user.role == 'admin') {
           await User.findByIdAndDelete(userId);
           await Post.deleteMany({ user: userId });
-          return "User deleted successfully";
+          return 'User deleted successfully';
         } else {
-          throw new AuthenticationError("Action not allowed");
+          throw new AuthenticationError('Action not allowed');
         }
       } catch (err) {
         throw new Error(err);
@@ -155,12 +141,12 @@ module.exports = {
       const user = checkAuth(context);
 
       try {
-        if (user.admin) {
+        if (user.role == 'admin') {
           await Admin.findByIdAndDelete(adminId);
           await Post.deleteMany({ user: adminId });
-          return "Admin deleted successfully";
+          return 'Admin deleted successfully';
         } else {
-          throw new AuthenticationError("Action not allowed");
+          throw new AuthenticationError('Action not allowed');
         }
       } catch (err) {
         throw new Error(err);
@@ -171,11 +157,11 @@ module.exports = {
       const user = checkAuth(context);
 
       try {
-        if (user.admin) {
+        if (user.role == 'admin') {
           await User.findByIdAndUpdate(userId, { access }, { new: true });
-          return "Access changed";
+          return 'Access changed';
         } else {
-          throw new AuthenticationError("Action not allowed");
+          throw new AuthenticationError('Action not allowed');
         }
       } catch (err) {
         throw new Error(err);
