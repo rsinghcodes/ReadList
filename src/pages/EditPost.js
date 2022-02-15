@@ -1,19 +1,19 @@
-import * as Yup from "yup";
-import { Heading, useToast } from "@chakra-ui/react";
-import React, { useEffect } from "react";
-import { useParams } from "react-router";
-import { useQuery, useMutation } from "@apollo/react-hooks";
-import gql from "graphql-tag";
-import { useHistory } from "react-router-dom";
-import { useFormik } from "formik";
+import * as Yup from 'yup';
+import { Heading, useToast } from '@chakra-ui/react';
+import React, { useEffect } from 'react';
+import { useParams } from 'react-router';
+import { useQuery, useMutation } from '@apollo/react-hooks';
+import gql from 'graphql-tag';
+import { useNavigate } from 'react-router-dom';
+import { useFormik } from 'formik';
 
-import { FETCH_POST_FOR_UPDATE } from "../util/graphql";
-import PostForm from "../components/PostForm";
+import { FETCH_POST_FOR_UPDATE } from '../util/graphql';
+import PostForm from '../components/PostForm';
 
 function EditPost() {
   const { postId } = useParams();
   const toast = useToast();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const { data } = useQuery(FETCH_POST_FOR_UPDATE, {
     variables: {
@@ -22,16 +22,16 @@ function EditPost() {
   });
 
   const EditPostSchema = Yup.object().shape({
-    title: Yup.string().required("Title is required"),
-    desc: Yup.string().required("Description is required"),
-    body: Yup.string().required("Markdown is required"),
+    title: Yup.string().required('Title is required'),
+    desc: Yup.string().required('Description is required'),
+    body: Yup.string().required('Markdown is required'),
   });
 
   const formik = useFormik({
     initialValues: {
-      title: "",
-      desc: "",
-      body: "",
+      title: '',
+      desc: '',
+      body: '',
     },
     validationSchema: EditPostSchema,
     onSubmit: () => {
@@ -55,14 +55,14 @@ function EditPost() {
       ...values,
     },
     update() {
-      values.title = "";
-      values.desc = "";
-      values.body = "";
-      history.push("/");
+      values.title = '';
+      values.desc = '';
+      values.body = '';
+      navigate('/', { replace: true });
       toast({
-        position: "top",
-        description: "Your Post has been successfully updated.",
-        status: "success",
+        position: 'top',
+        description: 'Your Post has been successfully updated.',
+        status: 'success',
         duration: 2000,
         isClosable: true,
       });

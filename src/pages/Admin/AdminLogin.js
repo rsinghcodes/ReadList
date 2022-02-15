@@ -12,33 +12,33 @@ import {
   InputRightElement,
   Stack,
   useToast,
-} from "@chakra-ui/react";
-import * as Yup from "yup";
-import { useFormik, Form, FormikProvider } from "formik";
-import React, { useContext, useState } from "react";
-import gql from "graphql-tag";
-import { useMutation } from "@apollo/react-hooks";
-import { useHistory } from "react-router-dom";
+} from '@chakra-ui/react';
+import * as Yup from 'yup';
+import { useFormik, Form, FormikProvider } from 'formik';
+import React, { useContext, useState } from 'react';
+import gql from 'graphql-tag';
+import { useMutation } from '@apollo/react-hooks';
+import { useNavigate } from 'react-router-dom';
 
-import { AuthContext } from "../../context/auth";
+import { AuthContext } from '../../context/auth';
 
 const AdminLogin = () => {
   const context = useContext(AuthContext);
   const [show, setShow] = useState(false);
   const toast = useToast();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const LoginSchema = Yup.object().shape({
     email: Yup.string()
-      .email("Email must be a valid email address")
-      .required("Email is required"),
-    password: Yup.string().required("Password is required"),
+      .email('Email must be a valid email address')
+      .required('Email is required'),
+    password: Yup.string().required('Password is required'),
   });
 
   const formik = useFormik({
     initialValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
     validationSchema: LoginSchema,
     onSubmit: () => {
@@ -52,11 +52,11 @@ const AdminLogin = () => {
   const [loginAdmin, { loading }] = useMutation(LOGIN_ADMIN, {
     update(_, { data: { loginAdmin: userData } }) {
       context.login(userData);
-      history.push("/");
+      navigate('/', { replace: true });
       toast({
-        position: "top",
-        description: "You have successfully logged in.",
-        status: "success",
+        position: 'top',
+        description: 'You have successfully logged in.',
+        status: 'success',
         duration: 2000,
         isClosable: true,
       });
@@ -84,7 +84,7 @@ const AdminLogin = () => {
                   placeholder="Please enter your email"
                   name="email"
                   type="text"
-                  {...getFieldProps("email")}
+                  {...getFieldProps('email')}
                 />
                 <FormErrorMessage>
                   {touched.email && errors.email}
@@ -98,9 +98,9 @@ const AdminLogin = () => {
                   <Input
                     id="password"
                     placeholder="Please enter password"
-                    type={show ? "text" : "password"}
+                    type={show ? 'text' : 'password'}
                     name="password"
-                    {...getFieldProps("password")}
+                    {...getFieldProps('password')}
                   />
                   <InputRightElement width="4.5rem">
                     <Button
@@ -108,7 +108,7 @@ const AdminLogin = () => {
                       size="sm"
                       onClick={() => setShow(!show)}
                     >
-                      {show ? "Hide" : "Show"}
+                      {show ? 'Hide' : 'Show'}
                     </Button>
                   </InputRightElement>
                 </InputGroup>
@@ -140,6 +140,7 @@ const LOGIN_ADMIN = gql`
       fullname
       createdAt
       token
+      role
     }
   }
 `;

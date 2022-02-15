@@ -1,9 +1,9 @@
-import * as Yup from "yup";
-import React, { useContext, useState } from "react";
-import { useMutation } from "@apollo/react-hooks";
-import gql from "graphql-tag";
-import { useHistory } from "react-router-dom";
-import { useFormik, Form, FormikProvider } from "formik";
+import * as Yup from 'yup';
+import React, { useContext, useState } from 'react';
+import { useMutation } from '@apollo/react-hooks';
+import gql from 'graphql-tag';
+import { useNavigate } from 'react-router-dom';
+import { useFormik, Form, FormikProvider } from 'formik';
 import {
   Alert,
   AlertIcon,
@@ -17,28 +17,28 @@ import {
   InputRightElement,
   Stack,
   useToast,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 
-import { AuthContext } from "../context/auth";
+import { AuthContext } from '../context/auth';
 
 function Login(props) {
   const context = useContext(AuthContext);
   const [accessError, setAccessError] = useState(false);
   const [show, setShow] = useState(false);
   const toast = useToast();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const LoginSchema = Yup.object().shape({
     email: Yup.string()
-      .email("Email must be a valid email address")
-      .required("Email is required"),
-    password: Yup.string().required("Password is required"),
+      .email('Email must be a valid email address')
+      .required('Email is required'),
+    password: Yup.string().required('Password is required'),
   });
 
   const formik = useFormik({
     initialValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
       remember: true,
     },
     validationSchema: LoginSchema,
@@ -53,11 +53,11 @@ function Login(props) {
   const [loginUser, { loading }] = useMutation(LOGIN_USER, {
     update(_, { data: { loginUser: userData } }) {
       context.login(userData);
-      history.push("/");
+      navigate('/', { replace: true });
       toast({
-        position: "top",
-        description: "You have successfully logged in.",
-        status: "success",
+        position: 'top',
+        description: 'You have successfully logged in.',
+        status: 'success',
         duration: 2000,
         isClosable: true,
       });
@@ -66,7 +66,7 @@ function Login(props) {
       if (err.graphQLErrors[0].extensions.errors) {
         setErrors(err.graphQLErrors[0].extensions.errors);
       }
-      if (err.graphQLErrors[0].extensions.code === "FORBIDDEN") {
+      if (err.graphQLErrors[0].extensions.code === 'FORBIDDEN') {
         setAccessError(true);
         setErrors({});
       }
@@ -85,7 +85,7 @@ function Login(props) {
               placeholder="Please enter your email"
               name="email"
               type="text"
-              {...getFieldProps("email")}
+              {...getFieldProps('email')}
             />
             <FormErrorMessage>{touched.email && errors.email}</FormErrorMessage>
           </FormControl>
@@ -95,13 +95,13 @@ function Login(props) {
               <Input
                 id="password"
                 placeholder="Please enter password"
-                type={show ? "text" : "password"}
+                type={show ? 'text' : 'password'}
                 name="password"
-                {...getFieldProps("password")}
+                {...getFieldProps('password')}
               />
               <InputRightElement width="4.5rem">
                 <Button h="1.75rem" size="sm" onClick={() => setShow(!show)}>
-                  {show ? "Hide" : "Show"}
+                  {show ? 'Hide' : 'Show'}
                 </Button>
               </InputRightElement>
             </InputGroup>
@@ -142,6 +142,7 @@ const LOGIN_USER = gql`
       fullname
       createdAt
       token
+      role
     }
   }
 `;
