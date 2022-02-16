@@ -20,7 +20,7 @@ function Home() {
   return (
     <>
       <Search />
-      <Box as="section" py="20">
+      <Box as="section" pt="20">
         <Box textAlign="center">
           <chakra.h1
             maxW="16ch"
@@ -50,7 +50,7 @@ function Home() {
             anything with ease and at zero cost.
           </Text>
 
-          <Flex mt="10" justify="center">
+          <Flex my="10" justify="center">
             {user && (
               <Button
                 h="4rem"
