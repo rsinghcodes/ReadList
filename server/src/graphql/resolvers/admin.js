@@ -1,5 +1,5 @@
 const bcrypt = require('bcryptjs');
-const { UserInputError, AuthenticationError } = require('apollo-server');
+const { GraphQLError } = require('graphql');
 
 const {
   validateRegisterInput,
@@ -35,21 +35,25 @@ module.exports = {
       const { errors, isValid } = validateLoginInput(email, password);
 
       if (!isValid) {
-        throw new UserInputError('Errors', { errors });
+        throw new GraphQLError('Errors', {
+          extensions: { code: 'BAD_USER_INPUT', errors },
+        });
       }
 
       const admin = await Admin.findOne({ email });
 
       if (!admin) {
         errors.email = 'Email not found';
-        throw new UserInputError('Email not found', { errors });
+        throw new GraphQLError('Email not found', {
+          extensions: { code: 'QUERY_NOT_FOUND', errors },
+        });
       }
 
       const match = await bcrypt.compare(password, admin.password);
       if (!match) {
         errors.password = 'Password is invalid!';
-        throw new UserInputError('Password is invalid!', {
-          errors,
+        throw new GraphQLError('Password is invalid!', {
+          extensions: { code: 'BAD_USER_INPUT', errors },
         });
       }
 
@@ -73,14 +77,19 @@ module.exports = {
         confirmPassword
       );
       if (!isValid) {
-        throw new UserInputError('Errors', { errors });
+        throw new GraphQLError('Errors', {
+          extensions: { code: 'BAD_USER_INPUT', errors },
+        });
       }
       // Make sure user doesnt already exist
       const admin = await Admin.findOne({ email });
       if (admin) {
-        throw new UserInputError('Email is taken', {
-          errors: {
-            email: 'This email is taken',
+        throw new GraphQLError('Email is taken', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            errors: {
+              email: 'This email is taken',
+            },
           },
         });
       }
@@ -114,7 +123,9 @@ module.exports = {
           await Post.findByIdAndDelete(postId);
           return 'Post deleted successfully';
         } else {
-          throw new AuthenticationError('Action not allowed');
+          throw new GraphQLError('Action not allowed', {
+            extensions: { code: 'AUTHENTICATION_ERROR' },
+          });
         }
       } catch (err) {
         throw new Error(err);
@@ -130,7 +141,9 @@ module.exports = {
           await Post.deleteMany({ user: userId });
           return 'User deleted successfully';
         } else {
-          throw new AuthenticationError('Action not allowed');
+          throw new GraphQLError('Action not allowed', {
+            extensions: { code: 'AUTHENTICATION_ERROR' },
+          });
         }
       } catch (err) {
         throw new Error(err);
@@ -146,7 +159,9 @@ module.exports = {
           await Post.deleteMany({ user: adminId });
           return 'Admin deleted successfully';
         } else {
-          throw new AuthenticationError('Action not allowed');
+          throw new GraphQLError('Action not allowed', {
+            extensions: { code: 'AUTHENTICATION_ERROR' },
+          });
         }
       } catch (err) {
         throw new Error(err);
@@ -161,7 +176,9 @@ module.exports = {
           await User.findByIdAndUpdate(userId, { access }, { new: true });
           return 'Access changed';
         } else {
-          throw new AuthenticationError('Action not allowed');
+          throw new GraphQLError('Action not allowed', {
+            extensions: { code: 'AUTHENTICATION_ERROR' },
+          });
         }
       } catch (err) {
         throw new Error(err);

@@ -1,25 +1,30 @@
-const { ApolloServer } = require("apollo-server");
-const mongoose = require("mongoose");
+const { ApolloServer } = require('@apollo/server');
+const { startStandaloneServer } = require('@apollo/server/standalone');
+const mongoose = require('mongoose');
 
-const typeDefs = require("./graphql/typeDefs");
-const resolvers = require("./graphql/resolvers");
-const { MONGODB } = require("./config.js");
-
-const PORT = process.env.PORT || 4000;
+const typeDefs = require('./graphql/typeDefs');
+const resolvers = require('./graphql/resolvers');
+const { MONGODB } = require('./config.js');
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: ({ req }) => ({ req }),
 });
+
+const PORT = process.env.PORT || 4000;
 
 mongoose
   .connect(MONGODB)
-  .then(() => {
-    return server.listen({ port: PORT });
+  .then(async () => {
+    const { url } = await startStandaloneServer(server, {
+      context: async ({ req }) => ({ req }),
+      listen: { port: PORT },
+    });
+
+    return url;
   })
-  .then((res) => {
-    console.log(`Server running at ${res.url}`);
+  .then((url) => {
+    console.log(`Server running at ${url}`);
   })
   .catch((err) => {
     console.error(err);
