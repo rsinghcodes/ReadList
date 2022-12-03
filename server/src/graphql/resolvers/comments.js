@@ -1,16 +1,19 @@
-const { AuthenticationError, UserInputError } = require("apollo-server");
+const { GraphQLError } = require('graphql');
 
-const checkAuth = require("../../util/check-auth");
-const Post = require("../../models/Post");
+const checkAuth = require('../../util/check-auth');
+const Post = require('../../models/Post');
 
 module.exports = {
   Mutation: {
     createComment: async (_, { postId, body }, context) => {
       const { email, fullname } = checkAuth(context);
-      if (body.trim() === "") {
-        throw new UserInputError("Empty comment", {
-          errors: {
-            body: "Comment field is required",
+      if (body.trim() === '') {
+        throw new GraphQLError('Empty comment', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            errors: {
+              body: 'Comment field is required',
+            },
           },
         });
       }
@@ -26,7 +29,10 @@ module.exports = {
         });
         await post.save();
         return post;
-      } else throw new UserInputError("Post not found");
+      } else
+        throw new GraphQLError('Post not found', {
+          extensions: { code: 'QUERY_NOT_FOUND' },
+        });
     },
     async deleteComment(_, { postId, commentId }, context) {
       const { email, admin } = checkAuth(context);
@@ -41,10 +47,14 @@ module.exports = {
           await post.save();
           return post;
         } else {
-          throw new AuthenticationError("Action not allowed");
+          throw new GraphQLError('Action not allowed', {
+            extensions: { code: 'AUTHENTICATION_ERROR' },
+          });
         }
       } else {
-        throw new UserInputError("Post not found");
+        throw new GraphQLError('Post not found', {
+          extensions: { code: 'QUERY_NOT_FOUND' },
+        });
       }
     },
   },

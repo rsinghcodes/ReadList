@@ -1,9 +1,5 @@
 const bcrypt = require('bcryptjs');
-const {
-  UserInputError,
-  AuthenticationError,
-  ForbiddenError,
-} = require('apollo-server');
+const { GraphQLError } = require('graphql');
 
 const {
   validateRegisterInput,
@@ -31,26 +27,41 @@ module.exports = {
       const { errors, isValid } = validateLoginInput(email, password);
 
       if (!isValid) {
-        throw new UserInputError('Errors', { errors });
+        throw new GraphQLError('Errors', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            errors,
+          },
+        });
       }
 
       const user = await User.findOne({ email });
 
       if (!user) {
         errors.email = 'Email not found!';
-        throw new UserInputError('Email not found!', { errors });
+        throw new GraphQLError('Email not found!', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            errors,
+          },
+        });
       }
 
       const match = await bcrypt.compare(password, user.password);
       if (!match) {
         errors.password = 'Password is invalid!';
-        throw new UserInputError('Password is invalid!', {
-          errors,
+        throw new GraphQLError('Password is invalid!', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            errors,
+          },
         });
       }
 
       if (!user.access) {
-        throw new ForbiddenError('Access denied!');
+        throw new GraphQLError('Access denied!', {
+          extensions: { code: 'FORBIDDEN_ERROR' },
+        });
       }
 
       const token = generateToken(user);
@@ -72,14 +83,19 @@ module.exports = {
         confirmPassword
       );
       if (!isValid) {
-        throw new UserInputError('Errors', { errors });
+        throw new GraphQLError('Errors', {
+          extensions: { code: 'BAD_USER_INPUT', errors },
+        });
       }
-      // Make sure user doesnt already exist
+      // Make sure user doesn't already exist
       const user = await User.findOne({ email });
       if (user) {
-        throw new UserInputError('Email is taken', {
-          errors: {
-            email: 'Account is already created using this email!',
+        throw new GraphQLError('Email is taken', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            errors: {
+              email: 'Account is already created using this email!',
+            },
           },
         });
       }
@@ -117,7 +133,9 @@ module.exports = {
       );
 
       if (!isValid) {
-        throw new UserInputError('Errors', { errors });
+        throw new GraphQLError('Errors', {
+          extensions: { code: 'BAD_USER_INPUT', errors },
+        });
       }
 
       // hash password and create an auth token
@@ -150,7 +168,9 @@ module.exports = {
           await Post.deleteMany({ user: userId });
           return 'User deleted successfully';
         } else {
-          throw new AuthenticationError('Action not allowed');
+          throw new GraphQLError('Action not allowed', {
+            extensions: { code: 'AUTHENTICATION_ERROR' },
+          });
         }
       } catch (err) {
         throw new Error(err);

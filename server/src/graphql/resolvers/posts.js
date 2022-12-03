@@ -1,14 +1,13 @@
-const { AuthenticationError, UserInputError } = require("apollo-server");
-const marked = require("marked");
-const slugify = require("slugify");
-const createDomPurify = require("dompurify");
-const { JSDOM } = require("jsdom");
-
+const marked = require('marked');
+const slugify = require('slugify');
+const createDomPurify = require('dompurify');
+const { JSDOM } = require('jsdom');
+const { GraphQLError } = require('graphql');
 const dompurify = createDomPurify(new JSDOM().window);
 
-const { validatePostInput } = require("../../util/validators");
-const Post = require("../../models/Post");
-const checkAuth = require("../../util/check-auth");
+const { validatePostInput } = require('../../util/validators');
+const Post = require('../../models/Post');
+const checkAuth = require('../../util/check-auth');
 
 module.exports = {
   Query: {
@@ -27,7 +26,7 @@ module.exports = {
         if (post) {
           return post;
         } else {
-          throw new Error("Post not found");
+          throw new Error('Post not found');
         }
       } catch (err) {
         throw new Error(err);
@@ -41,8 +40,8 @@ module.exports = {
         // update the search query
         searchQuery = {
           $or: [
-            { title: { $regex: filter, $options: "i" } },
-            { desc: { $regex: filter, $options: "i" } },
+            { title: { $regex: filter, $options: 'i' } },
+            { desc: { $regex: filter, $options: 'i' } },
           ],
         };
       }
@@ -52,7 +51,7 @@ module.exports = {
         if (post) {
           return post;
         } else {
-          throw new Error("Post not found");
+          throw new Error('Post not found');
         }
       } catch (err) {
         throw new Error(err);
@@ -65,7 +64,7 @@ module.exports = {
         if (post) {
           return post;
         } else {
-          throw new Error("Post not found");
+          throw new Error('Post not found');
         }
       } catch (err) {
         throw new Error(err);
@@ -78,7 +77,7 @@ module.exports = {
         if (post) {
           return post;
         } else {
-          throw new Error("Post not found");
+          throw new Error('Post not found');
         }
       } catch (err) {
         throw new Error(err);
@@ -92,15 +91,20 @@ module.exports = {
       const { errors, isValid } = validatePostInput(title, desc, body);
 
       if (!isValid) {
-        throw new UserInputError("Errors", { errors });
+        throw new GraphQLError('Errors', {
+          extensions: { code: 'BAD_USER_INPUT', errors },
+        });
       }
 
       // Make sure same title doesn't already exist
       const blogTitle = await Post.findOne({ title });
       if (blogTitle) {
-        throw new UserInputError("Title is taken", {
-          errors: {
-            title: "This title is already taken.",
+        throw new GraphQLError('Title is taken', {
+          extensions: {
+            code: 'GRAPHQL_VALIDATION_FAILED',
+            errors: {
+              title: 'This title is already taken.',
+            },
           },
         });
       }
@@ -127,7 +131,9 @@ module.exports = {
       const { errors, isValid } = validatePostInput(title, desc, body);
 
       if (!isValid) {
-        throw new UserInputError("Errors", { errors });
+        throw new GraphQLError('Errors', {
+          extensions: { code: 'BAD_USER_INPUT', errors },
+        });
       }
 
       try {
@@ -147,7 +153,9 @@ module.exports = {
 
           return updatedPost;
         } else {
-          throw new AuthenticationError("Action not allowed");
+          throw new GraphQLError('Action not allowed', {
+            extensions: { code: 'AUTHENTICATION_ERROR' },
+          });
         }
       } catch (err) {
         throw new Error(err);
@@ -160,9 +168,11 @@ module.exports = {
         const post = await Post.findById(postId);
         if (user.email === post.email) {
           await post.delete();
-          return "Post deleted successfully";
+          return 'Post deleted successfully';
         } else {
-          throw new AuthenticationError("Action not allowed");
+          throw new GraphQLError('Action not allowed', {
+            extensions: { code: 'AUTHENTICATION_ERROR' },
+          });
         }
       } catch (err) {
         throw new Error(err);
@@ -184,7 +194,10 @@ module.exports = {
 
         await post.save();
         return post;
-      } else throw new UserInputError("Post not found");
+      } else
+        throw new GraphQLError('Post not found', {
+          extensions: { code: 'BAD_USER_INPUT' },
+        });
     },
   },
 };

@@ -1,6 +1,4 @@
-const { gql } = require('apollo-server');
-
-module.exports = gql`
+module.exports = `#graphql
   type Post {
     id: ID!
     title: String!
