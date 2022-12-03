@@ -1,8 +1,7 @@
 import * as Yup from 'yup';
-import gql from 'graphql-tag';
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useMutation } from '@apollo/react-hooks';
+import { gql, useMutation } from '@apollo/client';
 import { useFormik, Form, FormikProvider } from 'formik';
 import {
   Heading,

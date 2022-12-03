@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState } from 'react';
 import {
   AlertDialog,
   AlertDialogBody,
@@ -12,11 +12,10 @@ import {
   Tooltip,
   Tr,
   useToast,
-} from "@chakra-ui/react";
-import { CheckCircleIcon, DeleteIcon, NotAllowedIcon } from "@chakra-ui/icons";
-import { useMutation } from "@apollo/react-hooks";
-import gql from "graphql-tag";
-import moment from "moment";
+} from '@chakra-ui/react';
+import { CheckCircleIcon, DeleteIcon, NotAllowedIcon } from '@chakra-ui/icons';
+import { gql, useMutation } from '@apollo/client';
+import moment from 'moment';
 
 const ManageUsers = ({
   user: { id, fullname, email, createdAt, updatedAt, access },
@@ -36,9 +35,9 @@ const ManageUsers = ({
   const [accountPermission] = useMutation(ACCOUNT_ACCESS_MUTATION, {
     update() {
       toast({
-        position: "top",
-        description: "Access Changed",
-        status: "success",
+        position: 'top',
+        description: 'Access Changed',
+        status: 'success',
         duration: 2000,
         isClosable: true,
       });

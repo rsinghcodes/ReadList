@@ -1,7 +1,7 @@
-import gql from "graphql-tag";
+import { gql } from '@apollo/client';
 
 export const FETCH_POSTS_QUERY = gql`
-  {
+  query GetPosts {
     getPosts {
       id
       title
@@ -52,7 +52,7 @@ export const FETCH_POST_FOR_UPDATE = gql`
 `;
 
 export const FETCH_USERS_QUERY = gql`
-  {
+  query GetUsers {
     getUsers {
       id
       fullname
@@ -65,7 +65,7 @@ export const FETCH_USERS_QUERY = gql`
 `;
 
 export const FETCH_ADMINS_QUERY = gql`
-  {
+  query GetAdmins {
     getAdmins {
       id
       email

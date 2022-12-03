@@ -1,6 +1,6 @@
 import React from 'react';
 import { VStack } from '@chakra-ui/react';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 
 import { FETCH_POSTS_QUERY } from '../util/graphql';
 import PostCard from '../components/PostCard';

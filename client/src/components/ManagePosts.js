@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState } from 'react';
 import {
   Td,
   Tr,
@@ -12,11 +12,10 @@ import {
   IconButton,
   Flex,
   Link,
-} from "@chakra-ui/react";
-import { useMutation } from "@apollo/react-hooks";
-import gql from "graphql-tag";
-import { DeleteIcon, ExternalLinkIcon } from "@chakra-ui/icons";
-import moment from "moment";
+} from '@chakra-ui/react';
+import { gql, useMutation } from '@apollo/client';
+import { DeleteIcon, ExternalLinkIcon } from '@chakra-ui/icons';
+import moment from 'moment';
 
 const ManagePosts = ({ post }) => {
   const [confirmOpen, setConfirmOpen] = useState(false);

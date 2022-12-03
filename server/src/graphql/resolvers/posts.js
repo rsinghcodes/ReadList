@@ -114,7 +114,7 @@ module.exports = {
         slug: slugify(title, { lower: true, strict: true }),
         desc,
         body,
-        sanitizedHtml: dompurify.sanitize(marked(body)),
+        sanitizedHtml: dompurify.sanitize(marked.parse(body)),
         user: user.id,
         email: user.email,
         fullname: user.fullname,

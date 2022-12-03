@@ -2,8 +2,7 @@ import * as Yup from 'yup';
 import { Heading, useToast } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router';
-import { useQuery, useMutation } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
+import { gql, useQuery, useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 
