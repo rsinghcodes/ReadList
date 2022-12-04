@@ -1,16 +1,15 @@
-import React, { useState, useRef } from "react";
-import { useMutation } from "@apollo/react-hooks";
-import { Box, Button, Input } from "@chakra-ui/react";
-import gql from "graphql-tag";
+import React, { useState, useRef } from 'react';
+import { Box, Button, Input } from '@chakra-ui/react';
+import { gql, useMutation } from '@apollo/client';
 
 function CommentForm({ postId }) {
   const commentInputRef = useRef(null);
 
-  const [comment, setComment] = useState("");
+  const [comment, setComment] = useState('');
 
   const [submitComment] = useMutation(SUBMIT_COMMENT_MUTATION, {
     update() {
-      setComment("");
+      setComment('');
       commentInputRef.current.blur();
     },
     variables: {
@@ -34,7 +33,7 @@ function CommentForm({ postId }) {
         mt="3.5"
         onClick={submitComment}
         colorScheme="teal"
-        isDisabled={comment.trim() === ""}
+        isDisabled={comment.trim() === ''}
       >
         Publish Comment
       </Button>

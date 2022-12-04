@@ -13,12 +13,11 @@ import {
   Text,
   useToast,
   VStack,
-} from "@chakra-ui/react";
-import React, { useContext, useRef, useState } from "react";
-import gql from "graphql-tag";
-import { Link } from "react-router-dom";
-import { useQuery, useMutation } from "@apollo/react-hooks";
-import { AuthContext } from "../context/auth";
+} from '@chakra-ui/react';
+import React, { useContext, useRef, useState } from 'react';
+import { gql, useQuery, useMutation } from '@apollo/client';
+import { Link } from 'react-router-dom';
+import { AuthContext } from '../context/auth';
 
 const Profile = () => {
   const context = useContext(AuthContext);
@@ -37,9 +36,9 @@ const Profile = () => {
     update() {
       context.logout();
       toast({
-        position: "top",
+        position: 'top',
         description: `Your Account has been successfully deleted.`,
-        status: "success",
+        status: 'success',
         duration: 2000,
         isClosable: true,
       });
@@ -50,7 +49,7 @@ const Profile = () => {
   return (
     <>
       <Box borderWidth="1px" borderRadius="lg" mt="5" p="3.5">
-        <Heading fontSize="2xl">Personal Information</Heading>{" "}
+        <Heading fontSize="2xl">Personal Information</Heading>{' '}
         {data ? (
           <>
             <VStack

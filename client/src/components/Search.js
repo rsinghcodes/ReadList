@@ -1,4 +1,3 @@
-import { useLazyQuery } from '@apollo/react-hooks';
 import { SearchIcon } from '@chakra-ui/icons';
 import {
   Box,
@@ -11,7 +10,7 @@ import {
   ModalOverlay,
   useDisclosure,
 } from '@chakra-ui/react';
-import gql from 'graphql-tag';
+import { gql, useLazyQuery } from '@apollo/client';
 import React from 'react';
 import { Link } from 'react-router-dom';
 

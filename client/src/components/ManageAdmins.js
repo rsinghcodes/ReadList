@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useRef, useState } from 'react';
 import {
   AlertDialog,
   AlertDialogBody,
@@ -10,13 +10,12 @@ import {
   IconButton,
   Td,
   Tr,
-} from "@chakra-ui/react";
-import { DeleteIcon } from "@chakra-ui/icons";
-import moment from "moment";
-import gql from "graphql-tag";
-import { useMutation } from "@apollo/react-hooks";
+} from '@chakra-ui/react';
+import { DeleteIcon } from '@chakra-ui/icons';
+import moment from 'moment';
+import { gql, useMutation } from '@apollo/client';
 
-import { AuthContext } from "../context/auth";
+import { AuthContext } from '../context/auth';
 
 const ManageAdmins = ({ admin }) => {
   const { user } = useContext(AuthContext);

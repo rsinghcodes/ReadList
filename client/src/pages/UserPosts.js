@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
-import { useQuery } from '@apollo/react-hooks';
+import { gql, useQuery } from '@apollo/client';
 import { Box, Button, Flex, Heading, VStack } from '@chakra-ui/react';
-import gql from 'graphql-tag';
 import { Link } from 'react-router-dom';
 import { EditIcon } from '@chakra-ui/icons';
 

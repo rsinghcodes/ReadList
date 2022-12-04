@@ -1,4 +1,4 @@
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery } from '@apollo/client';
 import {
   Box,
   Divider,
@@ -13,18 +13,18 @@ import {
   Th,
   Thead,
   Tr,
-} from "@chakra-ui/react";
-import React, { lazy } from "react";
-import ManageAdmins from "../../components/ManageAdmins";
+} from '@chakra-ui/react';
+import React, { lazy } from 'react';
+import ManageAdmins from '../../components/ManageAdmins';
 
 import {
   FETCH_POSTS_QUERY,
   FETCH_USERS_QUERY,
   FETCH_ADMINS_QUERY,
-} from "../../util/graphql";
-const ManagePosts = lazy(() => import("../../components/ManagePosts"));
-const ManageUsers = lazy(() => import("../../components/ManageUsers"));
-const AdminRegister = lazy(() => import("../../components/AdminRegister"));
+} from '../../util/graphql';
+const ManagePosts = lazy(() => import('../../components/ManagePosts'));
+const ManageUsers = lazy(() => import('../../components/ManageUsers'));
+const AdminRegister = lazy(() => import('../../components/AdminRegister'));
 
 const AdminDashboard = () => {
   const posts = useQuery(FETCH_POSTS_QUERY);

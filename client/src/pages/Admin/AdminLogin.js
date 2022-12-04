@@ -16,8 +16,7 @@ import {
 import * as Yup from 'yup';
 import { useFormik, Form, FormikProvider } from 'formik';
 import React, { useContext, useState } from 'react';
-import gql from 'graphql-tag';
-import { useMutation } from '@apollo/react-hooks';
+import { gql, useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 
 import { AuthContext } from '../../context/auth';
