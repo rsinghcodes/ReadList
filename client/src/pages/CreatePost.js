@@ -34,12 +34,16 @@ function CreatePost() {
 
   const [createPost] = useMutation(CREATE_POST_MUTATION, {
     variables: values,
-    update(proxy, result) {
-      const data = proxy.readQuery({
+    update(client, result) {
+      const data = client.readQuery({
         query: FETCH_POSTS_QUERY,
       });
-      data.getPosts = [result.data.createPost, ...data.getPosts];
-      proxy.writeQuery({ query: FETCH_POSTS_QUERY, data });
+      client.writeQuery({
+        query: FETCH_POSTS_QUERY,
+        data: {
+          getPosts: [result.data.createPost, ...data.getPosts],
+        },
+      });
       values.title = '';
       values.desc = '';
       values.body = '';
@@ -70,27 +74,12 @@ function CreatePost() {
 const CREATE_POST_MUTATION = gql`
   mutation CreatePost($title: String!, $desc: String!, $body: String!) {
     createPost(title: $title, desc: $desc, body: $body) {
-      body
-      commentCount
-      comments {
-        id
-        body
-        email
-        createdAt
-      }
-      createdAt
-      desc
-      email
-      fullname
       id
-      likeCount
       title
+      desc
+      sanitizedHtml
       slug
-      likes {
-        id
-        email
-        createdAt
-      }
+      createdAt
     }
   }
 `;
