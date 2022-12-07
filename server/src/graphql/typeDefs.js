@@ -69,7 +69,7 @@ module.exports = `#graphql
     registerAdmin(registerInput: UserInput): Admin!
     registerUser(registerInput: UserInput): User!
     loginAdmin(email: String!, password: String!): Admin!
-    accountPermission(userId: ID!, access: Boolean!): String!
+    accountPermission(userId: ID!, access: Boolean!): User!
     loginUser(email: String!, password: String!): User!
     updateUser(updateInput: UpdateUserInput, userId: ID!): User!
     createPost(title: String!, desc: String!, body: String!): Post!

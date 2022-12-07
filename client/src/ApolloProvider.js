@@ -1,6 +1,5 @@
 import React from 'react';
-
-import App from './App';
+import { Toaster } from 'react-hot-toast';
 import {
   ApolloClient,
   InMemoryCache,
@@ -8,8 +7,9 @@ import {
   HttpLink,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-
 import { ChakraProvider } from '@chakra-ui/react';
+
+import App from './App';
 import theme from './theme/theme';
 
 const httpLink = new HttpLink({
@@ -34,6 +34,7 @@ export default (
   <ApolloProvider client={client}>
     <ChakraProvider theme={theme}>
       <App />
+      <Toaster />
     </ChakraProvider>
   </ApolloProvider>
 );

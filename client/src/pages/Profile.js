@@ -17,6 +17,8 @@ import {
 import React, { useContext, useRef, useState } from 'react';
 import { gql, useQuery, useMutation } from '@apollo/client';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
+
 import { AuthContext } from '../context/auth';
 
 const Profile = () => {
@@ -60,6 +62,13 @@ const Profile = () => {
             >
               <Text fontSize="md">Full Name: {data.getUser.fullname}</Text>
               <Text fontSize="md">Email: {data.getUser.email}</Text>
+              <Text fontSize="md">
+                Account Created: {moment(data.getUser.createdAt).calendar()}
+              </Text>
+              <Text fontSize="md">
+                Account Last Updated:{' '}
+                {moment(data.getUser.updatedAt).calendar()}
+              </Text>
             </VStack>
             <Divider orientation="horizontal" />
             <Box mt="7" display="flex" justifyContent="flex-end">
@@ -120,6 +129,8 @@ const FETCH_USER_QUERY = gql`
     getUser(userId: $userId) {
       fullname
       email
+      updatedAt
+      createdAt
     }
   }
 `;
