@@ -65,7 +65,7 @@ function Login(props) {
       if (err.graphQLErrors[0].extensions.errors) {
         setErrors(err.graphQLErrors[0].extensions.errors);
       }
-      if (err.graphQLErrors[0].extensions.code === 'FORBIDDEN') {
+      if (err.graphQLErrors[0].extensions.code === 'FORBIDDEN_ERROR') {
         setAccessError(true);
         setErrors({});
       }

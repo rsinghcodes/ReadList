@@ -11,36 +11,76 @@ import {
   Td,
   Tooltip,
   Tr,
-  useToast,
 } from '@chakra-ui/react';
 import { CheckCircleIcon, DeleteIcon, NotAllowedIcon } from '@chakra-ui/icons';
 import { gql, useMutation } from '@apollo/client';
 import moment from 'moment';
+import toast from 'react-hot-toast';
+
+import { FETCH_USERS_QUERY } from '../util/graphql';
 
 const ManageUsers = ({
   user: { id, fullname, email, createdAt, updatedAt, access },
 }) => {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const cancelRef = useRef();
-  const toast = useToast();
 
   const [deleteUserByAdmin] = useMutation(DELETE_USER_MUTATION, {
-    update() {
-      setConfirmOpen(false);
-      window.location.reload(false);
-    },
     variables: { userId: id },
+    update(client) {
+      setConfirmOpen(false);
+      const data = client.readQuery({
+        query: FETCH_USERS_QUERY,
+      });
+      client.writeQuery({
+        query: FETCH_USERS_QUERY,
+        data: {
+          getUsers: data.getUsers.filter((user) => user.id !== id),
+        },
+      });
+      toast.success('User deleted successfully.', {
+        position: 'top-center',
+        duration: 2500,
+      });
+    },
+    onError(err) {
+      toast.error('Something went wrong!', {
+        position: 'top-center',
+        duration: 2500,
+      });
+    },
   });
 
   const [accountPermission] = useMutation(ACCOUNT_ACCESS_MUTATION, {
-    update() {
-      toast({
-        position: 'top',
-        description: 'Access Changed',
-        status: 'success',
-        duration: 2000,
-        isClosable: true,
+    update(client, result) {
+      const data = client.readQuery({
+        query: FETCH_USERS_QUERY,
       });
+      client.writeQuery({
+        query: FETCH_USERS_QUERY,
+        data: {
+          getUsers: data.getUsers.map((user) =>
+            user.id === id ? result?.data?.accountPermission : user
+          ),
+        },
+      });
+      toast.success('Access changed successfully.', {
+        position: 'top-center',
+        duration: 2500,
+      });
+    },
+    onError(err) {
+      if (err.graphQLErrors[0].extensions.code === 'AUTHENTICATION_ERROR') {
+        toast.error('Action not allowed', {
+          position: 'top-center',
+          duration: 2500,
+        });
+      } else {
+        toast.error('Something went wrong!', {
+          position: 'top-center',
+          duration: 2500,
+        });
+      }
     },
   });
 
@@ -48,36 +88,40 @@ const ManageUsers = ({
     <Tr>
       <Td>{fullname}</Td>
       <Td>{email}</Td>
-      <Td>{access.toString()}</Td>
+      <Td>{access ? 'Yes' : 'No'}</Td>
       <Td>{moment(createdAt).fromNow()}</Td>
       <Td>{moment(updatedAt).fromNow()}</Td>
       <Td isNumeric>
-        <Tooltip label="Grant account access">
-          <IconButton
-            aria-label="Grant account access"
-            icon={<CheckCircleIcon />}
-            mr={2}
-            colorScheme="green"
-            onClick={() =>
-              accountPermission({
-                variables: { userId: id, access: true },
-              })
-            }
-          />
-        </Tooltip>
-        <Tooltip label="Revoke account access">
-          <IconButton
-            aria-label="Revoke account access"
-            icon={<NotAllowedIcon />}
-            colorScheme="red"
-            mr={2}
-            onClick={() =>
-              accountPermission({
-                variables: { userId: id, access: false },
-              })
-            }
-          />
-        </Tooltip>
+        {access ? (
+          <Tooltip label="Revoke account access">
+            <IconButton
+              aria-label="Revoke account access"
+              icon={<NotAllowedIcon />}
+              colorScheme="red"
+              mr={2}
+              onClick={() =>
+                accountPermission({
+                  variables: { userId: id, access: !access },
+                })
+              }
+            />
+          </Tooltip>
+        ) : (
+          <Tooltip label="Grant account access">
+            <IconButton
+              aria-label="Grant account access"
+              icon={<CheckCircleIcon />}
+              mr={2}
+              colorScheme="green"
+              onClick={() =>
+                accountPermission({
+                  variables: { userId: id, access: !access },
+                })
+              }
+            />
+          </Tooltip>
+        )}
+
         <IconButton
           aria-label="Delete post"
           icon={<DeleteIcon />}
@@ -124,7 +168,14 @@ const DELETE_USER_MUTATION = gql`
 
 const ACCOUNT_ACCESS_MUTATION = gql`
   mutation accountPermission($userId: ID!, $access: Boolean!) {
-    accountPermission(userId: $userId, access: $access)
+    accountPermission(userId: $userId, access: $access) {
+      id
+      fullname
+      email
+      createdAt
+      updatedAt
+      access
+    }
   }
 `;
 

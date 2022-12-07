@@ -173,8 +173,16 @@ module.exports = {
 
       try {
         if (user.role == 'admin') {
-          await User.findByIdAndUpdate(userId, { access }, { new: true });
-          return 'Access changed';
+          const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { access },
+            { new: true }
+          );
+
+          return {
+            ...updatedUser._doc,
+            id: updatedUser._id,
+          };
         } else {
           throw new GraphQLError('Action not allowed', {
             extensions: { code: 'AUTHENTICATION_ERROR' },

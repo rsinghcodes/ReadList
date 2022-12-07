@@ -6,8 +6,10 @@ export const FETCH_POSTS_QUERY = gql`
       id
       title
       desc
+      body
       sanitizedHtml
       slug
+      fullname
       createdAt
     }
   }

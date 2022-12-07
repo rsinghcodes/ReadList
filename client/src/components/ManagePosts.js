@@ -16,17 +16,45 @@ import {
 import { gql, useMutation } from '@apollo/client';
 import { DeleteIcon, ExternalLinkIcon } from '@chakra-ui/icons';
 import moment from 'moment';
+import toast from 'react-hot-toast';
+
+import { FETCH_POSTS_QUERY } from '../util/graphql';
 
 const ManagePosts = ({ post }) => {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const cancelRef = useRef();
 
   const [deletePostByAdmin] = useMutation(DELETE_POST_MUTATION, {
-    update() {
-      setConfirmOpen(false);
-      window.location.reload(false);
-    },
     variables: { postId: post.id },
+    update(client) {
+      setConfirmOpen(false);
+      const data = client.readQuery({
+        query: FETCH_POSTS_QUERY,
+      });
+      client.writeQuery({
+        query: FETCH_POSTS_QUERY,
+        data: {
+          getPosts: data.getPosts.filter((p) => p.id !== post.id),
+        },
+      });
+      toast.success('Post deleted successfully.', {
+        position: 'top-center',
+        duration: 2500,
+      });
+    },
+    onError(err) {
+      if (err.graphQLErrors[0].extensions.code === 'AUTHENTICATION_ERROR') {
+        toast.error('Action not allowed', {
+          position: 'top-center',
+          duration: 2500,
+        });
+      } else {
+        toast.error('Something went wrong!', {
+          position: 'top-center',
+          duration: 2500,
+        });
+      }
+    },
   });
 
   return (

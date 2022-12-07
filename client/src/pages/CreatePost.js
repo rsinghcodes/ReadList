@@ -1,15 +1,15 @@
 import * as Yup from 'yup';
 import React from 'react';
-import { Heading, useToast } from '@chakra-ui/react';
+import { Heading } from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import { gql, useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 import { FETCH_POSTS_QUERY } from '../util/graphql';
 import PostForm from '../components/PostForm';
 
 function CreatePost() {
-  const toast = useToast();
   const navigate = useNavigate();
 
   const CreatePostSchema = Yup.object().shape({
@@ -48,12 +48,9 @@ function CreatePost() {
       values.desc = '';
       values.body = '';
       navigate('/', { replace: true });
-      toast({
-        position: 'top',
-        description: 'Your Post has been successfully created.',
-        status: 'success',
-        duration: 2000,
-        isClosable: true,
+      toast.success('Post Published Successfully 🎉', {
+        position: 'top-center',
+        duration: 2500,
       });
     },
     onError(err) {
@@ -76,9 +73,11 @@ const CREATE_POST_MUTATION = gql`
     createPost(title: $title, desc: $desc, body: $body) {
       id
       title
+      body
       desc
       sanitizedHtml
       slug
+      fullname
       createdAt
     }
   }

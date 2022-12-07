@@ -1,17 +1,18 @@
 import * as Yup from 'yup';
-import { Heading, useToast } from '@chakra-ui/react';
+import { Heading } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router';
 import { gql, useQuery, useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
+import toast from 'react-hot-toast';
 
-import { FETCH_POST_FOR_UPDATE } from '../util/graphql';
+import { FETCH_POST_FOR_UPDATE, FETCH_POSTS_QUERY } from '../util/graphql';
 import PostForm from '../components/PostForm';
 
 function EditPost() {
   const { postId } = useParams();
-  const toast = useToast();
+
   const navigate = useNavigate();
 
   const { data } = useQuery(FETCH_POST_FOR_UPDATE, {
@@ -53,17 +54,25 @@ function EditPost() {
       postId,
       ...values,
     },
-    update() {
+    update(client, result) {
+      const data = client.readQuery({
+        query: FETCH_POSTS_QUERY,
+      });
+      client.writeQuery({
+        query: FETCH_POSTS_QUERY,
+        data: {
+          getPosts: data.getPosts.map((post) =>
+            post.id === postId ? result.data.updatePost : post
+          ),
+        },
+      });
       values.title = '';
       values.desc = '';
       values.body = '';
       navigate('/', { replace: true });
-      toast({
-        position: 'top',
-        description: 'Your Post has been successfully updated.',
-        status: 'success',
-        duration: 2000,
-        isClosable: true,
+      toast.success('Successfully Edited', {
+        position: 'top-center',
+        duration: 2500,
       });
     },
     onError(err) {
@@ -92,23 +101,11 @@ const UPDATE_POST_MUTATION = gql`
       id
       title
       desc
+      body
       sanitizedHtml
       slug
-      createdAt
       fullname
-      email
-      likeCount
-      likes {
-        email
-      }
-      commentCount
-      comments {
-        id
-        email
-        fullname
-        createdAt
-        body
-      }
+      createdAt
     }
   }
 `;
