@@ -1,0 +1,15 @@
+/node_modules
+/docker-compose.yml
+
+build
+Dockerfile
+
+npm-debug.log
+
+.DS_Store
+.git
+*.md
+.gitignore
+.dockerignore
+
+LICENSE
