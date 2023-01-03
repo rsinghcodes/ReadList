@@ -17,7 +17,7 @@ import { gql, useMutation } from '@apollo/client';
 import moment from 'moment';
 import toast from 'react-hot-toast';
 
-import { FETCH_USERS_QUERY } from '../util/graphql';
+import { FETCH_USERS_QUERY } from '../utils/graphql';
 
 const ManageUsers = ({
   user: { id, fullname, email, createdAt, updatedAt, access },

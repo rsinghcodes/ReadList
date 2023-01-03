@@ -29,7 +29,7 @@ import {
 import { Link } from 'react-router-dom';
 import { ChevronDownIcon, EditIcon, TimeIcon } from '@chakra-ui/icons';
 
-import { FETCH_POST_QUERY } from '../util/graphql';
+import { FETCH_POST_QUERY } from '../utils/graphql';
 import DeleteButton from '../components/DeleteButton';
 import CommentForm from '../components/CommentForm';
 import CommentBox from '../components/CommentBox';

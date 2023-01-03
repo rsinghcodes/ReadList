@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import toast from 'react-hot-toast';
 
-import { FETCH_POST_FOR_UPDATE, FETCH_POSTS_QUERY } from '../util/graphql';
+import { FETCH_POST_FOR_UPDATE, FETCH_POSTS_QUERY } from '../utils/graphql';
 import PostForm from '../components/PostForm';
 
 function EditPost() {

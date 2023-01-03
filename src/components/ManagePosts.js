@@ -18,7 +18,7 @@ import { DeleteIcon, ExternalLinkIcon } from '@chakra-ui/icons';
 import moment from 'moment';
 import toast from 'react-hot-toast';
 
-import { FETCH_POSTS_QUERY } from '../util/graphql';
+import { FETCH_POSTS_QUERY } from '../utils/graphql';
 
 const ManagePosts = ({ post }) => {
   const [confirmOpen, setConfirmOpen] = useState(false);

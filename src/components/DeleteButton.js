@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { gql, useMutation } from '@apollo/client';
 
-import { FETCH_POSTS_QUERY } from '../util/graphql';
+import { FETCH_POSTS_QUERY } from '../utils/graphql';
 import {
   AlertDialog,
   AlertDialogBody,

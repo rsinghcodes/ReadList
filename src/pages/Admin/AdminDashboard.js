@@ -21,7 +21,7 @@ import {
   FETCH_POSTS_QUERY,
   FETCH_USERS_QUERY,
   FETCH_ADMINS_QUERY,
-} from '../../util/graphql';
+} from '../../utils/graphql';
 const ManagePosts = lazy(() => import('../../components/ManagePosts'));
 const ManageUsers = lazy(() => import('../../components/ManageUsers'));
 const AdminRegister = lazy(() => import('../../components/AdminRegister'));

@@ -4,9 +4,9 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Container, Progress } from '@chakra-ui/react';
 
 import { AuthProvider } from './context/auth';
-import PrivateRoute from './util/PrivateRoute';
-import AuthRoute from './util/AuthRoute';
-import AdminPrivateRoute from './util/AdminPrivateRoute';
+import PrivateRoute from './utils/PrivateRoute';
+import AuthRoute from './utils/AuthRoute';
+import AdminPrivateRoute from './utils/AdminPrivateRoute';
 
 import Header from './components/Header';
 import Footer from './components/Footer';
