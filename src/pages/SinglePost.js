@@ -40,7 +40,9 @@ function SinglePost() {
   const { slug } = useParams();
   const { user } = useContext(AuthContext);
   const toast = useToast();
-  const { onCopy } = useClipboard(`http://localhost:3000/posts/${slug}`);
+  const { onCopy } = useClipboard(
+    `https://readlist.onrender.com/posts/${slug}`
+  );
 
   const { data } = useQuery(FETCH_POST_QUERY, {
     variables: {
