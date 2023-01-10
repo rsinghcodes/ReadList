@@ -1,8 +1,8 @@
-import React from "react";
-import moment from "moment";
-import { Link } from "react-router-dom";
-import readingTime from "reading-time";
-import { BiShareAlt } from "react-icons/bi";
+import React from 'react';
+import moment from 'moment';
+import { Link } from 'react-router-dom';
+import readingTime from 'reading-time';
+import { BiShareAlt } from 'react-icons/bi';
 import {
   Box,
   Button,
@@ -16,25 +16,24 @@ import {
   useClipboard,
   useColorModeValue,
   useMediaQuery,
-  useToast,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
+import toast from 'react-hot-toast';
 
 function PostCard({ post: { title, desc, sanitizedHtml, createdAt, slug } }) {
-  const toast = useToast();
-  const { onCopy } = useClipboard(`http://localhost:3000/posts/${slug}`);
-  const [isLargerThan48em] = useMediaQuery("(min-width: 48em)");
+  const { onCopy } = useClipboard(window.location.href + `posts/${slug}`);
+  const [isLargerThan48em] = useMediaQuery('(min-width: 48em)');
   const { text } = readingTime(sanitizedHtml);
 
   return (
     <Box as="article" p="5" borderWidth="1px" rounded="lg" w="100%">
       <Flex justifyContent="space-between" alignItems="center">
         <Box
-          color={useColorModeValue("gray.500", "gray.400")}
+          color={useColorModeValue('gray.500', 'gray.400')}
           as="time"
           dateTime="2022-01-01 15:30:00 +0000 UTC"
           fontSize="xl"
         >
-          {moment(createdAt).format("ll")} — {text}
+          {moment(createdAt).format('ll')} — {text}
         </Box>
         {isLargerThan48em ? (
           <Button
@@ -43,12 +42,9 @@ function PostCard({ post: { title, desc, sanitizedHtml, createdAt, slug } }) {
             fontWeight={500}
             onClick={() => {
               onCopy();
-              toast({
-                position: "top",
-                description: "Share Link copied to clipboard.",
-                status: "success",
-                duration: 2000,
-                isClosable: true,
+              toast.success('Share Link copied to clipboard 📋.', {
+                position: 'top-center',
+                duration: 2500,
               });
             }}
           >
@@ -62,12 +58,9 @@ function PostCard({ post: { title, desc, sanitizedHtml, createdAt, slug } }) {
             icon={<BiShareAlt />}
             onClick={() => {
               onCopy();
-              toast({
-                position: "top",
-                description: "Share Link copied to clipboard.",
-                status: "success",
-                duration: 2000,
-                isClosable: true,
+              toast.success('Share Link copied to clipboard 📋.', {
+                position: 'top-center',
+                duration: 2500,
               });
             }}
           />
@@ -80,7 +73,7 @@ function PostCard({ post: { title, desc, sanitizedHtml, createdAt, slug } }) {
             {title}
           </LinkOverlay>
         </Heading>
-        <Text fontSize="xl" color={useColorModeValue("gray.500", "gray.400")}>
+        <Text fontSize="xl" color={useColorModeValue('gray.500', 'gray.400')}>
           {desc}
         </Text>
       </LinkBox>
