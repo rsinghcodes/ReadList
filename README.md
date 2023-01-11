@@ -36,14 +36,15 @@ The purpose of this web application is to make it easy to publish any type of co
 
 ## 🚧 Technology Stack
 
-- **Server Enviornment** - NodeJS
-- **Framework** - ExpressJS
+- **Server Enviornment** - Node.js
+- **Framework** - Express.js
+- **DevOps** - Docker
 - **Bundler** - Webpack
-- **For APIs** - GraphQL in conjunction with Apollo
-- **Frontend** - ReactJS, Chakra UI
+- **For APIs** - GraphQL in conjunction with Apollo Server
+- **Frontend** - React.js, Chakra UI
 - **Database** - MongoDB in conjunction with Mongoose
 - **Cloud database service** - MongoDB Atlas
-- **Deployment** - Heroku (Backend) & Netlify (Frontend)
+- **Deployment** - Render (Backend) & Netlify (Frontend)
 
 Authentication is implemented using a JSON Web Token (JWT) saved in local storage. Upon a successful login attempt made to the GraphQL endpoint, the response is a JWT containing the user data. This token is then added to every API request that requires authorization.
 
@@ -55,52 +56,13 @@ Authentication is implemented using a JSON Web Token (JWT) saved in local storag
 git clone https://github.com/rsinghcodes/ReadList.git
 ```
 
-**Step :two::** Navigate to server directory.
-
-```
-cd server
-```
-
-**Step :three::** Create a `.env` file in the server directory of the project. Add environment-specific variables in the form of `NAME=VALUE`. For example:
-
-```
-MONGODB=...
-SECRET_KEY=...
-```
-
-**Step :four::** Install the dependencies.
+**Step :two::** Install all the dependencies.
 
 ```
 npm install
 ```
 
-**Step :five::** Start build with Webpack’s development configurations.
-
-```
-npm run build
-```
-
-**Step :six::** Now to start server in development mode, open a new Terminal and run the compiled code.
-
-```
-npm run dev
-```
-
-**Server started at [http://localhost:4000](http://localhost:4000).**
-
-**Step :seven::** Open another new terminal, navigate to client directory.
-
-```
-cd client
-```
-
-**Step :eight::** Install all the dependencies.
-
-```
-npm install
-```
-
-**Step :nine::** Now start Frontend application
+**Step :three::** Now start the application
 
 ```
 npm start
