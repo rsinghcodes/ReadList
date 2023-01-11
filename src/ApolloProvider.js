@@ -13,7 +13,7 @@ import App from './App';
 import theme from './theme/theme';
 
 const httpLink = new HttpLink({
-  uri: 'https://readlist-backend.onrender.com',
+  uri: 'https://readlist.onrender.com',
 });
 
 const authLink = setContext(() => {
