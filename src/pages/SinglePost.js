@@ -42,7 +42,7 @@ function SinglePost() {
   const toast = useToast();
   const { onCopy } = useClipboard(window.location.href + `posts/${slug}`);
 
-  const { data } = useQuery(FETCH_POST_QUERY, {
+  const { data, loading } = useQuery(FETCH_POST_QUERY, {
     variables: {
       slug,
     },
@@ -53,11 +53,11 @@ function SinglePost() {
   }, []);
 
   function deletePostCallback() {
-    navigate('/', { replace: true });
+    navigate('/');
   }
 
   let postMarkup;
-  if (!data) {
+  if (loading) {
     postMarkup = <p>Loading post...</p>;
   } else {
     const {

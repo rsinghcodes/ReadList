@@ -13,16 +13,14 @@ import {
   InputGroup,
   InputRightElement,
   Stack,
-  useToast,
 } from '@chakra-ui/react';
+import { toast } from 'react-hot-toast';
 
 import { AuthContext } from '../context/auth';
 
 function Register(props) {
   const context = useContext(AuthContext);
-
   const [show, setShow] = useState(false);
-  const toast = useToast();
   const navigate = useNavigate();
 
   const RegisterSchema = Yup.object().shape({
@@ -62,13 +60,11 @@ function Register(props) {
   const [addUser, { loading }] = useMutation(REGISTER_USER, {
     update(_, { data: { registerUser: userData } }) {
       context.login(userData);
-      navigate('/', { replace: true });
-      toast({
-        position: 'top',
-        description: 'You have successfully registered.',
-        status: 'success',
-        duration: 2000,
-        isClosable: true,
+    },
+    onCompleted() {
+      navigate('/');
+      toast.success('Registered successfully', {
+        duration: 2500,
       });
     },
     onError(err) {

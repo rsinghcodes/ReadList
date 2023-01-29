@@ -21,7 +21,7 @@ function CommentForm({ postId }) {
     <>
       <Box mt="5">
         <Input
-          placeholder="Comment on this Post.."
+          placeholder="Comment on this post.."
           name="comment"
           value={comment}
           onChange={(event) => setComment(event.target.value)}

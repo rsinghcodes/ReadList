@@ -30,26 +30,25 @@ function CreatePost() {
     },
   });
 
-  const { values, setErrors } = formik;
+  const { values, setErrors, resetForm } = formik;
 
   const [createPost] = useMutation(CREATE_POST_MUTATION, {
     variables: values,
-    update(client, result) {
-      const data = client.readQuery({
+    update(client, { data }) {
+      const { getPosts } = client.readQuery({
         query: FETCH_POSTS_QUERY,
       });
       client.writeQuery({
         query: FETCH_POSTS_QUERY,
         data: {
-          getPosts: [result.data.createPost, ...data.getPosts],
+          getPosts: [data.createPost, ...getPosts],
         },
       });
-      values.title = '';
-      values.desc = '';
-      values.body = '';
-      navigate('/', { replace: true });
+    },
+    onCompleted() {
+      resetForm();
+      navigate('/');
       toast.success('Post Published Successfully 🎉', {
-        position: 'top-center',
         duration: 2500,
       });
     },

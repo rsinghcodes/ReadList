@@ -28,29 +28,28 @@ const ManagePosts = ({ post }) => {
     variables: { postId: post.id },
     update(client) {
       setConfirmOpen(false);
-      const data = client.readQuery({
+      const { getPosts } = client.readQuery({
         query: FETCH_POSTS_QUERY,
       });
       client.writeQuery({
         query: FETCH_POSTS_QUERY,
         data: {
-          getPosts: data.getPosts.filter((p) => p.id !== post.id),
+          getPosts: getPosts.filter((p) => p.id !== post.id),
         },
       });
+    },
+    onCompleted() {
       toast.success('Post deleted successfully.', {
-        position: 'top-center',
         duration: 2500,
       });
     },
     onError(err) {
       if (err.graphQLErrors[0].extensions.code === 'AUTHENTICATION_ERROR') {
         toast.error('Action not allowed', {
-          position: 'top-center',
           duration: 2500,
         });
       } else {
         toast.error('Something went wrong!', {
-          position: 'top-center',
           duration: 2500,
         });
       }

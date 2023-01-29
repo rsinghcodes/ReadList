@@ -43,7 +43,6 @@ function PostCard({ post: { title, desc, sanitizedHtml, createdAt, slug } }) {
             onClick={() => {
               onCopy();
               toast.success('Share Link copied to clipboard 📋.', {
-                position: 'top-center',
                 duration: 2500,
               });
             }}
@@ -59,7 +58,6 @@ function PostCard({ post: { title, desc, sanitizedHtml, createdAt, slug } }) {
             onClick={() => {
               onCopy();
               toast.success('Share Link copied to clipboard 📋.', {
-                position: 'top-center',
                 duration: 2500,
               });
             }}

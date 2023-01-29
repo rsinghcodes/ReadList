@@ -29,38 +29,38 @@ const ManageUsers = ({
     variables: { userId: id },
     update(client) {
       setConfirmOpen(false);
-      const data = client.readQuery({
+      const { getUsers } = client.readQuery({
         query: FETCH_USERS_QUERY,
       });
       client.writeQuery({
         query: FETCH_USERS_QUERY,
         data: {
-          getUsers: data.getUsers.filter((user) => user.id !== id),
+          getUsers: getUsers.filter((user) => user.id !== id),
         },
       });
+    },
+    onCompleted() {
       toast.success('User deleted successfully.', {
-        position: 'top-center',
         duration: 2500,
       });
     },
     onError(err) {
       toast.error('Something went wrong!', {
-        position: 'top-center',
         duration: 2500,
       });
     },
   });
 
   const [accountPermission] = useMutation(ACCOUNT_ACCESS_MUTATION, {
-    update(client, result) {
-      const data = client.readQuery({
+    update(client, { data }) {
+      const { getUsers } = client.readQuery({
         query: FETCH_USERS_QUERY,
       });
       client.writeQuery({
         query: FETCH_USERS_QUERY,
         data: {
-          getUsers: data.getUsers.map((user) =>
-            user.id === id ? result?.data?.accountPermission : user
+          getUsers: getUsers.map((user) =>
+            user.id === id ? data?.accountPermission : user
           ),
         },
       });

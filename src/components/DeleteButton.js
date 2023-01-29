@@ -12,39 +12,36 @@ import {
   Button,
   IconButton,
   MenuItem,
-  useToast,
 } from '@chakra-ui/react';
 import { DeleteIcon } from '@chakra-ui/icons';
+import { toast } from 'react-hot-toast';
 
 function DeleteButton({ postId, commentId, callback }) {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const cancelRef = useRef();
-  const toast = useToast();
   const toastText = commentId ? 'Comment' : 'Post';
 
   const mutation = commentId ? DELETE_COMMENT_MUTATION : DELETE_POST_MUTATION;
 
   const [deletePostOrMutation] = useMutation(mutation, {
-    update(client) {
+    update(client, { data }) {
       setConfirmOpen(false);
       if (!commentId) {
-        const data = client.readQuery({
+        const { getPosts } = client.readQuery({
           query: FETCH_POSTS_QUERY,
         });
         client.writeQuery({
           query: FETCH_POSTS_QUERY,
           data: {
-            getPosts: data.getPosts.filter((p) => p.id !== postId),
+            getPosts: getPosts.filter((post) => post.id !== data.deletePost.id),
           },
         });
       }
+    },
+    onCompleted() {
       if (callback) callback();
-      toast({
-        position: 'top',
-        description: `Your ${toastText} has been successfully deleted.`,
-        status: 'success',
-        duration: 2000,
-        isClosable: true,
+      toast.success(`${toastText} deleted successfully.`, {
+        duration: 2500,
       });
     },
     variables: {
@@ -103,7 +100,9 @@ function DeleteButton({ postId, commentId, callback }) {
 
 const DELETE_POST_MUTATION = gql`
   mutation deletePost($postId: ID!) {
-    deletePost(postId: $postId)
+    deletePost(postId: $postId) {
+      id
+    }
   }
 `;
 

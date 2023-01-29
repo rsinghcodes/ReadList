@@ -11,13 +11,13 @@ import {
   InputGroup,
   InputRightElement,
   Stack,
-  useToast,
 } from '@chakra-ui/react';
+import { toast } from 'react-hot-toast';
+import { FETCH_ADMINS_QUERY } from '../utils/graphql';
 
 const AdminRegister = () => {
   const initialRef = React.useRef();
   const [show, setShow] = useState(false);
-  const toast = useToast();
 
   const RegisterSchema = Yup.object().shape({
     fullname: Yup.string()
@@ -50,17 +50,32 @@ const AdminRegister = () => {
     },
   });
 
-  const { errors, setErrors, touched, values, handleSubmit, getFieldProps } =
-    formik;
+  const {
+    errors,
+    setErrors,
+    touched,
+    values,
+    resetForm,
+    handleSubmit,
+    getFieldProps,
+  } = formik;
 
   const [addAdmin, { loading }] = useMutation(REGISTER_ADMIN, {
-    update() {
-      toast({
-        position: 'top',
-        description: 'Admin successfully registered.',
-        status: 'success',
-        duration: 2000,
-        isClosable: true,
+    update(client, { data }) {
+      const { getAdmins } = client.readQuery({
+        query: FETCH_ADMINS_QUERY,
+      });
+      client.writeQuery({
+        query: FETCH_ADMINS_QUERY,
+        data: {
+          getAdmins: [...getAdmins, data.registerAdmin],
+        },
+      });
+    },
+    onCompleted() {
+      resetForm();
+      toast.success('Admin successfully registered.', {
+        duration: 2500,
       });
     },
     onError(err) {
