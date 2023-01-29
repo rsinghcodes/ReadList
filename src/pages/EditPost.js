@@ -39,7 +39,7 @@ function EditPost() {
     },
   });
 
-  const { values, setValues, setErrors } = formik;
+  const { values, setValues, resetForm, setErrors } = formik;
 
   useEffect(() => {
     if (!data) {
@@ -54,24 +54,23 @@ function EditPost() {
       postId,
       ...values,
     },
-    update(client, result) {
-      const data = client.readQuery({
+    update(client, { data }) {
+      const { getPosts } = client.readQuery({
         query: FETCH_POSTS_QUERY,
       });
       client.writeQuery({
         query: FETCH_POSTS_QUERY,
         data: {
-          getPosts: data.getPosts.map((post) =>
-            post.id === postId ? result.data.updatePost : post
+          getPosts: getPosts.map((post) =>
+            post.id === postId ? data.updatePost : post
           ),
         },
       });
-      values.title = '';
-      values.desc = '';
-      values.body = '';
-      navigate('/', { replace: true });
-      toast.success('Successfully Edited', {
-        position: 'top-center',
+    },
+    onCompleted() {
+      resetForm();
+      navigate('/');
+      toast.success('Post updated successfully.', {
         duration: 2500,
       });
     },

@@ -41,6 +41,19 @@ export const FETCH_POST_QUERY = gql`
   }
 `;
 
+export const FETCH_USERS_POSTS_QUERY = gql`
+  query ($userId: ID!) {
+    getUserPosts(userId: $userId) {
+      id
+      title
+      desc
+      sanitizedHtml
+      createdAt
+      slug
+    }
+  }
+`;
+
 export const FETCH_POST_FOR_UPDATE = gql`
   query ($postId: ID!) {
     getPostforUpdate(postId: $postId) {

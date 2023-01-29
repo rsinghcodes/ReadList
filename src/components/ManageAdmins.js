@@ -14,8 +14,10 @@ import {
 import { DeleteIcon } from '@chakra-ui/icons';
 import moment from 'moment';
 import { gql, useMutation } from '@apollo/client';
+import { toast } from 'react-hot-toast';
 
 import { AuthContext } from '../context/auth';
+import { FETCH_ADMINS_QUERY } from '../utils/graphql';
 
 const ManageAdmins = ({ admin }) => {
   const { user } = useContext(AuthContext);
@@ -23,9 +25,22 @@ const ManageAdmins = ({ admin }) => {
   const cancelRef = useRef();
 
   const [deleteAdmin] = useMutation(DELETE_ADMIN_MUTATION, {
-    update() {
+    update(client) {
       setConfirmOpen(false);
-      window.location.reload(false);
+      const { getAdmins } = client.readQuery({
+        query: FETCH_ADMINS_QUERY,
+      });
+      client.writeQuery({
+        query: FETCH_ADMINS_QUERY,
+        data: {
+          getAdmins: getAdmins.filter((a) => a.id !== admin.id),
+        },
+      });
+    },
+    onCompleted() {
+      toast.success('Admin deleted successfully.', {
+        duration: 2500,
+      });
     },
     variables: { adminId: admin.id },
   });

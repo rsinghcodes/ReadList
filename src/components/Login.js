@@ -4,8 +4,6 @@ import { gql, useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
 import {
-  Alert,
-  AlertIcon,
   Button,
   Flex,
   FormControl,
@@ -15,16 +13,14 @@ import {
   InputGroup,
   InputRightElement,
   Stack,
-  useToast,
 } from '@chakra-ui/react';
+import { toast } from 'react-hot-toast';
 
 import { AuthContext } from '../context/auth';
 
 function Login(props) {
   const context = useContext(AuthContext);
-  const [accessError, setAccessError] = useState(false);
   const [show, setShow] = useState(false);
-  const toast = useToast();
   const navigate = useNavigate();
 
   const LoginSchema = Yup.object().shape({
@@ -52,13 +48,11 @@ function Login(props) {
   const [loginUser, { loading }] = useMutation(LOGIN_USER, {
     update(_, { data: { loginUser: userData } }) {
       context.login(userData);
-      navigate('/', { replace: true });
-      toast({
-        position: 'top',
-        description: 'You have successfully logged in.',
-        status: 'success',
-        duration: 2000,
-        isClosable: true,
+    },
+    onCompleted() {
+      navigate('/');
+      toast.success('LoggedIn successfully', {
+        duration: 2500,
       });
     },
     onError(err) {
@@ -66,7 +60,9 @@ function Login(props) {
         setErrors(err.graphQLErrors[0].extensions.errors);
       }
       if (err.graphQLErrors[0].extensions.code === 'FORBIDDEN_ERROR') {
-        setAccessError(true);
+        toast.error('Access Denied!', {
+          duration: 2500,
+        });
         setErrors({});
       }
     },
@@ -121,12 +117,6 @@ function Login(props) {
               Login
             </Button>
           </Flex>
-          {accessError && (
-            <Alert status="error">
-              <AlertIcon />
-              Account access denied!
-            </Alert>
-          )}
         </Stack>
       </Form>
     </FormikProvider>
