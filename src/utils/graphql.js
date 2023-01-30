@@ -41,7 +41,7 @@ export const FETCH_POST_QUERY = gql`
   }
 `;
 
-export const FETCH_USERS_POSTS_QUERY = gql`
+export const FETCH_POSTS_BY_USERID = gql`
   query ($userId: ID!) {
     getUserPosts(userId: $userId) {
       id

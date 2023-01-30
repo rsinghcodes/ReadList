@@ -17,6 +17,7 @@ import {
 import React, { useContext, useRef, useState } from 'react';
 import { gql, useQuery, useMutation } from '@apollo/client';
 import { Link } from 'react-router-dom';
+import { BiTrash } from 'react-icons/bi';
 import moment from 'moment';
 
 import { AuthContext } from '../context/auth';
@@ -37,6 +38,8 @@ const Profile = () => {
   const [deleteUser] = useMutation(DELETE_USER_MUTATION, {
     update() {
       context.logout();
+    },
+    onCompleted() {
       toast({
         position: 'top',
         description: `Your Account has been successfully deleted.`,
@@ -72,7 +75,11 @@ const Profile = () => {
             </VStack>
             <Divider orientation="horizontal" />
             <Box mt="7" display="flex" justifyContent="flex-end">
-              <Button colorScheme="red" onClick={() => setConfirmOpen(true)}>
+              <Button
+                leftIcon={<BiTrash size="1.3rem" />}
+                colorScheme="red"
+                onClick={() => setConfirmOpen(true)}
+              >
                 Delete my account
               </Button>
               <Button colorScheme="teal" ml="7" as={Link} to="/profile/update">

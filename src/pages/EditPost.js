@@ -49,7 +49,7 @@ function EditPost() {
     }
   }, [data, setValues]);
 
-  const [updatePost] = useMutation(UPDATE_POST_MUTATION, {
+  const [updatePost, { loading }] = useMutation(UPDATE_POST_MUTATION, {
     variables: {
       postId,
       ...values,
@@ -84,7 +84,7 @@ function EditPost() {
       <Heading fontSize="2xl" mt="5">
         Edit Post
       </Heading>
-      <PostForm formik={formik} />
+      <PostForm formik={formik} loading={loading} />
     </>
   );
 }

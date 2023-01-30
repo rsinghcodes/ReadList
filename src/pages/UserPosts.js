@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { useQuery } from '@apollo/client';
+import React, { useContext, useEffect } from 'react';
+import { useLazyQuery } from '@apollo/client';
 import { Box, Button, Flex, Heading, VStack } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import { EditIcon } from '@chakra-ui/icons';
@@ -8,16 +8,20 @@ import { AuthContext } from '../context/auth';
 import PostCard from '../components/PostCard';
 import Search from '../components/Search';
 
-import { FETCH_USERS_POSTS_QUERY } from '../utils/graphql';
+import { FETCH_POSTS_BY_USERID } from '../utils/graphql';
 
 function UserPosts() {
   const { user } = useContext(AuthContext);
+  const [getUserPosts, { loading, data }] = useLazyQuery(FETCH_POSTS_BY_USERID);
 
-  const { loading, data } = useQuery(FETCH_USERS_POSTS_QUERY, {
-    variables: {
-      userId: user.id,
-    },
-  });
+  useEffect(() => {
+    getUserPosts({
+      variables: {
+        userId: user.id,
+      },
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user.id]);
 
   return (
     <>
@@ -30,7 +34,7 @@ function UserPosts() {
             {data?.getUserPosts.map((post) => (
               <PostCard post={post} key={post.id} />
             ))}
-            {data.getUserPosts.length === 0 && (
+            {data?.getUserPosts.length === 0 && (
               <Box
                 as="article"
                 p="5"

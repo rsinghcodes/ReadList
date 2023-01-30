@@ -32,7 +32,7 @@ function CreatePost() {
 
   const { values, setErrors, resetForm } = formik;
 
-  const [createPost] = useMutation(CREATE_POST_MUTATION, {
+  const [createPost, { loading }] = useMutation(CREATE_POST_MUTATION, {
     variables: values,
     update(client, { data }) {
       const { getPosts } = client.readQuery({
@@ -48,7 +48,7 @@ function CreatePost() {
     onCompleted() {
       resetForm();
       navigate('/');
-      toast.success('Post Published Successfully 🎉', {
+      toast.success('Post published successfully 🎉', {
         duration: 2500,
       });
     },
@@ -62,7 +62,7 @@ function CreatePost() {
       <Heading fontSize="2xl" mt="5">
         Create Post
       </Heading>
-      <PostForm formik={formik} />
+      <PostForm formik={formik} loading={loading} />
     </>
   );
 }

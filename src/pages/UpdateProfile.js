@@ -16,6 +16,7 @@ import {
   useToast,
   FormErrorMessage,
 } from '@chakra-ui/react';
+import { BiSave } from 'react-icons/bi';
 
 import { AuthContext } from '../context/auth';
 
@@ -59,10 +60,12 @@ function UpdateProfile() {
   const [updateUser, { loading }] = useMutation(UPDATE_USER, {
     update(_, { data: { updateUser: userData } }) {
       context.login(userData);
-      navigate('/', { replace: true });
+    },
+    onCompleted() {
+      navigate('/');
       toast({
         position: 'top',
-        description: 'You password successfully updated.',
+        description: 'Password updated successfully.',
         status: 'success',
         duration: 2000,
         isClosable: true,
@@ -151,6 +154,7 @@ function UpdateProfile() {
             </FormControl>
             <Flex justifyContent="flex-end">
               <Button
+                leftIcon={<BiSave size="1.2rem" />}
                 colorScheme="teal"
                 isLoading={loading}
                 loadingText="Saving..."
