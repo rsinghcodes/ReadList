@@ -48,6 +48,9 @@ The purpose of this web application is to make it easy to publish any type of co
 
 Authentication is implemented using a JSON Web Token (JWT) saved in local storage. Upon a successful login attempt made to the GraphQL endpoint, the response is a JWT containing the user data. This token is then added to every API request that requires authorization.
 
+## Backend Application link:
+🗄 Backend - https://github.com/rsinghcodes/readlist-backend
+
 ## ⬇️ Installation & Set Up
 
 **Step :one::** Clone this repository to your local machine
@@ -69,11 +72,11 @@ npm start
 ```
 
 Your app is ready to be run! ✨✨\
-**Open [http://localhost:3000](http://localhost:3000) to view it in the browser.**
+**Open [http://localhost:3000](http://localhost:3000) to view it in the browser.** 
 
 ## :satellite: Project Deployment
 
-Project has been deployed [here!](https://readlistapp.netlify.app/)
+Project has been deployed [here!](https://readlistapp.netlify.app/) Show some love by starring ⭐ this repo.
 
 ## Features that I'm planning to add in future
 
