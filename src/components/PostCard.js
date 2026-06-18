@@ -29,7 +29,7 @@ function PostCard({ post: { title, desc, sanitizedHtml, createdAt, slug } }) {
   const cardBg = useColorModeValue('white', 'gray.800');
   const createdAtIso = moment(createdAt).isValid()
     ? moment(createdAt).toISOString()
-    : createdAt;
+    : undefined;
 
   return (
     <Box

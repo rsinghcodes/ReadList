@@ -84,7 +84,7 @@ function Home() {
           </Flex>
           {!user && (
             <Text color={mutedTextColor} mb="8">
-              Sign in from the top-right menu to publish your own articles.
+              Sign in to publish your own articles.
             </Text>
           )}
         </Box>
