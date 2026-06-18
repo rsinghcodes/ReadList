@@ -20,7 +20,8 @@ import {
 import toast from 'react-hot-toast';
 
 function PostCard({ post: { title, desc, sanitizedHtml, createdAt, slug } }) {
-  const shareLink = `${window.location.origin}/posts/${slug}`;
+  const basePath = (process.env.PUBLIC_URL || '').replace(/\/$/, '');
+  const shareLink = `${window.location.origin}${basePath}/posts/${slug}`;
   const { onCopy } = useClipboard(shareLink);
   const [isLargerThan48em] = useMediaQuery('(min-width: 48em)');
   const { text } = readingTime(sanitizedHtml);
