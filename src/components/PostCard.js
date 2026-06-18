@@ -27,8 +27,10 @@ function PostCard({ post: { title, desc, sanitizedHtml, createdAt, slug } }) {
   const { text } = readingTime(sanitizedHtml);
   const mutedTextColor = useColorModeValue('gray.500', 'gray.400');
   const cardBg = useColorModeValue('white', 'gray.800');
-  const isCreatedAtValid = moment(createdAt).isValid();
-  const createdAtIso = isCreatedAtValid ? moment(createdAt).toISOString() : '';
+  const createdAtMoment = moment(createdAt);
+  const createdAtIso = createdAtMoment.isValid()
+    ? createdAtMoment.toISOString()
+    : undefined;
 
   return (
     <Box
@@ -45,7 +47,7 @@ function PostCard({ post: { title, desc, sanitizedHtml, createdAt, slug } }) {
         <Box
           color={mutedTextColor}
           as="time"
-          {...(isCreatedAtValid ? { dateTime: createdAtIso } : {})}
+          dateTime={createdAtIso}
           fontSize="xl"
         >
           {moment(createdAt).format('ll')} — {text}
