@@ -88,7 +88,7 @@ function PostCard({ post: { title, desc, sanitizedHtml, createdAt, slug } }) {
         </Text>
       </LinkBox>
       <Button as={Link} to={`/posts/${slug}`} variant="link" colorScheme="teal">
-        Read article →
+        Read article
       </Button>
     </Box>
   );
