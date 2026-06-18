@@ -1,7 +1,6 @@
 import React from 'react';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
-import readingTime from 'reading-time';
 import { BiShareAlt } from 'react-icons/bi';
 import {
   Box,
@@ -19,12 +18,19 @@ import {
 } from '@chakra-ui/react';
 import toast from 'react-hot-toast';
 
+const getReadingTimeLabel = (html = '') => {
+  const plainText = html.replace(/<[^>]*>/g, ' ');
+  const words = plainText.trim().split(/\s+/).filter(Boolean).length;
+  const minutes = Math.max(1, Math.ceil(words / 200));
+  return `${minutes} min read`;
+};
+
 function PostCard({ post: { title, desc, sanitizedHtml, createdAt, slug } }) {
   const basePath = (process.env.PUBLIC_URL || '').replace(/\/$/, '');
   const shareLink = `${window.location.origin}${basePath}/posts/${slug}`;
   const { onCopy } = useClipboard(shareLink);
   const [isLargerThan48em] = useMediaQuery('(min-width: 48em)');
-  const { text } = readingTime(sanitizedHtml);
+  const readingTimeLabel = getReadingTimeLabel(sanitizedHtml);
   const mutedTextColor = useColorModeValue('gray.500', 'gray.400');
   const cardBg = useColorModeValue('white', 'gray.800');
   const createdAtMoment = moment(createdAt);
@@ -50,7 +56,7 @@ function PostCard({ post: { title, desc, sanitizedHtml, createdAt, slug } }) {
           dateTime={createdAtIso}
           fontSize="xl"
         >
-          {moment(createdAt).format('ll')} — {text}
+          {moment(createdAt).format('ll')} — {readingTimeLabel}
         </Box>
         {isLargerThan48em ? (
           <Button

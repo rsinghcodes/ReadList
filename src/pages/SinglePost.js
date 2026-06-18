@@ -4,7 +4,6 @@ import { BiShareAlt } from 'react-icons/bi';
 import { useQuery } from '@apollo/client';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
-import readingTime from 'reading-time';
 
 import { AuthContext } from '../context/auth';
 import {
@@ -34,6 +33,13 @@ import DeleteButton from '../components/DeleteButton';
 import CommentForm from '../components/CommentForm';
 import CommentBox from '../components/CommentBox';
 import LikeButton from '../components/LikeButton';
+
+const getReadingTimeLabel = (html = '') => {
+  const plainText = html.replace(/<[^>]*>/g, ' ');
+  const words = plainText.trim().split(/\s+/).filter(Boolean).length;
+  const minutes = Math.max(1, Math.ceil(words / 200));
+  return `${minutes} min read`;
+};
 
 function SinglePost() {
   const navigate = useNavigate();
@@ -74,7 +80,7 @@ function SinglePost() {
       commentCount,
     } = data.getPost;
 
-    const { text } = readingTime(sanitizedHtml);
+    const readingTimeLabel = getReadingTimeLabel(sanitizedHtml);
 
     postMarkup = (
       <>
@@ -107,7 +113,7 @@ function SinglePost() {
                 <Flex alignItems="center">
                   <TimeIcon w={3.5} h={3.5} color="gray.500" />
                   <Text color="gray.500" fontSize="sm" ml={1.5}>
-                    {text}
+                    {readingTimeLabel}
                   </Text>
                 </Flex>
               </div>

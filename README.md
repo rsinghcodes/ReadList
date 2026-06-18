@@ -121,7 +121,7 @@ ReadList follows a **decoupled client–server architecture** with a GraphQL API
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js ≥ 16
+- Node.js ≥ 22
 - npm or yarn
 - Docker (optional, for containerized setup)
 
