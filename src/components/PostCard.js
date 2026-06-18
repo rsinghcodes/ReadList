@@ -20,17 +20,29 @@ import {
 import toast from 'react-hot-toast';
 
 function PostCard({ post: { title, desc, sanitizedHtml, createdAt, slug } }) {
-  const { onCopy } = useClipboard(window.location.href + `posts/${slug}`);
+  const shareLink = `${window.location.origin}/posts/${slug}`;
+  const { onCopy } = useClipboard(shareLink);
   const [isLargerThan48em] = useMediaQuery('(min-width: 48em)');
   const { text } = readingTime(sanitizedHtml);
+  const mutedTextColor = useColorModeValue('gray.500', 'gray.400');
+  const cardBg = useColorModeValue('white', 'gray.800');
 
   return (
-    <Box as="article" p="5" borderWidth="1px" rounded="lg" w="100%">
+    <Box
+      as="article"
+      p="5"
+      borderWidth="1px"
+      rounded="lg"
+      w="100%"
+      bg={cardBg}
+      transition="transform 0.2s ease, box-shadow 0.2s ease"
+      _hover={{ transform: 'translateY(-2px)', boxShadow: 'lg' }}
+    >
       <Flex justifyContent="space-between" alignItems="center">
         <Box
-          color={useColorModeValue('gray.500', 'gray.400')}
+          color={mutedTextColor}
           as="time"
-          dateTime="2022-01-01 15:30:00 +0000 UTC"
+          dateTime={createdAt}
           fontSize="xl"
         >
           {moment(createdAt).format('ll')} — {text}
@@ -47,7 +59,7 @@ function PostCard({ post: { title, desc, sanitizedHtml, createdAt, slug } }) {
               });
             }}
           >
-            Click to copy url
+            Copy share link
           </Button>
         ) : (
           <IconButton
@@ -71,10 +83,13 @@ function PostCard({ post: { title, desc, sanitizedHtml, createdAt, slug } }) {
             {title}
           </LinkOverlay>
         </Heading>
-        <Text fontSize="xl" color={useColorModeValue('gray.500', 'gray.400')}>
+        <Text fontSize="xl" color={mutedTextColor}>
           {desc}
         </Text>
       </LinkBox>
+      <Button as={Link} to={`/posts/${slug}`} variant="link" colorScheme="teal">
+        Read article →
+      </Button>
     </Box>
   );
 }

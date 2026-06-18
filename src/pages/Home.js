@@ -5,6 +5,7 @@ import {
   Button,
   chakra,
   Flex,
+  HStack,
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
@@ -16,11 +17,12 @@ import PostLists from './PostLists';
 
 function Home() {
   const { user } = useContext(AuthContext);
+  const mutedTextColor = useColorModeValue('gray.500', 'gray.400');
 
   return (
     <>
       <Search />
-      <Box as="section" pt="20">
+      <Box as="section" pt={{ base: '12', md: '20' }}>
         <Box textAlign="center">
           <chakra.h1
             maxW="16ch"
@@ -32,43 +34,64 @@ function Home() {
             mb="16px"
             lineHeight="1.2"
           >
-            Create blog and share
+            Publish stories and share
             <Box as="span" color={useColorModeValue('teal.500', 'teal.300')}>
               {' '}
-              with community.
+              with your community.
             </Box>
           </chakra.h1>
 
           <Text
             maxW="560px"
             mx="auto"
-            color={useColorModeValue('gray.500', 'gray.400')}
+            color={mutedTextColor}
             fontSize={{ base: 'lg', lg: 'xl' }}
             mt="6"
           >
-            ReadList is simple, and easy to use blogging application. Share
-            anything with ease and at zero cost.
+            Discover thoughtful posts, search quickly, and start writing when
+            inspiration strikes.
           </Text>
 
           <Flex my="10" justify="center">
-            {user && (
+            <HStack spacing={4} flexWrap="wrap" justify="center">
               <Button
                 h="4rem"
-                px="40px"
-                fontSize="1.2rem"
+                px="32px"
+                fontSize="1.1rem"
                 as={Link}
-                to="/create-post"
+                to="/posts"
                 size="lg"
+                variant="outline"
                 colorScheme="teal"
-                rightIcon={<EditIcon fontSize="0.8em" />}
               >
-                Create New Post
+                Explore Posts
               </Button>
-            )}
+              {user && (
+                <Button
+                  h="4rem"
+                  px="40px"
+                  fontSize="1.1rem"
+                  as={Link}
+                  to="/create-post"
+                  size="lg"
+                  colorScheme="teal"
+                  rightIcon={<EditIcon fontSize="0.8em" />}
+                >
+                  Create New Post
+                </Button>
+              )}
+            </HStack>
           </Flex>
+          {!user && (
+            <Text color={mutedTextColor} mb="8">
+              Sign in from the top-right menu to publish your own articles.
+            </Text>
+          )}
         </Box>
       </Box>
-      <PostLists />
+      <Box id="latest-posts">
+        <PostLists />
+      </Box>
     </>
   );
 }
